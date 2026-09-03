@@ -29,8 +29,7 @@
     .brand-art { position:relative; isolation:isolate; }
     .brand-art::before { position:absolute; z-index:-1; inset:12% 8%; border-radius:50%; background:linear-gradient(135deg,rgba(122,92,255,.35),rgba(28,204,217,.25)); content:""; filter:blur(70px); }
     .brand-art img { display:block; width:100%; border:1px solid rgba(255,255,255,.1); border-radius:15px; box-shadow:var(--shadow); }
-    .dragon-rule { position:relative; height:44px; }
-    .dragon-rule img { position:absolute; top:50%; left:50%; width:min(76%,840px); transform:translate(-50%,-50%); filter:drop-shadow(0 0 20px rgba(28,204,217,.16)); }
+    .section-rule { height:1px; background:linear-gradient(90deg,transparent 0%,rgba(122,92,255,.8) 28%,rgba(28,204,217,.8) 72%,transparent 100%); box-shadow:0 0 18px rgba(28,204,217,.13); }
     .manuals { position:relative; isolation:isolate; padding:78px 0 110px; overflow:hidden; }
     .manuals::before { position:absolute; z-index:-1; right:-5%; bottom:0; width:min(65vw,760px); aspect-ratio:959/376; background:url("img/PerfectWave_KCrop.png") center bottom/contain no-repeat; content:""; opacity:.07; mix-blend-mode:screen; -webkit-mask-image:linear-gradient(90deg,transparent,#000 22%,#000 82%,transparent); mask-image:linear-gradient(90deg,transparent,#000 22%,#000 82%,transparent); }
     .section-head { display:flex; align-items:end; justify-content:space-between; gap:36px; margin-bottom:42px; }
@@ -54,8 +53,6 @@
       .site-header nav a:first-child { display:none; }
       .hero { grid-template-columns:1fr; padding:42px 0 48px; }
       .brand-art { max-width:520px; }
-      .dragon-rule { height:32px; }
-      .dragon-rule img { width:105%; max-width:none; }
       .manuals { padding:62px 0 90px; }
       .section-head { align-items:start; flex-direction:column; }
       .manual-card { grid-template-columns:1fr; }
@@ -76,7 +73,7 @@
       <div><p class="eyebrow">Leviathan Pro for VCV Rack 2</p><h1 id="hero-title">Into the deep.</h1><p class="lede">Guides, reference material, and patch ideas for every instrument in the Leviathan collection.</p><a class="button" href="#manuals">Browse manuals</a></div>
       <div class="brand-art"><img src="img/Branding_Logo_Crop_Only.png" alt="Leviathan"></div>
     </section>
-    <div class="dragon-rule shell" aria-hidden="true"><img src="img/Leviathan_Dragon_Transparent_Refined.png" alt=""></div>
+    <div class="section-rule shell" aria-hidden="true"></div>
     <section class="manuals" id="manuals" aria-labelledby="manuals-title">
       <div class="shell">
         <header class="section-head"><div><p class="eyebrow">Documentation</p><h2 id="manuals-title">Module manuals</h2></div><p class="section-note">Start with Bifurx. Additional Leviathan module guides will appear here as they surface.</p></header>
