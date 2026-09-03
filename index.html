@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Leviathan — a powerful plugin built for deep, expressive sound."
+    />
+    <title>Leviathan — Go Deeper</title>
+
+    <style>
+      :root {
+        color-scheme: dark;
+        --ink: #f2f4ef;
+        --muted: #9ca9a4;
+        --accent: #88e8c5;
+        --accent-dark: #071e1c;
+        --surface: #0c1415;
+        --line: rgba(242, 244, 239, 0.12);
+        --page: #060a0b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 76% 18%, rgba(33, 112, 99, 0.25), transparent 30rem),
+          linear-gradient(145deg, #071011 0%, var(--page) 52%);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .shell {
+        width: min(1120px, calc(100% - 3rem));
+        margin: 0 auto;
+      }
+
+      .site-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 5.5rem;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.85rem;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 2rem;
+        height: 2rem;
+        place-items: center;
+        border: 1px solid var(--accent);
+        border-radius: 50%;
+        color: var(--accent);
+        font-family: Georgia, serif;
+        font-size: 1.2rem;
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 1.75rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      nav a:hover,
+      nav a:focus-visible {
+        color: var(--ink);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        align-items: center;
+        gap: clamp(3rem, 8vw, 7rem);
+        min-height: calc(100vh - 5.5rem);
+        padding: 6rem 0;
+      }
+
+      .eyebrow {
+        margin: 0 0 1rem;
+        color: var(--accent);
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: 8ch;
+        margin-bottom: 1.5rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(4.5rem, 12vw, 9rem);
+        font-weight: 400;
+        letter-spacing: -0.065em;
+        line-height: 0.8;
+      }
+
+      .lede {
+        max-width: 36rem;
+        margin-bottom: 2rem;
+        color: var(--muted);
+        font-size: clamp(1.05rem, 2vw, 1.25rem);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 3rem;
+        padding: 0.75rem 1.3rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        font-size: 0.88rem;
+        font-weight: 750;
+        transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+      }
+
+      .button:hover,
+      .button:focus-visible {
+        border-color: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      .button.primary {
+        border-color: var(--accent);
+        color: var(--accent-dark);
+        background: var(--accent);
+      }
+
+      .visual-placeholder {
+        position: relative;
+        display: grid;
+        width: min(100%, 28rem);
+        aspect-ratio: 4 / 5;
+        place-items: center;
+        justify-self: end;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 50% 50% 2rem 2rem;
+        background:
+          repeating-radial-gradient(circle at 50% 45%, transparent 0 2rem, rgba(136, 232, 197, 0.12) 2.05rem 2.12rem),
+          linear-gradient(180deg, rgba(136, 232, 197, 0.08), rgba(0, 0, 0, 0.2));
+        box-shadow: 0 2rem 6rem rgba(0, 0, 0, 0.35);
+      }
+
+      .visual-placeholder::after {
+        position: absolute;
+        inset: auto 10% 10%;
+        height: 35%;
+        border-radius: 50%;
+        background: var(--accent);
+        content: "";
+        filter: blur(70px);
+        opacity: 0.13;
+      }
+
+      .visual-placeholder span {
+        z-index: 1;
+        color: rgba(242, 244, 239, 0.4);
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .features {
+        padding: 7rem 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .section-heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 2rem;
+        margin-bottom: 3rem;
+      }
+
+      h2 {
+        max-width: 14ch;
+        margin-bottom: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.4rem, 5vw, 4.5rem);
+        font-weight: 400;
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 1.25rem;
+        background: var(--line);
+      }
+
+      .feature {
+        min-height: 15rem;
+        padding: 2rem;
+        background: var(--surface);
+      }
+
+      .feature-number {
+        color: var(--accent);
+        font: 0.75rem/1 monospace;
+      }
+
+      .feature h3 {
+        margin: 4rem 0 0.7rem;
+        font-size: 1.15rem;
+      }
+
+      .feature p {
+        margin-bottom: 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 2rem;
+        padding: 2rem 0;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      @media (max-width: 760px) {
+        .shell {
+          width: min(100% - 2rem, 1120px);
+        }
+
+        nav a:not(.button) {
+          display: none;
+        }
+
+        .hero {
+          grid-template-columns: 1fr;
+          min-height: auto;
+          padding: 5rem 0;
+        }
+
+        .visual-placeholder {
+          width: 100%;
+          max-height: 31rem;
+          justify-self: start;
+        }
+
+        .section-heading {
+          align-items: start;
+          flex-direction: column;
+        }
+
+        .feature-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .feature {
+          min-height: auto;
+        }
+
+        .feature h3 {
+          margin-top: 2.5rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        .button {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="site-header shell">
+      <a class="brand" href="#top" aria-label="Leviathan home">
+        <span class="brand-mark" aria-hidden="true">L</span>
+        Leviathan
+      </a>
+
+      <nav aria-label="Primary navigation">
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a class="button" href="#download">Get Leviathan</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero shell" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">A new instrument from the deep</p>
+          <h1 id="hero-title">Levia&shy;than</h1>
+          <p class="lede">
+            A powerful plugin built for deep, expressive sound. Shape movement,
+            texture, and weight without losing the thread of your idea.
+          </p>
+          <div class="actions">
+            <a class="button primary" href="#download">Download plugin</a>
+            <a class="button" href="#features">Explore features</a>
+          </div>
+        </div>
+
+        <div class="visual-placeholder" role="img" aria-label="Placeholder for Leviathan product artwork">
+          <span>Product artwork</span>
+        </div>
+      </section>
+
+      <section class="features" id="features" aria-labelledby="features-title">
+        <div class="shell">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Built to go deeper</p>
+              <h2 id="features-title">Big sound. Clear controls.</h2>
+            </div>
+            <p class="lede">A focused set of tools for building sounds that move and breathe.</p>
+          </div>
+
+          <div class="feature-grid">
+            <article class="feature">
+              <span class="feature-number">01</span>
+              <h3>Shape the source</h3>
+              <p>Sculpt rich material quickly with an interface that stays out of your way.</p>
+            </article>
+            <article class="feature">
+              <span class="feature-number">02</span>
+              <h3>Create movement</h3>
+              <p>Add evolving detail and organic motion without a complicated setup.</p>
+            </article>
+            <article class="feature">
+              <span class="feature-number">03</span>
+              <h3>Make it yours</h3>
+              <p>Move from subtle texture to massive depth while keeping every choice playable.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="shell features" id="about" aria-labelledby="about-title">
+        <p class="eyebrow">About Leviathan</p>
+        <h2 id="about-title">Designed for discovery.</h2>
+        <p class="lede">
+          Leviathan is made for musicians and sound designers who want character,
+          control, and a fast route from first impulse to finished sound.
+        </p>
+      </section>
+
+      <section class="shell features" id="download" aria-labelledby="download-title">
+        <p class="eyebrow">Coming soon</p>
+        <h2 id="download-title">Ready to surface?</h2>
+        <p class="lede">Download links, formats, requirements, and release details will live here.</p>
+        <a class="button primary" href="mailto:hello@example.com">Join the list</a>
+      </section>
+    </main>
+
+    <footer class="shell">
+      <span>&copy; 2026 Leviathan</span>
+      <span>Made for deep listening.</span>
+    </footer>
+  </body>
+</html>
