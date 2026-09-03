@@ -18,6 +18,8 @@ body { margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe 
 a { color:#7feaf1; }
 .layout { display:grid; grid-template-columns:250px minmax(0,1fr); max-width:1500px; margin:auto; }
 nav { position:sticky; top:0; height:100vh; padding:30px 24px; border-right:1px solid var(--line); background:rgba(7,11,18,.9); backdrop-filter:blur(18px); overflow:auto; }
+nav .brand-home { display:block; padding:0; border-radius:7px; }
+nav .brand-home:focus-visible { outline:2px solid var(--cyan); outline-offset:4px; }
 nav .brand-lockup { display:block; width:100%; max-width:200px; height:auto; margin:0 0 20px; border-radius:7px; box-shadow:0 10px 30px rgba(0,0,0,.28); }
 nav .brand { font-size:1.25rem; letter-spacing:.18em; font-weight:800; margin-bottom:2px; }
 nav .sub { color:var(--muted); font-size:.78rem; margin-bottom:28px; }
@@ -100,7 +102,7 @@ footer span { position:relative; z-index:1; }
 <body>
 <div class="layout">
 <nav aria-label="Manual navigation">
-  <img class="brand-lockup" src="../img/Branding_Logo_Crop_Only.png" alt="Leviathan">
+  <a class="brand-home" href="../index.html" aria-label="Return to the Leviathan manuals home"><img class="brand-lockup" src="../img/Branding_Logo_Crop_Only.png" alt="Leviathan"></a>
   <div class="brand">BIFURX</div><div class="sub">LEVIATHAN PRO USER MANUAL</div>
   <a href="#start">Quick start</a><a href="#concept">Core concept</a><a href="#panel">Panel tour</a><a href="#cv">CV and patching</a><a href="#modes">Filter modes</a><a href="#display">Display</a><a href="#settings">Context menu</a><a href="#recipes">Patch recipes</a><a href="#troubleshooting">Troubleshooting</a><a href="#reference">Reference</a>
   <div class="nav-actions"><button onclick="window.print()">Print / Save PDF</button></div>

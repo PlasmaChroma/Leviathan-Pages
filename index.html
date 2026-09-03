@@ -18,10 +18,10 @@
     .wordmark span { color:var(--cyan); }
     .site-header nav { display:flex; align-items:center; gap:22px; color:var(--muted); font-size:.86rem; }
     .site-header a:hover,.site-header a:focus-visible { color:#fff; }
-    .hero { display:grid; grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr); align-items:center; gap:clamp(3rem,8vw,7rem); min-height:630px; padding:76px 0 66px; }
+    .hero { display:grid; grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr); align-items:center; gap:clamp(3rem,8vw,7rem); padding:52px 0 44px; }
     .eyebrow { margin:0 0 14px; color:var(--cyan); font-size:.72rem; font-weight:850; letter-spacing:.2em; text-transform:uppercase; }
     h1,h2,h3,p { margin-top:0; }
-    h1 { margin-bottom:24px; font-size:clamp(2.7rem,5.7vw,5.25rem); font-weight:800; letter-spacing:-.07em; line-height:.88; white-space:nowrap; background:linear-gradient(110deg,#fff 15%,#c3d9ff 48%,#7feaf1 72%,#b59fff); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    h1 { margin-bottom:24px; font-size:clamp(2.7rem,5.7vw,5.25rem); font-weight:800; letter-spacing:-.07em; line-height:.88; white-space:nowrap; background:linear-gradient(100deg,#865cff 0%,#c9a8ff 27%,#f6f9ff 49%,#77eaff 72%,#1cccd9 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
     .lede { max-width:600px; margin-bottom:28px; color:#c8d5e3; font-size:clamp(1.05rem,2vw,1.28rem); }
     .button { display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:48px; padding:11px 18px; border:1px solid rgba(28,204,217,.6); border-radius:999px; background:rgba(28,204,217,.1); font-size:.88rem; font-weight:800; transition:transform 160ms ease,border-color 160ms ease,background 160ms ease; }
     .button::after { content:"→"; font-size:1.05rem; }
@@ -31,7 +31,7 @@
     .brand-art img { display:block; width:100%; border:1px solid rgba(255,255,255,.1); border-radius:15px; box-shadow:var(--shadow); }
     .dragon-rule { position:relative; height:44px; }
     .dragon-rule img { position:absolute; top:50%; left:50%; width:min(76%,840px); transform:translate(-50%,-50%); filter:drop-shadow(0 0 20px rgba(28,204,217,.16)); }
-    .manuals { position:relative; isolation:isolate; padding:105px 0 120px; overflow:hidden; }
+    .manuals { position:relative; isolation:isolate; padding:78px 0 110px; overflow:hidden; }
     .manuals::before { position:absolute; z-index:-1; right:-5%; bottom:0; width:min(65vw,760px); aspect-ratio:959/376; background:url("img/PerfectWave_KCrop.png") center bottom/contain no-repeat; content:""; opacity:.07; mix-blend-mode:screen; -webkit-mask-image:linear-gradient(90deg,transparent,#000 22%,#000 82%,transparent); mask-image:linear-gradient(90deg,transparent,#000 22%,#000 82%,transparent); }
     .section-head { display:flex; align-items:end; justify-content:space-between; gap:36px; margin-bottom:42px; }
     h2 { margin-bottom:0; font-size:clamp(2.5rem,5vw,4.8rem); letter-spacing:-.055em; line-height:.95; }
@@ -52,11 +52,11 @@
     @media (max-width:760px) {
       .shell { width:min(100% - 2rem,1180px); }
       .site-header nav a:first-child { display:none; }
-      .hero { grid-template-columns:1fr; min-height:auto; padding:62px 0 70px; }
+      .hero { grid-template-columns:1fr; padding:42px 0 48px; }
       .brand-art { max-width:520px; }
       .dragon-rule { height:32px; }
       .dragon-rule img { width:105%; max-width:none; }
-      .manuals { padding:78px 0 90px; }
+      .manuals { padding:62px 0 90px; }
       .section-head { align-items:start; flex-direction:column; }
       .manual-card { grid-template-columns:1fr; }
       .module-preview { height:330px; }
