@@ -38,8 +38,8 @@
     .manual-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr)); gap:24px; }
     .manual-card { display:grid; grid-template-columns:minmax(190px,.72fr) minmax(0,1.28fr); min-height:390px; overflow:hidden; border:1px solid var(--line); border-radius:22px; background:linear-gradient(145deg,rgba(18,27,41,.97),rgba(9,14,22,.96)); box-shadow:var(--shadow); transition:transform 180ms ease,border-color 180ms ease; }
     .manual-card:hover,.manual-card:focus-visible { border-color:rgba(28,204,217,.65); transform:translateY(-4px); outline:none; }
-    .module-preview { display:flex; align-items:flex-end; justify-content:center; overflow:hidden; padding:30px 24px 0; background:radial-gradient(circle at 50% 46%,rgba(122,92,255,.22),transparent 55%),rgba(255,255,255,.02); }
-    .module-preview img { width:min(100%,190px); max-height:350px; object-fit:contain; object-position:bottom; filter:drop-shadow(0 18px 25px rgba(0,0,0,.5)); transition:transform 180ms ease; }
+    .module-preview { display:flex; align-items:center; justify-content:center; gap:10px; overflow:hidden; padding:24px; background:radial-gradient(circle at 50% 46%,rgba(122,92,255,.22),transparent 55%),rgba(255,255,255,.02); }
+    .module-preview img { width:min(68%,145px); max-height:350px; object-fit:contain; object-position:center; filter:drop-shadow(0 18px 25px rgba(0,0,0,.5)); transition:transform 180ms ease; }
     .manual-card:hover .module-preview img { transform:translateY(-4px); }
     .manual-copy { display:flex; flex-direction:column; justify-content:center; padding:42px; }
     .status { align-self:flex-start; margin-bottom:28px; padding:5px 9px; border:1px solid rgba(235,204,128,.35); border-radius:999px; color:var(--gold); font-size:.67rem; font-weight:850; letter-spacing:.12em; text-transform:uppercase; }
@@ -79,7 +79,7 @@
         <header class="section-head"><div><p class="eyebrow">Leviathan Pro documentation</p><h2 id="manuals-title">Module manuals</h2></div><p class="section-note">Start with Bifurx. Additional Leviathan Pro module guides will appear here as they surface.</p></header>
         <div class="manual-grid">
           <a class="manual-card" href="manuals/Bifurx_User_Manual.html" aria-label="Open the Bifurx user manual">
-            <div class="module-preview"><img src="manuals/img/bifurx_dark.png" alt="Bifurx module with dark panel"></div>
+            <div class="module-preview"><img src="manuals/img/bifurx_light.png" alt="Bifurx module with light panel"><img src="manuals/img/bifurx_dark.png" alt="Bifurx module with dark panel"></div>
             <div class="manual-copy"><span class="status">Manual available</span><p class="eyebrow">Dual-focus multimode filter</p><h3>Bifurx</h3><p>Learn the signal flow, controls, filter modes, display, CV behavior, and six starting patches.</p><div class="open-label">Open user manual <span aria-hidden="true">→</span></div></div>
           </a>
         </div>
