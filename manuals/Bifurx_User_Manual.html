@@ -42,7 +42,7 @@ h1 { font-size:clamp(4rem,9vw,8.4rem); line-height:.84; letter-spacing:-.075em; 
 .hero-modules img:last-child { transform:rotateY(-7deg) translateY(-12px); }
 section { position:relative; isolation:isolate; padding:70px clamp(32px,7vw,110px); border-bottom:1px solid var(--line); scroll-margin-top:20px; overflow:hidden; }
 section::before { position:absolute; z-index:0; bottom:0; width:min(58vw,650px); aspect-ratio:959/376; background:url("../img/PerfectWave_KCrop.png") center bottom/contain no-repeat; content:""; opacity:.065; mix-blend-mode:screen; -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); pointer-events:none; }
-section:nth-of-type(odd)::before { right:-5%; transform:scaleX(-1); }
+section:nth-of-type(odd)::before { right:-5%; transform:scaleX(-1); -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); }
 section:nth-of-type(even)::before { left:-5%; }
 section > * { position:relative; z-index:1; }
 .section-head { max-width:850px; margin-bottom:38px; }
