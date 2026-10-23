@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="User manual and technical guide for Integral Flux, a dual slope generator, slew limiter, and analog logic module for VCV Rack 2.">
+<title>Integral Flux User Manual - Leviathan</title>
+<style>
+:root {
+  color-scheme: dark;
+  --ink:#eef6ff; --muted:#a9b7c8; --deep:#070b12; --panel:#0e1520; --panel2:#121b29;
+  --cyan:#1cccd9; --purple:#7a5cff; --gold:#ebcc80; --line:#26364a; --paper:#f7f9fc;
+  --shadow:0 22px 60px rgba(0,0,0,.38);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; background:radial-gradient(circle at 78% 10%,rgba(122,92,255,.14),transparent 30rem),radial-gradient(circle at 18% 22%,rgba(28,204,217,.11),transparent 28rem),var(--deep); color:var(--ink); line-height:1.62; }
+a { color:#7feaf1; }
+.layout { display:grid; grid-template-columns:250px minmax(0,1fr); max-width:1500px; margin:auto; }
+nav { position:sticky; top:0; height:100vh; padding:30px 24px; border-right:1px solid var(--line); background:rgba(7,11,18,.9); backdrop-filter:blur(18px); overflow:auto; }
+nav .brand-home { display:block; padding:0; border-radius:7px; }
+nav .brand-home:focus-visible { outline:2px solid var(--cyan); outline-offset:4px; }
+nav .brand-lockup { display:block; width:100%; max-width:200px; height:auto; margin:0 0 20px; border-radius:7px; box-shadow:0 10px 30px rgba(0,0,0,.28); }
+nav .brand { font-size:1.15rem; letter-spacing:.18em; font-weight:800; margin-bottom:2px; }
+nav .sub { color:var(--muted); font-size:.75rem; margin-bottom:28px; }
+nav a { display:block; color:#c7d3e1; text-decoration:none; padding:7px 0; font-size:.88rem; }
+nav a:hover { color:#fff; transform:translateX(2px); }
+nav .nav-actions { margin-top:24px; }
+button { border:1px solid rgba(28,204,217,.55); background:rgba(28,204,217,.1); color:var(--ink); padding:9px 12px; border-radius:999px; cursor:pointer; }
+main { min-width:0; }
+.hero { min-height:740px; display:grid; grid-template-columns:minmax(0,1fr) minmax(330px,560px); gap:70px; align-items:center; padding:80px clamp(32px,7vw,110px); overflow:hidden; }
+.dragon-divider { position:relative; height:48px; }
+.dragon-divider img { position:absolute; left:50%; top:50%; display:block; width:min(78%,900px); height:auto; transform:translate(-50%,-50%); opacity:.42; filter:drop-shadow(0 0 22px rgba(28,204,217,.16)); pointer-events:none; user-select:none; }
+.kicker,.eyebrow { color:var(--cyan); text-transform:uppercase; letter-spacing:.2em; font-size:.72rem; font-weight:800; }
+h1 { font-size:clamp(3.8rem,8.5vw,7.6rem); line-height:.86; letter-spacing:-.075em; margin:16px 0 28px; background:linear-gradient(100deg,#865cff 0%,#c9a8ff 27%,#f6f9ff 49%,#77eaff 72%,#1cccd9 100%); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 10px 28px rgba(50,124,210,.14)); }
+.deck { font-size:clamp(1.08rem,2vw,1.4rem); max-width:680px; color:#d4e0ed; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; }
+.chip { border:1px solid var(--line); background:rgba(255,255,255,.035); border-radius:999px; padding:7px 11px; color:#c9d6e4; font-size:.8rem; }
+.hero-modules { display:flex; align-items:center; justify-content:center; gap:24px; perspective:1200px; }
+.hero-modules img { width:min(90%,340px); height:auto; border:1px solid rgba(255,255,255,.16); border-radius:12px; box-shadow:var(--shadow); transform:rotateY(-4deg) translateY(6px); }
+section { position:relative; isolation:isolate; padding:70px clamp(32px,7vw,110px); border-bottom:1px solid var(--line); scroll-margin-top:20px; overflow:hidden; }
+section::before { position:absolute; z-index:0; bottom:0; width:min(58vw,650px); aspect-ratio:959/376; background:url("../img/PerfectWave_KCrop.png") center bottom/contain no-repeat; content:""; opacity:.065; mix-blend-mode:screen; -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); pointer-events:none; }
+section:nth-of-type(odd)::before { right:-5%; transform:scaleX(-1); -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); }
+section:nth-of-type(even)::before { left:-5%; }
+section > * { position:relative; z-index:1; }
+.section-head { max-width:850px; margin-bottom:38px; }
+h2 { font-size:clamp(2.1rem,4.7vw,4.2rem); line-height:1; letter-spacing:-.045em; margin:8px 0 18px; }
+h3 { line-height:1.18; margin:.2rem 0 .45rem; }
+p { margin:.45rem 0 1rem; }
+.muted { color:var(--muted); }
+.callout { border-left:3px solid var(--cyan); padding:18px 22px; background:rgba(28,204,217,.07); max-width:900px; margin:30px 0; border-radius:0 12px 12px 0; }
+.callout strong { color:var(--cyan); }
+
+/* Architecture */
+.architecture { display:grid; grid-template-columns:repeat(5,minmax(120px,1fr)); gap:12px; align-items:stretch; }
+.arch-box { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:105px; padding:18px; border-radius:14px; border:1px solid var(--line); background:var(--panel); position:relative; font-weight:750; }
+.arch-box:not(:last-child)::after { content:""; position:absolute; right:-13px; top:50%; width:13px; border-top:2px solid var(--cyan); }
+.arch-box small { display:block; color:var(--muted); font-weight:500; margin-top:5px; font-size:.8rem; }
+.arch-diagram-wrap { margin-top:32px; border:1px solid var(--line); border-radius:16px; overflow:hidden; background:rgba(10,16,25,.8); padding:24px; text-align:center; }
+.arch-diagram-wrap img { max-width:100%; height:auto; border-radius:8px; }
+
+/* Panel tour */
+.panel-tour { display:grid; grid-template-columns:minmax(300px,460px) minmax(0,1fr); gap:50px; align-items:start; }
+.annotated-panel { position:relative; width:min(100%,420px); margin:0 auto; box-shadow:var(--shadow); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.1); }
+.annotated-panel img { display:block; width:100%; height:auto; }
+.control-list { display:grid; grid-template-columns:1fr; gap:12px; }
+.control-card { display:grid; grid-template-columns:34px 1fr; gap:12px; padding:18px; border-radius:14px; border:1px solid var(--line); background:rgba(14,21,32,.8); }
+.control-card .num { width:30px; height:30px; border-radius:50%; display:grid; place-items:center; background:var(--purple); font-weight:900; }
+.control-card p { color:#c2cede; font-size:.91rem; margin:.3rem 0; }
+.control-card .range { color:var(--gold); font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; }
+
+.panel-overlay { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+.panel-overlay line { stroke:#fff; stroke-width:32; paint-order:stroke; }
+.panel-overlay circle { fill:#f7fbff; stroke:var(--purple); stroke-width:55; }
+.panel-overlay text { fill:#101725; font-size:255px; font-weight:900; text-anchor:middle; dominant-baseline:central; }
+.panel-overlay a:hover circle,.panel-overlay a:focus circle { fill:var(--gold); stroke:var(--cyan); }
+.io-heading { margin-top:48px; }
+.control-card { scroll-margin-top:24px; }
+
+/* Tables */
+.table-wrap { width:100%; overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
+table { width:100%; border-collapse:collapse; min-width:760px; background:rgba(12,18,28,.88); }
+th { text-align:left; color:var(--gold); font-size:.74rem; text-transform:uppercase; letter-spacing:.08em; background:#121b29; }
+th,td { padding:14px 16px; border-bottom:1px solid var(--line); vertical-align:top; }
+td { color:#cbd6e3; }
+tr:last-child td { border-bottom:0; }
+
+/* Info and recipes */
+.display-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.info-card { padding:26px; border:1px solid var(--line); border-radius:16px; background:var(--panel); }
+.info-card ul { padding-left:1.2rem; }
+.recipes { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.recipe { padding:24px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(155deg,rgba(122,92,255,.09),rgba(28,204,217,.04)); }
+.recipe .why { color:#9feaf0; border-top:1px solid var(--line); padding-top:14px; margin-top:14px; font-size:.9rem; }
+details { border:1px solid var(--line); border-radius:12px; margin:10px 0; background:var(--panel); }
+summary { cursor:pointer; padding:16px 18px; font-weight:750; }
+details p { padding:0 18px 18px; color:#c6d2df; }
+.spec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.spec { padding:20px; border:1px solid var(--line); border-radius:14px; background:var(--panel); }
+.spec strong { display:block; color:var(--gold); font-size:.73rem; text-transform:uppercase; letter-spacing:.08em; }
+footer { position:relative; min-height:150px; padding:42px clamp(32px,7vw,110px); color:var(--muted); display:flex; align-items:flex-end; justify-content:space-between; gap:30px; overflow:hidden; }
+footer span { position:relative; z-index:1; }
+
+@media (max-width:1100px) { .layout{display:block} nav{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)} nav a{display:inline-block;margin-right:16px} .hero{grid-template-columns:1fr;} .panel-tour{grid-template-columns:1fr} .recipes{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:680px) { section,.hero{padding:48px 20px} .hero{min-height:auto} .dragon-divider{height:36px}.dragon-divider img{width:110%;max-width:none;opacity:.38} .hero-modules{gap:10px} .hero-modules img{width:100%} .control-list,.display-grid,.recipes,.spec-grid{grid-template-columns:1fr} .architecture{grid-template-columns:1fr} .arch-box:not(:last-child)::after{right:50%;top:auto;bottom:-13px;height:13px;width:0;border-top:0;border-left:2px solid var(--cyan)} footer{display:block;min-height:140px;padding:36px 20px} footer span{display:block;margin-bottom:6px} }
+@media print {
+  :root{color-scheme:light} body{background:#fff;color:#101725;font-size:10.5pt} nav,.nav-actions,.dragon-divider{display:none} .layout{display:block;max-width:none} .hero{min-height:0;grid-template-columns:1fr 340px;padding:32px;border-bottom:1px solid #b9c3ce;page-break-after:always} h1{font-size:54pt;color:#152238;background:none} section{padding:28px 34px;border-color:#cdd5de} section::before{display:none} .control-card,.info-card,.recipe,.spec,details{background:#fff;border-color:#b9c3ce;color:#101725;break-inside:avoid} p,td,.control-card p,details p{color:#26364a} table{background:#fff} th{background:#eaf1f7;color:#25334a} th,td{border-color:#cdd5de} .panel-tour{grid-template-columns:270px 1fr;gap:24px} .recipes{grid-template-columns:repeat(2,1fr)} a{color:#174f7a} footer{min-height:0;border-top:1px solid #cdd5de;color:#536274}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav aria-label="Manual navigation">
+  <a class="brand-home" href="../index.html" aria-label="Return to manuals portal"><img class="brand-lockup" src="../img/Branding_Logo_Crop_Only.png" alt="Leviathan"></a>
+  <div class="brand">INTEGRAL FLUX</div>
+  <div class="sub">LEVIATHAN USER MANUAL</div>
+  <a href="#concept">Core concept</a>
+  <a href="#panel">Panel tour</a>
+  <a href="#cv">CV and patching</a>
+  <a href="#modes">Function vs Slew</a>
+  <a href="#curves">Curvature engine</a>
+  <a href="#display">Waveform display</a>
+  <a href="#settings">Context menu</a>
+  <a href="#recipes">Patch recipes</a>
+  <a href="#troubleshooting">Troubleshooting</a>
+  <a href="#reference">Reference</a>
+  <div class="nav-actions"><button onclick="window.print()">Print / Save PDF</button></div>
+</nav>
+<main>
+<header class="hero">
+  <div>
+    <p class="kicker">Leviathan for VCV Rack 2 · Open Source</p>
+    <h1>Integral Flux</h1>
+    <p class="deck">A dual-slope generator, variable curvature slew limiter, precision attenuverter suite, and analog logic mix matrix.</p>
+    <p class="muted">Two independent outer function cores with sub-milli-Hertz to audio-rate speed, two central DC attenuverters, dedicated phase gates, and normalized OR / SUM / INV bus synthesis.</p>
+    <div class="chips">
+      <span class="chip">20 HP Eurorack</span>
+      <span class="chip">Dual Slope Generator</span>
+      <span class="chip">Analog Logic Bus</span>
+      <span class="chip">Real-time Visualizer</span>
+      <span class="chip">GPL-3.0 License</span>
+    </div>
+  </div>
+  <div class="hero-modules">
+    <img src="img/Integral%20Flux.png" alt="Integral Flux front panel">
+  </div>
+</header>
+<div class="dragon-divider" aria-hidden="true"><img src="../img/Leviathan_Dragon_Transparent_Refined.png" alt=""></div>
+
+<!-- Core concept -->
+<section id="concept">
+  <div class="section-head">
+    <p class="eyebrow">Core concept</p>
+    <h2>Integration, transformation, and logic.</h2>
+    <p>Integral Flux is built on two primary outer channels (CH1 and CH4) and two precision utility channels (CH2 and CH3). Channels 1 and 4 can operate as free-running or triggered function generators, LFOs, audio-rate VCOs, or voltage slew limiters with continuously variable curvature from logarithmic through linear to exponential.</p>
+  </div>
+  <div class="architecture">
+    <div class="arch-box">Outer Cores<small>CH1 & CH4 (Rise/Fall/Both)</small></div>
+    <div class="arch-box">Curvature<small>Log → Lin → Exp & Shark Fin</small></div>
+    <div class="arch-box">Normaled Offsets<small>CH2 (+10V) & CH3 (+5V)</small></div>
+    <div class="arch-box">Bus Picking<small>Var patch normal disconnect</small></div>
+    <div class="arch-box">Analog Logic<small>SUM, OR, & INV outputs</small></div>
+  </div>
+
+  <div class="arch-diagram-wrap">
+    <p class="eyebrow" style="margin-bottom:12px;">Signal routing</p>
+    <p>CH1/CH4 core → two parallel paths: direct UNITY output, and attenuverter → +/-10V clamp → variable OUT.</p>
+    <p>CH2/CH3 input (or +10V/+5V reference) → attenuverter → +/-10V clamp → variable OUT.</p>
+    <p>Each variable channel also feeds the internal bus while its OUT is unpatched: SUM = clamped sum; INV = −SUM; OR = maximum of zero and the four bus voltages. EOR/EOC gates follow core stage or slew direction independently.</p>
+  </div>
+</section>
+
+<!-- Panel tour -->
+<section id="panel">
+  <div class="section-head">
+    <p class="eyebrow">Panel tour</p>
+    <h2>Controls and I/O legend.</h2>
+    <p class="muted">CH1 is on the left, CH4 on the right; CH2 and CH3 are the center utility channels. The two views below separate controls from jacks. Repeated numbers identify the same control or port type on different channels.</p>
+  </div>
+  <h3>Controls &amp; displays · 1–7</h3>
+  <div class="panel-tour">
+<figure class="annotated-panel">
+<img src="img/Integral%20Flux.png" alt="Integral Flux front panel; numbered references are described in the adjacent legend.">
+<svg class="panel-overlay" viewBox="0 0 10160 12850" aria-label="Control and display locations">
+<a href="#flux-control-1" aria-label="1: SURGE — rise time"><title>1: SURGE — rise time</title><line x1="3375.45" y1="3581.57" x2="3845.45" y2="3111.57"/><circle cx="3845.45" cy="3111.57" r="220"/><text x="3845.45" y="3111.57">1</text></a>
+<a href="#flux-control-1" aria-label="1: SURGE — rise time"><title>1: SURGE — rise time</title><line x1="6763.81" y1="3581.57" x2="6293.81" y2="3111.57"/><circle cx="6293.81" cy="3111.57" r="220"/><text x="6293.81" y="3111.57">1</text></a>
+<a href="#flux-control-2" aria-label="2: SINK — fall time"><title>2: SINK — fall time</title><line x1="4200.75" y1="5307.91" x2="4670.75" y2="4837.91"/><circle cx="4670.75" cy="4837.91" r="220"/><text x="4670.75" y="4837.91">2</text></a>
+<a href="#flux-control-2" aria-label="2: SINK — fall time"><title>2: SINK — fall time</title><line x1="5918.54" y1="5307.91" x2="5448.54" y2="4837.91"/><circle cx="5448.54" cy="4837.91" r="220"/><text x="5448.54" y="4837.91">2</text></a>
+<a href="#flux-control-3" aria-label="3: LOOP buttons and LEDs"><title>3: LOOP buttons &amp; LEDs</title><line x1="2837.54" y1="1853.81" x2="3307.54" y2="1383.81"/><circle cx="3307.54" cy="1383.81" r="220"/><text x="3307.54" y="1383.81">3</text></a>
+<a href="#flux-control-3" aria-label="3: LOOP buttons and LEDs"><title>3: LOOP buttons &amp; LEDs</title><line x1="7305.23" y1="1853.80" x2="6835.23" y2="1383.80"/><circle cx="6835.23" cy="1383.80" r="220"/><text x="6835.23" y="1383.80">3</text></a>
+<a href="#flux-control-4" aria-label="4: CURVE knobs"><title>4: CURVE knobs</title><line x1="1397.54" y1="5052.61" x2="1867.54" y2="4582.61"/><circle cx="1867.54" cy="4582.61" r="220"/><text x="1867.54" y="4582.61">4</text></a>
+<a href="#flux-control-4" aria-label="4: CURVE knobs"><title>4: CURVE knobs</title><line x1="9171.60" y1="5052.61" x2="8701.60" y2="4582.61"/><circle cx="8701.60" cy="4582.61" r="220"/><text x="8701.60" y="4582.61">4</text></a>
+<a href="#flux-control-5" aria-label="5: Shape-mode switches"><title>5: Shape-mode switches</title><line x1="974.74" y1="3040.01" x2="1444.74" y2="2570.01"/><circle cx="1444.74" cy="2570.01" r="220"/><text x="1444.74" y="2570.01">5</text></a>
+<a href="#flux-control-5" aria-label="5: Shape-mode switches"><title>5: Shape-mode switches</title><line x1="9138.12" y1="3040.01" x2="8668.12" y2="2570.01"/><circle cx="8668.12" cy="2570.01" r="220"/><text x="8668.12" y="2570.01">5</text></a>
+<a href="#flux-control-6" aria-label="6: Waveform previews"><title>6: Waveform previews</title><line x1="1436.00" y1="6950.00" x2="1436.00" y2="6950.00"/><circle cx="1436.00" cy="6950.00" r="220"/><text x="1436.00" y="6950.00">6</text></a>
+<a href="#flux-control-6" aria-label="6: Waveform previews"><title>6: Waveform previews</title><line x1="8712.50" y1="6950.00" x2="8712.50" y2="6950.00"/><circle cx="8712.50" cy="6950.00" r="220"/><text x="8712.50" y="6950.00">6</text></a>
+<a href="#flux-control-7" aria-label="7: Channel attenuverters"><title>7: Channel attenuverters</title><line x1="2549.44" y1="8644.58" x2="3019.44" y2="8174.58"/><circle cx="3019.44" cy="8174.58" r="220"/><text x="3019.44" y="8174.58">7</text></a>
+<a href="#flux-control-7" aria-label="7: Channel attenuverters"><title>7: Channel attenuverters</title><line x1="4206.81" y1="8644.58" x2="4676.81" y2="8174.58"/><circle cx="4676.81" cy="8174.58" r="220"/><text x="4676.81" y="8174.58">7</text></a>
+<a href="#flux-control-7" aria-label="7: Channel attenuverters"><title>7: Channel attenuverters</title><line x1="5895.00" y1="8644.58" x2="5425.00" y2="8174.58"/><circle cx="5425.00" cy="8174.58" r="220"/><text x="5425.00" y="8174.58">7</text></a>
+<a href="#flux-control-7" aria-label="7: Channel attenuverters"><title>7: Channel attenuverters</title><line x1="7593.14" y1="8644.58" x2="7123.14" y2="8174.58"/><circle cx="7123.14" cy="8174.58" r="220"/><text x="7123.14" y="8174.58">7</text></a>
+</svg>
+</figure>
+<div class="control-list">
+<article class="control-card" id="flux-control-1"><span class="num">1</span><div><h3>SURGE — rise time</h3><p class="range">CH1 left; CH4 right</p><p>Sets the rising-stage time. Rise CV is the adjacent input marked by a rising-slope glyph.</p></div></article>
+<article class="control-card" id="flux-control-2"><span class="num">2</span><div><h3>SINK — fall time</h3><p class="range">CH1 inner left; CH4 inner right</p><p>Sets the falling-stage time. Fall CV is the jack below and toward the outside of each SINK knob.</p></div></article>
+<article class="control-card" id="flux-control-3"><span class="num">3</span><div><h3>LOOP buttons &amp; LEDs</h3><p class="range">Gold buttons near the top</p><p>Each button latches cycling on or off. The small light above it indicates cycling; the separate jack beside it is Cycle CV (10).</p></div></article>
+<article class="control-card" id="flux-control-4"><span class="num">4</span><div><h3>CURVE knobs</h3><p class="range">Large outer knobs</p><p>Shapes rise and fall. Mirror mode is linear at 33% travel; Shark Fin is linear at 50%. Shape also affects timing.</p></div></article>
+<article class="control-card" id="flux-control-5"><span class="num">5</span><div><h3>Shape-mode switches</h3><p class="range">Small vertical switches above CURVE</p><p>Select Mirror or Shark Fin independently for CH1 and CH4. These switches are controls, not jacks.</p></div></article>
+<article class="control-card" id="flux-control-6"><span class="num">6</span><div><h3>Waveform previews</h3><p class="range">Two windows below CURVE</p><p>Show nominal cycle geometry and a calculated frequency estimate. The animated phase dot is visible only for active functions at low rates.</p></div></article>
+<article class="control-card" id="flux-control-7"><span class="num">7</span><div><h3>Channel attenuverters</h3><p class="range">Four small knobs in a row, CH1 → CH4</p><p>Control the four numbered outputs and their bus contributions. Center = zero, counter-clockwise = inverted, clockwise = positive. CH2/CH3 use +10V/+5V references when their inputs are unpatched.</p></div></article>
+</div>
+  </div>
+  <h3 class="io-heading">Inputs &amp; outputs · 8–18</h3>
+  <p class="muted">Purple-ringed jacks are inputs; cyan-ringed jacks are outputs. Rise and fall CV use slope glyphs; Cycle CV sits beside LOOP. The unity outputs carry ∫ 1 and ∫ 4 labels. Click a numbered marker to reach its description.</p>
+  <div class="panel-tour">
+<figure class="annotated-panel">
+<img src="img/Integral%20Flux.png" alt="Integral Flux front panel; numbered references are described in the adjacent legend.">
+<svg class="panel-overlay" viewBox="0 0 10160 12850" aria-label="Input and output locations">
+<a href="#flux-control-8" aria-label="8: IN 1 / IN 4 — signal inputs"><title>8: IN 1 / IN 4 — signal inputs</title><line x1="794.70" y1="1445.37" x2="1264.70" y2="975.37"/><circle cx="1264.70" cy="975.37" r="220"/><text x="1264.70" y="975.37">8</text></a>
+<a href="#flux-control-8" aria-label="8: IN 1 / IN 4 — signal inputs"><title>8: IN 1 / IN 4 — signal inputs</title><line x1="9318.10" y1="1445.37" x2="8848.10" y2="975.37"/><circle cx="8848.10" cy="975.37" r="220"/><text x="8848.10" y="975.37">8</text></a>
+<a href="#flux-control-9" aria-label="9: TRIG — trigger inputs"><title>9: TRIG — trigger inputs</title><line x1="1791.10" y1="1445.37" x2="2261.10" y2="975.37"/><circle cx="2261.10" cy="975.37" r="220"/><text x="2261.10" y="975.37">9</text></a>
+<a href="#flux-control-9" aria-label="9: TRIG — trigger inputs"><title>9: TRIG — trigger inputs</title><line x1="8321.68" y1="1445.37" x2="7851.68" y2="975.37"/><circle cx="7851.68" cy="975.37" r="220"/><text x="7851.68" y="975.37">9</text></a>
+<a href="#flux-control-10" aria-label="10: Cycle CV inputs"><title>10: Cycle CV inputs</title><line x1="3654.91" y1="1843.79" x2="4124.91" y2="1373.79"/><circle cx="4124.91" cy="1373.79" r="220"/><text x="4124.91" y="1373.79">10</text></a>
+<a href="#flux-control-10" aria-label="10: Cycle CV inputs"><title>10: Cycle CV inputs</title><line x1="6467.88" y1="1843.78" x2="5997.88" y2="1373.78"/><circle cx="5997.88" cy="1373.78" r="220"/><text x="5997.88" y="1373.78">10</text></a>
+<a href="#flux-control-11" aria-label="11: Rise CV inputs"><title>11: Rise CV inputs</title><line x1="2168.30" y1="3401.57" x2="2638.30" y2="2931.57"/><circle cx="2638.30" cy="2931.57" r="220"/><text x="2638.30" y="2931.57">11</text></a>
+<a href="#flux-control-11" aria-label="11: Rise CV inputs"><title>11: Rise CV inputs</title><line x1="7981.00" y1="3401.57" x2="7511.00" y2="2931.57"/><circle cx="7511.00" cy="2931.57" r="220"/><text x="7511.00" y="2931.57">11</text></a>
+<a href="#flux-control-12" aria-label="12: BOTH — combined timing CV"><title>12: BOTH — combined timing CV</title><line x1="2663.30" y1="5026.97" x2="3133.30" y2="4556.97"/><circle cx="3133.30" cy="4556.97" r="220"/><text x="3133.30" y="4556.97">12</text></a>
+<a href="#flux-control-12" aria-label="12: BOTH — combined timing CV"><title>12: BOTH — combined timing CV</title><line x1="7455.99" y1="5026.97" x2="6985.99" y2="4556.97"/><circle cx="6985.99" cy="4556.97" r="220"/><text x="6985.99" y="4556.97">12</text></a>
+<a href="#flux-control-13" aria-label="13: Fall CV inputs"><title>13: Fall CV inputs</title><line x1="3270.41" y1="6326.32" x2="3740.41" y2="5856.32"/><circle cx="3740.41" cy="5856.32" r="220"/><text x="3740.41" y="5856.32">13</text></a>
+<a href="#flux-control-13" aria-label="13: Fall CV inputs"><title>13: Fall CV inputs</title><line x1="6918.93" y1="6326.32" x2="6448.93" y2="5856.32"/><circle cx="6448.93" cy="5856.32" r="220"/><text x="6448.93" y="5856.32">13</text></a>
+<a href="#flux-control-14" aria-label="14: IN 2 / IN 3 — utility inputs"><title>14: IN 2 / IN 3 — utility inputs</title><line x1="4206.81" y1="7637.73" x2="4676.81" y2="7167.73"/><circle cx="4676.81" cy="7167.73" r="220"/><text x="4676.81" y="7167.73">14</text></a>
+<a href="#flux-control-14" aria-label="14: IN 2 / IN 3 — utility inputs"><title>14: IN 2 / IN 3 — utility inputs</title><line x1="5895.00" y1="7637.69" x2="5425.00" y2="7167.69"/><circle cx="5425.00" cy="7167.69" r="220"/><text x="5425.00" y="7167.69">14</text></a>
+<a href="#flux-control-15" aria-label="15: 1 / 2 / 3 / 4 — variable outputs"><title>15: 1 / 2 / 3 / 4 — variable outputs</title><line x1="2529.51" y1="9694.57" x2="2999.51" y2="9224.57"/><circle cx="2999.51" cy="9224.57" r="220"/><text x="2999.51" y="9224.57">15</text></a>
+<a href="#flux-control-15" aria-label="15: 1 / 2 / 3 / 4 — variable outputs"><title>15: 1 / 2 / 3 / 4 — variable outputs</title><line x1="4206.81" y1="9694.57" x2="4676.81" y2="9224.57"/><circle cx="4676.81" cy="9224.57" r="220"/><text x="4676.81" y="9224.57">15</text></a>
+<a href="#flux-control-15" aria-label="15: 1 / 2 / 3 / 4 — variable outputs"><title>15: 1 / 2 / 3 / 4 — variable outputs</title><line x1="5895.00" y1="9694.57" x2="5425.00" y2="9224.57"/><circle cx="5425.00" cy="9224.57" r="220"/><text x="5425.00" y="9224.57">15</text></a>
+<a href="#flux-control-15" aria-label="15: 1 / 2 / 3 / 4 — variable outputs"><title>15: 1 / 2 / 3 / 4 — variable outputs</title><line x1="7583.20" y1="9694.57" x2="7113.20" y2="9224.57"/><circle cx="7113.20" cy="9224.57" r="220"/><text x="7113.20" y="9224.57">15</text></a>
+<a href="#flux-control-16" aria-label="16: EoR / EoC — gate outputs"><title>16: EoR / EoC — gate outputs</title><line x1="1003.70" y1="9694.57" x2="1473.70" y2="9224.57"/><circle cx="1473.70" cy="9224.57" r="220"/><text x="1473.70" y="9224.57">16</text></a>
+<a href="#flux-control-16" aria-label="16: EoR / EoC — gate outputs"><title>16: EoR / EoC — gate outputs</title><line x1="9128.10" y1="9694.57" x2="8658.10" y2="9224.57"/><circle cx="8658.10" cy="9224.57" r="220"/><text x="8658.10" y="9224.57">16</text></a>
+<a href="#flux-control-17" aria-label="17: ∫ 1 / ∫ 4 — unity outputs"><title>17: ∫ 1 / ∫ 4 — unity outputs</title><line x1="1004.71" y1="11068.23" x2="1474.71" y2="11538.23"/><circle cx="1474.71" cy="11538.23" r="220"/><text x="1474.71" y="11538.23">17</text></a>
+<a href="#flux-control-17" aria-label="17: ∫ 1 / ∫ 4 — unity outputs"><title>17: ∫ 1 / ∫ 4 — unity outputs</title><line x1="9128.10" y1="11068.23" x2="8658.10" y2="11538.23"/><circle cx="8658.10" cy="11538.23" r="220"/><text x="8658.10" y="11538.23">17</text></a>
+<a href="#flux-control-18" aria-label="18: OR / SUM / INV — mix outputs"><title>18: OR / SUM / INV — mix outputs</title><line x1="3365.20" y1="11068.23" x2="3835.20" y2="10598.23"/><circle cx="3835.20" cy="10598.23" r="220"/><text x="3835.20" y="10598.23">18</text></a>
+<a href="#flux-control-18" aria-label="18: OR / SUM / INV — mix outputs"><title>18: OR / SUM / INV — mix outputs</title><line x1="5081.35" y1="11068.23" x2="4611.35" y2="10598.23"/><circle cx="4611.35" cy="10598.23" r="220"/><text x="4611.35" y="10598.23">18</text></a>
+<a href="#flux-control-18" aria-label="18: OR / SUM / INV — mix outputs"><title>18: OR / SUM / INV — mix outputs</title><line x1="6797.50" y1="11068.23" x2="6327.50" y2="10598.23"/><circle cx="6327.50" cy="10598.23" r="220"/><text x="6327.50" y="10598.23">18</text></a>
+</svg>
+</figure>
+<div class="control-list">
+<article class="control-card" id="flux-control-8"><span class="num">8</span><div><h3>IN 1 / IN 4 — signal inputs</h3><p class="range">Outermost top jacks</p><p>Feed the CH1/CH4 slew limiters when idle. During a triggered or cycling function, the input perturbs the function core.</p></div></article>
+<article class="control-card" id="flux-control-9"><span class="num">9</span><div><h3>TRIG — trigger inputs</h3><p class="range">Top jacks beside IN 1 / IN 4</p><p>Left TRIG drives CH1; right TRIG drives CH4. Rising edge at 1V, re-arm at 0V. Triggers during rise are ignored; accepted triggers during fall reset the core to 0V.</p></div></article>
+<article class="control-card" id="flux-control-10"><span class="num">10</span><div><h3>Cycle CV inputs</h3><p class="range">Jacks beside the gold LOOP buttons</p><p>A gate at or above 2.5V enables cycling. These are separate from TRIG. Cycling stays on if the LOOP button is latched, even with low Cycle CV.</p></div></article>
+<article class="control-card" id="flux-control-11"><span class="num">11</span><div><h3>Rise CV inputs</h3><p class="range">Rising-slope glyphs beside SURGE</p><p>CH1 on the left; CH4 on the right. Positive CV lengthens rise; negative CV shortens it.</p></div></article>
+<article class="control-card" id="flux-control-12"><span class="num">12</span><div><h3>BOTH — combined timing CV</h3><p class="range">Jacks between CURVE and SINK</p><p>Affects rise and fall together. Positive CV speeds up; negative CV slows down. The saturating response is not calibrated 1V/oct.</p></div></article>
+<article class="control-card" id="flux-control-13"><span class="num">13</span><div><h3>Fall CV inputs</h3><p class="range">Falling-slope glyphs below SINK</p><p>CH1 on the left; CH4 on the right. Positive CV lengthens fall; negative CV shortens it.</p></div></article>
+<article class="control-card" id="flux-control-14"><span class="num">14</span><div><h3>IN 2 / IN 3 — utility inputs</h3><p class="range">Center pair above the attenuverters</p><p>Feed the CH2/CH3 attenuverters. Unpatched: IN 2 supplies +10V and IN 3 supplies +5V. These channels do not slew.</p></div></article>
+<article class="control-card" id="flux-control-15"><span class="num">15</span><div><h3>1 / 2 / 3 / 4 — variable outputs</h3><p class="range">Four middle jacks in the upper output row</p><p>Each output follows its matching attenuverter and clamps to +/-10V. Patching one removes that channel from SUM, INV, and OR.</p></div></article>
+<article class="control-card" id="flux-control-16"><span class="num">16</span><div><h3>EoR / EoC — gate outputs</h3><p class="range">Outer jacks in the upper output row</p><p>Left EoR belongs to CH1: high during fall. Right EoC belongs to CH4: high during rise. Both are low at idle; in slew mode they indicate downward/upward motion respectively.</p></div></article>
+<article class="control-card" id="flux-control-17"><span class="num">17</span><div><h3>∫ 1 / ∫ 4 — unity outputs</h3><p class="range">Outer jacks in the bottom output row</p><p>Direct CH1/CH4 core outputs, bypassing attenuverters and their clamps. Patching these keeps the variable channels in the mix bus. The integral-symbol labels identify these unity outputs.</p></div></article>
+<article class="control-card" id="flux-control-18"><span class="num">18</span><div><h3>OR / SUM / INV — mix outputs</h3><p class="range">Three middle jacks in the bottom row, left to right</p><p>OR selects the highest positive bus voltage. SUM adds the unpatched variable channels and clamps to +/-10V. INV is the negative of SUM.</p></div></article>
+</div>
+  </div>
+</section>
+
+<!-- CV and patching -->
+<section id="cv">
+  <div class="section-head">
+    <p class="eyebrow">CV and patching</p>
+    <h2>Voltage behavior & normaling rules.</h2>
+    <p class="muted">Integral Flux follows the classic Make Noise Maths normalization conventions with modernized high-speed CV response.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Port</th>
+          <th>Type</th>
+          <th>Range / Voltage</th>
+          <th>Operational Behavior</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>IN 1 / IN 4</strong></td>
+          <td>Signal In</td>
+          <td>+/-10 V audio / CV</td>
+          <td>Input to the shaped slew limiter. When not cycling or running a triggered function, the output tracks this input with the rise and fall slew rates set by the dials.</td>
+        </tr>
+        <tr>
+          <td><strong>TRIG 1 / TRIG 4</strong></td>
+          <td>Trigger In</td>
+          <td>Rising edge at 1 V; re-arm at 0 V</td>
+          <td>Starts a rise phase; triggers during rise are ignored. A trigger during fall resets the core to 0V before rising. A trigger from idle slew starts from the current core voltage. Accepted triggers have a 0.5 ms re-arm interval.</td>
+        </tr>
+        <tr>
+          <td><strong>CYCLE 1 / CYCLE 4</strong></td>
+          <td>Gate In</td>
+          <td>High threshold 2.5 V</td>
+          <td>Engages cycling at 2.5V or above, in addition to the latched Cycle button. A low gate cannot override a latched-on button. Releasing the gate lets the current cycle finish.</td>
+        </tr>
+        <tr>
+          <td><strong>RISE CV / FALL CV</strong></td>
+          <td>Modulation</td>
+          <td>+/-10 V exponential</td>
+          <td>Exponential time scaling. <strong>Positive voltage increases time (slower)</strong>; <strong>negative voltage decreases time (faster)</strong>.</td>
+        </tr>
+        <tr>
+          <td><strong>BOTH CV</strong></td>
+          <td>Modulation</td>
+          <td>Bipolar, saturating speed control</td>
+          <td>Scales both stage times: positive CV speeds up, negative CV slows down. The response is saturating rather than calibrated 1V/oct. Rise/fall ratio is preserved until timing limits intervene.</td>
+        </tr>
+        <tr>
+          <td><strong>IN 2 / IN 3</strong></td>
+          <td>Signal In</td>
+          <td>Normaled to DC</td>
+          <td><strong>Unpatched normaling:</strong> IN 2 is normaled to +10V DC; IN 3 is normaled to +5V DC. Patching a jack overrides the internal DC reference.</td>
+        </tr>
+        <tr>
+          <td><strong>1 / 4 (Variable OUT)</strong></td>
+          <td>Variable Out</td>
+          <td>+/-10 V (attenuverted)</td>
+          <td>Scaled by the respective CH1/CH4 attenuverter knob. <strong>Patching this jack disconnects the channel from the SUM, OR, and INV mix bus.</strong></td>
+        </tr>
+        <tr>
+          <td><strong>∫ 1 / ∫ 4 (Unity)</strong></td>
+          <td>Direct Out</td>
+          <td>Nominal 0 to 10.2 V function</td>
+          <td>Direct core output, bypassing the attenuverter and its +/-10V clamp. Slew output can be bipolar. Patching Unity does <em>not</em> remove the channel from the mix bus.</td>
+        </tr>
+        <tr>
+          <td><strong>2 / 3 (Variable OUT)</strong></td>
+          <td>Variable Out</td>
+          <td>Unpatched: +/-10 V / +/-5 V</td>
+          <td>Attenuverted channel output, clamped to +/-10V with an external input. Unpatched input references are +10V on CH2 and +5V on CH3. Patching an output removes that channel from the mix bus.</td>
+        </tr>
+        <tr>
+          <td><strong>EOR (CH1)</strong></td>
+          <td>Gate Out</td>
+          <td>0 V / +10 V</td>
+          <td>End of Rise: +10V during Fall, 0V during Rise and idle. In slew mode, high while moving downward.</td>
+        </tr>
+        <tr>
+          <td><strong>EOC (CH4)</strong></td>
+          <td>Gate Out</td>
+          <td>0 V / +10 V</td>
+          <td>End of Cycle: +10V during Rise, 0V during Fall and idle. In slew mode, high while moving upward; this is not a short completion pulse.</td>
+        </tr>
+        <tr>
+          <td><strong>SUM</strong></td>
+          <td>Mix Bus</td>
+          <td>+/-10 V (clamped)</td>
+          <td>Algebraic sum of all unpatched variable channels: <code>V1 + V2 + V3 + V4</code>. LED reflects SUM polarity (green = positive, red = negative).</td>
+        </tr>
+        <tr>
+          <td><strong>INV</strong></td>
+          <td>Mix Bus</td>
+          <td>+/-10 V (clamped)</td>
+          <td>Inverted sum output: <code>-SUM</code>. Ideal for complementary ducking envelopes and cross-fade pan laws.</td>
+        </tr>
+        <tr>
+          <td><strong>OR</strong></td>
+          <td>Mix Bus</td>
+          <td>0 to +10 V</td>
+          <td>Analog OR / Peak Selector: outputs <code>max(0, V1, V2, V3, V4)</code>. Creates complex composite envelopes and waveshaped harmonics.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>Bus Picking Contract:</strong> Integral Flux isolates variable channels once their dedicated OUT jack is plugged in. To include an attenuverted channel in the SUM or OR bus, leave its dedicated output jack unpatched.
+  </div>
+</section>
+
+<!-- Function vs Slew -->
+<section id="modes">
+  <div class="section-head">
+    <p class="eyebrow">Modes of operation</p>
+    <h2>Function generator vs Slew limiter.</h2>
+    <p>Each outer channel seamlessly morphs between transient envelope generator, periodic oscillator, and external signal slewer based on how you patch it.</p>
+  </div>
+  <div class="display-grid">
+    <div class="info-card">
+      <h3>1. Function Generator Mode (Cycling / Triggered)</h3>
+      <p>When triggered via <strong>TRIG IN</strong> or when <strong>CYCLE</strong> is engaged:</p>
+      <ul>
+        <li>The unipolar function core rises toward 10.2V, then falls to 0V. Actual peak depends on rate, shape, and any patched signal; variable outputs clamp to +/-10V.</li>
+        <li><strong>Rise CV / Fall CV</strong> control the slope speed exponentially.</li>
+        <li><strong>Retriggering:</strong> An incoming trigger pulse during the Rise phase is ignored (ensuring complete attack transients). A trigger during the Fall phase immediately aborts decay and restarts Rise from 0V.</li>
+        <li><strong>External Signal Injection:</strong> Patching a signal into <strong>SIGNAL IN</strong> while cycling gently perturbs the core toward the external signal, allowing soft synchronization and sub-harmonic locking.</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>2. Slew Limiter Mode (Continuous Signal Patched)</h3>
+      <p>When a cable is connected to <strong>SIGNAL IN</strong>, Cycle is disabled, and no triggered function is active:</p>
+      <ul>
+        <li>The channel acts as a precision voltage slew limiter (portamento / lag processor).</li>
+        <li><strong>Rise Knob:</strong> Limits how fast the output can increase in voltage (slew rate limit on rising signals).</li>
+        <li><strong>Fall Knob:</strong> Limits how fast the output can decrease in voltage (slew rate limit on falling signals).</li>
+        <li><strong>Asymmetric Slew:</strong> Use fast Rise and slower Fall to follow positive peaks. For audio amplitude following, rectify bipolar audio externally first.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Curvature engine -->
+<section id="curves">
+  <div class="section-head">
+    <p class="eyebrow">Curvature engine</p>
+    <h2>Continuous mathematical warping.</h2>
+    <p>Unlike simple linear slew processors, Integral Flux features continuous curvature reshaping that retains natural transient punch and analog envelope feel.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Curvature Position</th>
+          <th>Rise Characteristic</th>
+          <th>Fall Characteristic</th>
+          <th>Musical Application</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Full CCW (Logarithmic)</strong></td>
+          <td>Fast initial burst, slow rounding at crest</td>
+          <td>Slow initial drop, faster finish</td>
+          <td>Rounded attacks and falls that accelerate toward zero.</td>
+        </tr>
+        <tr>
+          <td><strong>33% (Linear in Mirror mode)</strong></td>
+          <td>Constant slope rate (ramp up)</td>
+          <td>Constant slope rate (ramp down)</td>
+          <td>Clean pitch glissandi, symmetrical LFO triangles, precise modulation sweeps.</td>
+        </tr>
+        <tr>
+          <td><strong>Full CW (Exponential)</strong></td>
+          <td>Slow creeping start, explosive peak rise</td>
+          <td>Fast initial drop, gentler finish</td>
+          <td>Accelerating attacks and decays that slow toward zero.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>Shape Mode Switch:</strong> Each outer channel has its own panel switch. The table above describes Mirror mode:
+    <br>• <strong>Mirror (Maths):</strong> Uses the same voltage-dependent slope law for rise and fall; linear is at 33% knob travel.
+    <br>• <strong>Shark Fin:</strong> Reverses the curvature sign on rise while retaining the fall law; linear moves to 50% knob travel.
+  </div>
+</section>
+
+<!-- Waveform display -->
+<section id="display">
+  <div class="section-head">
+    <p class="eyebrow">Visual inspection</p>
+    <h2>Real-time waveform preview & frequency readout.</h2>
+    <p>Each outer channel is accompanied by a dedicated visualizer window rendered with sub-pixel vector precision.</p>
+  </div>
+  <div class="display-grid">
+    <div class="info-card">
+      <h3>Vector Contour & Phase Dot</h3>
+      <p>The display previews one nominal cycle of the function corresponding to the current Rise, Fall, and Shape knob settings:</p>
+      <ul>
+        <li><strong>Contour Line:</strong> Previews the selected curvature (log, lin, or exp).</li>
+        <li><strong>Animated Dot:</strong> Tracks active function cycles at low rates; hidden above about 2.4 Hz and while the function generator is idle.</li>
+        <li><strong>Instant Response:</strong> Contour geometry is cached and rebuilt when relevant settings change; the display still requires rendering work.</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>Adaptive Frequency Readout</h3>
+      <p>Below each waveform window, the calculated frequency estimate (1 / (rise time + fall time)) adapts its units. It is not a measurement of external input frequency:</p>
+      <ul>
+        <li><strong>Audio Rates:</strong> Readout in Hertz and kilo-Hertz (e.g. <code>120 Hz</code>, <code>1.05 kHz</code>).</li>
+        <li><strong>Sub-Audio Rates:</strong> Readout in milli-Hertz (<code>mHz</code>) (1 mHz = 1000 seconds per cycle). The readout rounds to whole mHz, so very slow rates may display 0 mHz.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Context menu settings -->
+<section id="settings">
+  <div class="section-head">
+    <p class="eyebrow">Engine settings</p>
+    <h2>Context menu options.</h2>
+    <p>Right-click the panel to configure anti-aliasing and performance optimizations tailored to your CPU and patch complexity.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Bandlimited EOR/EOC</strong></td>
+          <td>Disabled</td>
+          <td>Applies minBLEP anti-aliasing to the sharp edges of EOR and EOC gate transitions, reducing aliasing when using the gates as audio signals.</td>
+        </tr>
+        <tr>
+          <td><strong>Bandlimited CH1/CH4 Signal Outputs</strong></td>
+          <td>Enabled</td>
+          <td>Applies bandlimiting to sharp envelope reset edges when retriggering. Ideal when using Integral Flux as an audio oscillator.</td>
+        </tr>
+        <tr>
+          <td><strong>Timing Update Rate</strong></td>
+          <td>1 (Per-sample)</td>
+          <td>Allows control-rate decimation (/4, /8, /16, /32) of timing parameter calculations under heavy CV modulation to reduce CPU load. Interpolate Timing Updates (enabled by default) smooths timing changes between updates.</td>
+        </tr>
+        <tr>
+          <td><strong>Preview Tracer</strong></td>
+          <td>Enabled</td>
+          <td>Toggles the low-rate animated phase tracer. Select Mirror or Shark Fin using each channel's panel switch.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Patch recipes -->
+<section id="recipes">
+  <div class="section-head">
+    <p class="eyebrow">Patch recipes</p>
+    <h2>Six starting patches.</h2>
+    <p>Integral Flux excels at transforming simple modular signals into animated acoustic movement.</p>
+  </div>
+  <div class="recipes">
+    <article class="recipe">
+      <span class="status">Recipe 1</span>
+      <h3>Percussive Attack-Decay (AD) Envelope</h3>
+      <p><strong>Goal:</strong> Tight, punchy envelope for VCA bass and drum plucks.</p>
+      <p>1. Patch gate/trigger sequencer into <strong>TRIG 1</strong>.</p>
+      <p>2. Set <strong>Rise</strong> to ~10% (snappy attack) and <strong>Fall</strong> to ~35% (medium decay).</p>
+      <p>3. Use Mirror mode and turn <strong>Shape</strong> clockwise from its 33% linear point for a decay that falls quickly then slows.</p>
+      <p>4. Connect <strong>UNITY 1</strong> to your VCA CV input.</p>
+      <div class="why"><strong>Why:</strong> In Mirror mode, the clockwise slope law moves fastest at high voltage, giving a fast initial decay and a gentler finish.</div>
+    </article>
+
+    <article class="recipe">
+      <span class="status">Recipe 2</span>
+      <h3>Sub-Harmonic Clock Divider</h3>
+      <p><strong>Goal:</strong> Divide an incoming master clock by /2, /3, or /4 without dedicated divider modules.</p>
+      <p>1. Turn <strong>CYCLE 1</strong> off and patch master clock into <strong>TRIG 1</strong>.</p>
+      <p>2. Take output from <strong>EOR 1</strong> into your sequencer clock input.</p>
+      <p>3. Keep <strong>Fall</strong> short and lengthen <strong>Rise</strong> across multiple input clock periods. Tune while monitoring EOR; ratios depend on timing.</p>
+      <div class="why"><strong>Why:</strong> Triggers during rise are ignored. EOR rises when that longer rise ends; triggers during fall are accepted, so lengthening fall is not a reliable division method.</div>
+    </article>
+
+    <article class="recipe">
+      <span class="status">Recipe 3</span>
+      <h3>Asymmetric Pitch Portamento (Glissando)</h3>
+      <p><strong>Goal:</strong> Separate glide-up and glide-down slew rates for keyboard leads.</p>
+      <p>1. Patch 1V/Oct pitch CV into <strong>INPUT 1</strong>.</p>
+      <p>2. Ensure <strong>CYCLE 1</strong> is OFF.</p>
+      <p>3. Set <strong>Rise</strong> to ~25% and <strong>Fall</strong> to 0%.</p>
+      <p>4. Patch <strong>UNITY 1</strong> into your oscillator's V/Oct input.</p>
+      <div class="why"><strong>Why:</strong> Notes played moving up the keyboard will glide slowly into pitch, while notes descending follow the faster fall rate. Minimum time is finite, so some lag remains.</div>
+    </article>
+
+    <article class="recipe">
+      <span class="status">Recipe 4</span>
+      <h3>Cross-Modulated FM Complex Oscillator</h3>
+      <p><strong>Goal:</strong> Dual-operator audio FM voice without dedicated VCOs.</p>
+      <p>1. Enable <strong>CYCLE</strong> on both CH1 and CH4.</p>
+      <p>2. Turn Rise and Fall on both channels to near-minimum (frequency depends on Shape; watch the readout).</p>
+      <p>3. Patch <strong>OUT 1</strong> into CH4 <strong>BOTH CV</strong>, and <strong>OUT 4</strong> into CH1 <strong>FALL CV</strong>.</p>
+      <p>4. Listen to <strong>UNITY 1</strong> or <strong>UNITY 4</strong> through an audio output module. Patching OUT 1 and OUT 4 removes both from the internal mix bus.</p>
+      <div class="why"><strong>Why:</strong> Cross-frequency modulation between the two independent slope cores produces rich bell-like sidebands and complex spectra.</div>
+    </article>
+
+    <article class="recipe">
+      <span class="status">Recipe 5</span>
+      <h3>Analog Peak Envelope Follower</h3>
+      <p><strong>Goal:</strong> Extract dynamic amplitude contours from external acoustic audio.</p>
+      <p>1. Rectify acoustic audio with an external rectifier, then patch the unipolar signal into <strong>INPUT 4</strong>. Turn CYCLE 4 off and leave TRIG 4 unpatched.</p>
+      <p>2. Set <strong>Rise</strong> to 0% (fastest available rise).</p>
+      <p>3. Set <strong>Fall</strong> to ~30% (smooth decay between syllables or hits).</p>
+      <p>4. Patch <strong>UNITY 4</strong> into a filter cutoff or VCA CV input.</p>
+      <div class="why"><strong>Why:</strong> Fast rise follows positive peaks while slower fall smooths the rectified signal. The input is not internally full-wave rectified and minimum rise time is finite.</div>
+    </article>
+
+    <article class="recipe">
+      <span class="status">Recipe 6</span>
+      <h3>OR Rectifier &amp; Voltage Floor</h3>
+      <p><strong>Goal:</strong> Rectify a sine wave and set a positive voltage floor.</p>
+      <p>1. Patch an audio sine wave into <strong>INPUT 2</strong>.</p>
+      <p>2. Set CH2 gain to +75% (about 87.5% knob travel). Center CH1 and CH4 attenuverters and leave OUT 2/OUT 3 unpatched.</p>
+      <p>3. Monitor the <strong>OR</strong> output jack.</p>
+      <p>4. Adjust CH3 attenuverter knob (DC offset) to inject bias into the OR bus.</p>
+      <div class="why"><strong>Why:</strong> OR selects <code>max(0, V1, V2, V3, V4)</code>. A positive CH3 reference raises the output floor; it does not add an offset to CH2. This is rectification and peak selection, not wavefolding.</div>
+    </article>
+  </div>
+</section>
+
+<!-- Troubleshooting -->
+<section id="troubleshooting">
+  <div class="section-head">
+    <p class="eyebrow">Troubleshooting</p>
+    <h2>Common questions & answers.</h2>
+  </div>
+  <details>
+    <summary>Why isn't my channel appearing at the SUM or OR output?</summary>
+    <p>Check if a cable is plugged into that channel's variable <strong>OUT</strong> jack (e.g., OUT 1, OUT 2, etc.). Patching a dedicated channel variable output jack removes that channel from the SUM, OR, and INV mix bus. For CH1/CH4, use <strong>UNITY</strong> to tap the core without removing the variable channel from the bus. CH2/CH3 have no separate unity outputs.</p>
+  </details>
+  <details>
+    <summary>Why doesn't my trigger restart the envelope during attack?</summary>
+    <p>Integral Flux uses this trigger rule: an incoming trigger pulse received during the <strong>Rise</strong> phase is ignored to protect the integrity of the attack transient. Incoming triggers will immediately restart from 0V during <strong>Fall</strong>; from idle slew, the rise begins at the current core voltage.</p>
+  </details>
+  <details>
+    <summary>How do I achieve 1V/Oct tracking on the function generator?</summary>
+    <p>BOTH CV uses a saturating hardware-inspired response, so it does not provide calibrated 1V/oct tracking. An attenuverter can adjust modulation depth but cannot make this response track accurately across the full range.</p>
+  </details>
+  <details>
+    <summary>What do the dual LEDs on the mixer indicate?</summary>
+    <p>The mixer LEDs represent the polarity and magnitude of the <strong>SUM</strong> bus: green indicates positive voltage (0 to +10V), while red indicates negative voltage (0 to -10V). Since <strong>INV</strong> is simply <code>-SUM</code>, the lights simultaneously show both buses.</p>
+  </details>
+</section>
+
+<!-- Reference -->
+<section id="reference">
+  <div class="section-head">
+    <p class="eyebrow">Technical reference</p>
+    <h2>Panel &amp; DSP specifications.</h2>
+  </div>
+  <div class="spec-grid">
+    <div class="spec">
+      <strong>Format</strong>
+      20 HP virtual panel (VCV Rack 2)
+    </div>
+    <div class="spec">
+      <strong>Platform</strong>
+      Software module for VCV Rack 2; no physical depth or power draw specification
+    </div>
+    <div class="spec">
+      <strong>Frequency Span</strong>
+      Up to 1500 s per stage (3000 s nominal full cycle); self-cycle ceiling 1 kHz
+    </div>
+    <div class="spec">
+      <strong>Voltage Levels</strong>
+      Unity function target: 0–10.2V; slew may be bipolar · Variable: clamped +/-10V · Gates: nominal 0 / +10V
+    </div>
+    <div class="spec">
+      <strong>Curvature Law</strong>
+      Mirror: linear at 33% · Shark Fin: linear at 50%
+    </div>
+    <div class="spec">
+      <strong>DC Normaling</strong>
+      CH2 normaled to +10V · CH3 normaled to +5V
+    </div>
+    <div class="spec">
+      <strong>Anti-Aliasing</strong>
+      minBLEP step bandlimiting on gates & signal resets
+    </div>
+    <div class="spec">
+      <strong>License</strong>
+      GNU General Public License v3.0 (GPL-3.0-or-later)
+    </div>
+  </div>
+</section>
+</main>
+</div>
+<footer class="shell">
+  <span>&copy; 2026 Leviathan · Open Source under GPL-3.0-or-later</span>
+  <span>Integral Flux User Manual · Documentation for VCV Rack 2</span>
+</footer>
+</body>
+</html>

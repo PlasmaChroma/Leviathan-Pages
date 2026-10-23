@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="User manual and technical reference for Proc in VCV Rack 2, an 8 HP slope generator, shaped slew limiter, envelope follower, and freeze controller.">
+<title>Proc User Manual - Leviathan</title>
+<style>
+:root {
+  color-scheme: dark;
+  --ink:#eef6ff; --muted:#a9b7c8; --deep:#070b12; --panel:#0e1520; --panel2:#121b29;
+  --cyan:#1cccd9; --purple:#7a5cff; --gold:#ebcc80; --line:#26364a; --paper:#f7f9fc;
+  --shadow:0 22px 60px rgba(0,0,0,.38);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; background:radial-gradient(circle at 78% 10%,rgba(122,92,255,.14),transparent 30rem),radial-gradient(circle at 18% 22%,rgba(28,204,217,.11),transparent 28rem),var(--deep); color:var(--ink); line-height:1.62; }
+a { color:#7feaf1; }
+.layout { display:grid; grid-template-columns:250px minmax(0,1fr); max-width:1500px; margin:auto; }
+nav { position:sticky; top:0; height:100vh; padding:30px 24px; border-right:1px solid var(--line); background:rgba(7,11,18,.9); backdrop-filter:blur(18px); overflow:auto; }
+nav .brand-home { display:block; padding:0; border-radius:7px; }
+nav .brand-home:focus-visible { outline:2px solid var(--cyan); outline-offset:4px; }
+nav .brand-lockup { display:block; width:100%; max-width:200px; height:auto; margin:0 0 20px; border-radius:7px; box-shadow:0 10px 30px rgba(0,0,0,.28); }
+nav .brand { font-size:1.25rem; letter-spacing:.18em; font-weight:800; margin-bottom:2px; }
+nav .sub { color:var(--muted); font-size:.75rem; margin-bottom:28px; }
+nav a { display:block; color:#c7d3e1; text-decoration:none; padding:7px 0; font-size:.88rem; }
+nav a:hover { color:#fff; transform:translateX(2px); }
+nav .nav-actions { margin-top:24px; }
+button { border:1px solid rgba(28,204,217,.55); background:rgba(28,204,217,.1); color:var(--ink); padding:9px 12px; border-radius:999px; cursor:pointer; }
+main { min-width:0; }
+.hero { min-height:740px; display:grid; grid-template-columns:minmax(0,1fr) minmax(200px,320px); gap:40px; align-items:center; padding:80px clamp(32px,7vw,110px); overflow:hidden; }
+.dragon-divider { position:relative; height:48px; }
+.dragon-divider img { position:absolute; left:50%; top:50%; display:block; width:min(78%,900px); height:auto; transform:translate(-50%,-50%); opacity:.42; filter:drop-shadow(0 0 22px rgba(28,204,217,.16)); pointer-events:none; user-select:none; }
+.kicker,.eyebrow { color:var(--cyan); text-transform:uppercase; letter-spacing:.2em; font-size:.72rem; font-weight:800; }
+h1 { font-size:clamp(4rem,9vw,8.2rem); line-height:.86; letter-spacing:-.075em; margin:16px 0 28px; background:linear-gradient(100deg,#865cff 0%,#c9a8ff 27%,#f6f9ff 49%,#77eaff 72%,#1cccd9 100%); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 10px 28px rgba(50,124,210,.14)); }
+.deck { font-size:clamp(1.08rem,2vw,1.4rem); max-width:680px; color:#d4e0ed; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; }
+.chip { border:1px solid var(--line); background:rgba(255,255,255,.035); border-radius:999px; padding:7px 11px; color:#c9d6e4; font-size:.8rem; }
+.hero-modules { display:flex; align-items:center; justify-content:center; gap:24px; perspective:1200px; }
+.hero-modules img { width:min(75%,240px); height:auto; border:1px solid rgba(255,255,255,.16); border-radius:12px; box-shadow:var(--shadow); transform:rotateY(-5deg) translateY(8px); }
+section { position:relative; isolation:isolate; padding:70px clamp(32px,7vw,110px); border-bottom:1px solid var(--line); scroll-margin-top:20px; overflow:hidden; }
+section::before { position:absolute; z-index:0; bottom:0; width:min(58vw,650px); aspect-ratio:959/376; background:url("../img/PerfectWave_KCrop.png") center bottom/contain no-repeat; content:""; opacity:.065; mix-blend-mode:screen; -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); pointer-events:none; }
+section:nth-of-type(odd)::before { right:-5%; transform:scaleX(-1); -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); }
+section:nth-of-type(even)::before { left:-5%; }
+section > * { position:relative; z-index:1; }
+.section-head { max-width:850px; margin-bottom:38px; }
+h2 { font-size:clamp(2.1rem,4.7vw,4.2rem); line-height:1; letter-spacing:-.045em; margin:8px 0 18px; }
+h3 { line-height:1.18; margin:.2rem 0 .45rem; }
+p { margin:.45rem 0 1rem; }
+.muted { color:var(--muted); }
+.callout { border-left:3px solid var(--cyan); padding:18px 22px; background:rgba(28,204,217,.07); max-width:900px; margin:30px 0; border-radius:0 12px 12px 0; }
+.callout strong { color:var(--cyan); }
+
+/* Architecture */
+.architecture { display:grid; grid-template-columns:repeat(5,minmax(120px,1fr)); gap:12px; align-items:stretch; }
+.arch-box { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:105px; padding:18px; border-radius:14px; border:1px solid var(--line); background:var(--panel); position:relative; font-weight:750; }
+.arch-box:not(:last-child)::after { content:""; position:absolute; right:-13px; top:50%; width:13px; border-top:2px solid var(--cyan); }
+.arch-box small { display:block; color:var(--muted); font-weight:500; margin-top:5px; font-size:.8rem; }
+
+/* Panel tour */
+.panel-tour { display:grid; grid-template-columns:minmax(220px,300px) minmax(0,1fr); gap:40px; align-items:start; }
+.annotated-panel { position:relative; width:min(100%,260px); margin:0 auto; box-shadow:var(--shadow); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.1); }
+.annotated-panel img { display:block; width:100%; height:auto; }
+.control-list { display:grid; grid-template-columns:1fr; gap:12px; }
+.control-card { display:grid; grid-template-columns:34px 1fr; gap:12px; padding:18px; border-radius:14px; border:1px solid var(--line); background:rgba(14,21,32,.8); }
+.control-card .num { width:30px; height:30px; border-radius:50%; display:grid; place-items:center; background:var(--purple); font-weight:900; }
+.control-card p { color:#c2cede; font-size:.91rem; margin:.3rem 0; }
+.control-card .range { color:var(--gold); font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; }
+
+.panel-overlay { position:absolute; inset:0; width:100%; height:100%; }
+.panel-overlay line { stroke:#fff; stroke-width:26; }
+.panel-overlay circle { fill:#f7fbff; stroke:var(--purple); stroke-width:42; }
+.panel-overlay text { fill:#101725; font-size:210px; font-weight:900; text-anchor:middle; dominant-baseline:central; }
+.panel-overlay a:hover circle,.panel-overlay a:focus circle { fill:var(--gold); stroke:var(--cyan); }
+.io-heading { margin-top:48px; }
+.control-card { scroll-margin-top:24px; }
+
+/* Tables */
+.table-wrap { width:100%; overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
+table { width:100%; border-collapse:collapse; min-width:760px; background:rgba(12,18,28,.88); }
+th { text-align:left; color:var(--gold); font-size:.74rem; text-transform:uppercase; letter-spacing:.08em; background:#121b29; }
+th,td { padding:14px 16px; border-bottom:1px solid var(--line); vertical-align:top; }
+td { color:#cbd6e3; }
+tr:last-child td { border-bottom:0; }
+
+/* Info and recipes */
+.display-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.info-card { padding:26px; border:1px solid var(--line); border-radius:16px; background:var(--panel); }
+.info-card ul { padding-left:1.2rem; }
+.recipes { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.recipe { padding:24px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(155deg,rgba(122,92,255,.09),rgba(28,204,217,.04)); }
+.recipe .why { color:#9feaf0; border-top:1px solid var(--line); padding-top:14px; margin-top:14px; font-size:.9rem; }
+details { border:1px solid var(--line); border-radius:12px; margin:10px 0; background:var(--panel); }
+summary { cursor:pointer; padding:16px 18px; font-weight:750; }
+details p { padding:0 18px 18px; color:#c6d2df; }
+.spec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.spec { padding:20px; border:1px solid var(--line); border-radius:14px; background:var(--panel); }
+.spec strong { display:block; color:var(--gold); font-size:.73rem; text-transform:uppercase; letter-spacing:.08em; }
+footer { position:relative; min-height:150px; padding:42px clamp(32px,7vw,110px); color:var(--muted); display:flex; align-items:flex-end; justify-content:space-between; gap:30px; overflow:hidden; }
+footer span { position:relative; z-index:1; }
+
+@media (max-width:1100px) { .layout{display:block} nav{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)} nav a{display:inline-block;margin-right:16px} .hero{grid-template-columns:1fr;} .panel-tour{grid-template-columns:1fr} .recipes{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:680px) { section,.hero{padding:48px 20px} .hero{min-height:auto} .dragon-divider{height:36px}.dragon-divider img{width:110%;max-width:none;opacity:.38} .hero-modules{gap:10px} .hero-modules img{width:100%} .control-list,.display-grid,.recipes,.spec-grid{grid-template-columns:1fr} .architecture{grid-template-columns:1fr} .arch-box:not(:last-child)::after{right:50%;top:auto;bottom:-13px;height:13px;width:0;border-top:0;border-left:2px solid var(--cyan)} footer{display:block;min-height:140px;padding:36px 20px} footer span{display:block;margin-bottom:6px} }
+@media print {
+  :root{color-scheme:light} body{background:#fff;color:#101725;font-size:10.5pt} nav,.nav-actions,.dragon-divider{display:none} .layout{display:block;max-width:none} .hero{min-height:0;grid-template-columns:1fr 280px;padding:32px;border-bottom:1px solid #b9c3ce;page-break-after:always} h1{font-size:54pt;color:#152238;background:none} section{padding:28px 34px;border-color:#cdd5de} section::before{display:none} .control-card,.info-card,.recipe,.spec,details{background:#fff;border-color:#b9c3ce;color:#101725;break-inside:avoid} p,td,.control-card p,details p{color:#26364a} table{background:#fff} th{background:#eaf1f7;color:#25334a} th,td{border-color:#cdd5de} .panel-tour{grid-template-columns:220px 1fr;gap:24px} .recipes{grid-template-columns:repeat(2,1fr)} a{color:#174f7a} footer{min-height:0;border-top:1px solid #cdd5de;color:#536274}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav aria-label="Manual navigation">
+  <a class="brand-home" href="../index.html" aria-label="Return to manuals portal"><img class="brand-lockup" src="../img/Branding_Logo_Crop_Only.png" alt="Leviathan"></a>
+  <div class="brand">PROC</div>
+  <div class="sub">LEVIATHAN USER MANUAL</div>
+  <a href="#concept">Core concept</a>
+  <a href="#panel">Panel tour</a>
+  <a href="#cv">CV and patching</a>
+  <a href="#unique">Unique features</a>
+  <a href="#modes">Function vs Slew</a>
+  <a href="#curves">Curvature engine</a>
+  <a href="#display">Waveform display</a>
+  <a href="#settings">Context menu</a>
+  <a href="#recipes">Patch recipes</a>
+  <a href="#troubleshooting">Troubleshooting</a>
+  <a href="#reference">Reference</a>
+  <div class="nav-actions"><button onclick="window.print()">Print / Save PDF</button></div>
+</nav>
+<main>
+<header class="hero">
+  <div>
+    <p class="kicker">Leviathan for VCV Rack 2 · Open Source</p>
+    <h1>Proc</h1>
+    <p class="deck">A compact 8 HP slope generator, shaped voltage slew limiter, envelope follower, and freeze controller.</p>
+    <p class="muted">Proc distills the core integration DSP of Integral Flux into a streamlined single-channel instrument with an external HALT freeze input, dedicated output amplitude scaling, and simultaneous complementary positive and inverted outputs.</p>
+    <div class="chips">
+      <span class="chip">8 HP Eurorack</span>
+      <span class="chip">Single Slope Generator</span>
+      <span class="chip">HALT Integration Freeze</span>
+      <span class="chip">Dedicated Amplitude Scale</span>
+      <span class="chip">Simultaneous +/- Outputs</span>
+      <span class="chip">GPL-3.0 License</span>
+    </div>
+  </div>
+  <div class="hero-modules">
+    <img src="img/Proc.png" alt="Proc front panel artwork">
+  </div>
+</header>
+<div class="dragon-divider" aria-hidden="true"><img src="../img/Leviathan_Dragon_Transparent_Refined.png" alt=""></div>
+
+<!-- Core concept -->
+<section id="concept">
+  <div class="section-head">
+    <p class="eyebrow">Core concept</p>
+    <h2>Direct synthesis, precision slew, and pause control.</h2>
+    <p>Inspired by the classic single-channel lineage of Make Noise Function, Proc combines high-speed analog-modeled slope generation with modernized digital precision. Whether cycling as an audio VCO or low-frequency oscillator, slewing control voltages, following audio dynamics, or freezing in mid-flight via its HALT input, Proc provides complete mastery over voltage change over time.</p>
+  </div>
+  <div class="architecture">
+    <div class="arch-box">Surge & Sink<small>Rise & Fall Timing + CV</small></div>
+    <div class="arch-box">Warp Engine<small>Log → Lin → Exp Curve</small></div>
+    <div class="arch-box">HALT Core<small>Gate pauses core integration</small></div>
+    <div class="arch-box">AMP Conditioning<small>0 to 10V Amplitude Attenuation</small></div>
+    <div class="arch-box">Dual Phase & Gates<small>OUT+, OUT-, EOR, & EOC</small></div>
+  </div>
+</section>
+
+<!-- Panel tour -->
+<section id="panel">
+  <div class="section-head">
+    <p class="eyebrow">Panel tour</p>
+    <h2>Controls and I/O legend.</h2>
+    <p class="muted">The 8 HP panel has five controls, a waveform preview, six inputs, and four outputs. Separate views below identify controls and jacks. Click a numbered marker to reach its description.</p>
+  </div>
+  <h3>Controls &amp; display · 1–6</h3>
+  <div class="panel-tour">
+<figure class="annotated-panel">
+<img src="img/Proc.png" alt="Proc front panel; numbered references are described in the adjacent legend.">
+<svg class="panel-overlay" viewBox="0 0 4064 12850" aria-label="Control and display locations">
+<a href="#proc-control-1" aria-label="1: LOOP button and LED"><title>1: LOOP button &amp; LED</title><line x1="3244.93" y1="1893.80" x2="2854.93" y2="1473.80"/><circle cx="2854.93" cy="1473.80" r="175"/><text x="2854.93" y="1473.80">1</text></a>
+<a href="#proc-control-2" aria-label="2: SURGE — rise time"><title>2: SURGE — rise time</title><line x1="3240.74" y1="3529.31" x2="2850.74" y2="3109.31"/><circle cx="2850.74" cy="3109.31" r="175"/><text x="2850.74" y="3109.31">2</text></a>
+<a href="#proc-control-3" aria-label="3: SINK — fall time"><title>3: SINK — fall time</title><line x1="3240.74" y1="5357.91" x2="2850.74" y2="4937.91"/><circle cx="2850.74" cy="4937.91" r="175"/><text x="2850.74" y="4937.91">3</text></a>
+<a href="#proc-control-4" aria-label="4: CURVE — shape"><title>4: CURVE — shape</title><line x1="1177.53" y1="5792.61" x2="1567.53" y2="5372.61"/><circle cx="1567.53" cy="5372.61" r="175"/><text x="1567.53" y="5372.61">4</text></a>
+<a href="#proc-control-5" aria-label="5: Amplitude knob and readout"><title>5: Amplitude knob &amp; readout</title><line x1="724.64" y1="2811.01" x2="1114.64" y2="2391.01"/><circle cx="1114.64" cy="2391.01" r="175"/><text x="1114.64" y="2391.01">5</text></a>
+<a href="#proc-control-6" aria-label="6: Waveform preview"><title>6: Waveform preview</title><line x1="2032.00" y1="7815.96" x2="2032.00" y2="7815.96"/><circle cx="2032.00" cy="7815.96" r="175"/><text x="2032.00" y="7815.96">6</text></a>
+</svg>
+</figure>
+<div class="control-list">
+<article class="control-card" id="proc-control-1"><span class="num">1</span><div><h3>LOOP button &amp; LED</h3><p class="range">Gold button at top right</p><p>Latches continuous cycling on or off. The small light above the button shows cycle status. Proc has no separate Cycle CV input.</p></div></article>
+<article class="control-card" id="proc-control-2"><span class="num">2</span><div><h3>SURGE — rise time</h3><p class="range">Upper large knob on the right</p><p>Sets rise time. The adjacent rising-slope input (10) modulates it. Stage times depend on the knob, Curve, and CV; engine limits are 0.1 ms–1500 s per stage.</p></div></article>
+<article class="control-card" id="proc-control-3"><span class="num">3</span><div><h3>SINK — fall time</h3><p class="range">Lower large knob on the right</p><p>Sets fall time. Fall CV is the jack below and to the left (12). Equal rise/fall times at the linear Curve point produce a triangle.</p></div></article>
+<article class="control-card" id="proc-control-4"><span class="num">4</span><div><h3>CURVE — shape</h3><p class="range">Large knob on the left</p><p>Reshapes both stages and changes overall timing. Linear is at 33% travel. Proc has one curve law and no Mirror/Shark Fin switch.</p></div></article>
+<article class="control-card" id="proc-control-5"><span class="num">5</span><div><h3>Amplitude knob &amp; readout</h3><p class="range">Small knob below INPUT</p><p>Sets the function amplitude target from 0 to 10V; default 8V. The readout shows the setting, not a measured output peak. AMP is bypassed during idle slew operation.</p></div></article>
+<article class="control-card" id="proc-control-6"><span class="num">6</span><div><h3>Waveform preview</h3><p class="range">Wide window below the controls</p><p>Shows nominal cycle geometry and a calculated frequency estimate. The low-rate dot tracks active functions and hides above about 2.4 Hz or while idle. This is not an input oscilloscope.</p></div></article>
+</div>
+  </div>
+  <h3 class="io-heading">Inputs &amp; outputs · 7–16</h3>
+  <p class="muted">Purple-ringed jacks are inputs; cyan-ringed jacks are outputs. Rising and falling slope glyphs identify the two stage CV inputs. HALT pauses the core; TRIG starts a function.</p>
+  <div class="panel-tour">
+<figure class="annotated-panel">
+<img src="img/Proc.png" alt="Proc front panel; numbered references are described in the adjacent legend.">
+<svg class="panel-overlay" viewBox="0 0 4064 12850" aria-label="Input and output locations">
+<a href="#proc-control-7" aria-label="7: INPUT — signal input"><title>7: INPUT — signal input</title><line x1="724.70" y1="1505.47" x2="1114.70" y2="1085.47"/><circle cx="1114.70" cy="1085.47" r="175"/><text x="1114.70" y="1085.47">7</text></a>
+<a href="#proc-control-8" aria-label="8: TRIG — trigger input"><title>8: TRIG — trigger input</title><line x1="1994.30" y1="1505.47" x2="2384.30" y2="1085.47"/><circle cx="2384.30" cy="1085.47" r="175"/><text x="2384.30" y="1085.47">8</text></a>
+<a href="#proc-control-9" aria-label="9: HALT — pause input"><title>9: HALT — pause input</title><line x1="720.70" y1="4036.67" x2="1110.70" y2="3616.67"/><circle cx="1110.70" cy="3616.67" r="175"/><text x="1110.70" y="3616.67">9</text></a>
+<a href="#proc-control-10" aria-label="10: Rise CV input"><title>10: Rise CV input</title><line x1="1994.30" y1="3181.57" x2="2384.30" y2="2761.57"/><circle cx="2384.30" cy="2761.57" r="175"/><text x="2384.30" y="2761.57">10</text></a>
+<a href="#proc-control-11" aria-label="11: BOTH — combined timing CV"><title>11: BOTH — combined timing CV</title><line x1="1994.30" y1="4449.77" x2="2384.30" y2="4029.77"/><circle cx="2384.30" cy="4029.77" r="175"/><text x="2384.30" y="4029.77">11</text></a>
+<a href="#proc-control-12" aria-label="12: Fall CV input"><title>12: Fall CV input</title><line x1="2360.40" y1="6326.32" x2="1970.40" y2="5906.32"/><circle cx="1970.40" cy="5906.32" r="175"/><text x="1970.40" y="5906.32">12</text></a>
+<a href="#proc-control-13" aria-label="13: EoR — gate output"><title>13: EoR — gate output</title><line x1="943.70" y1="9694.57" x2="1333.70" y2="9274.57"/><circle cx="1333.70" cy="9274.57" r="175"/><text x="1333.70" y="9274.57">13</text></a>
+<a href="#proc-control-14" aria-label="14: EoC — gate output"><title>14: EoC — gate output</title><line x1="2659.51" y1="9694.57" x2="2269.51" y2="9274.57"/><circle cx="2269.51" cy="9274.57" r="175"/><text x="2269.51" y="9274.57">14</text></a>
+<a href="#proc-control-15" aria-label="15: OUT+ — main output"><title>15: OUT+ — main output</title><line x1="944.71" y1="11068.23" x2="1334.71" y2="11498.23"/><circle cx="1334.71" cy="11498.23" r="175"/><text x="1334.71" y="11498.23">15</text></a>
+<a href="#proc-control-16" aria-label="16: OUT- — inverted output"><title>16: OUT- — inverted output</title><line x1="2655.20" y1="11068.23" x2="2265.20" y2="11498.23"/><circle cx="2265.20" cy="11498.23" r="175"/><text x="2265.20" y="11498.23">16</text></a>
+</svg>
+</figure>
+<div class="control-list">
+<article class="control-card" id="proc-control-7"><span class="num">7</span><div><h3>INPUT — signal input</h3><p class="range">Top-left jack</p><p>Feeds the slew limiter when Cycle is off and no triggered function is active. During a function, a patched signal pulls the core voltage toward the input.</p></div></article>
+<article class="control-card" id="proc-control-8"><span class="num">8</span><div><h3>TRIG — trigger input</h3><p class="range">Top-center jack</p><p>Rising edge at 1V, re-arm at 0V. Triggers during rise or HALT are ignored. An accepted trigger during fall resets the core to 0V; from idle slew, rise starts at the current core voltage.</p></div></article>
+<article class="control-card" id="proc-control-9"><span class="num">9</span><div><h3>HALT — pause input</h3><p class="range">Left jack below the amplitude readout</p><p>At 2.5V or above, holds core voltage and gate states. AMP still scales a held function; existing bandlimiting tails can settle. Release resumes integration.</p></div></article>
+<article class="control-card" id="proc-control-10"><span class="num">10</span><div><h3>Rise CV input</h3><p class="range">Rising-slope glyph, left of SURGE</p><p>Positive CV lengthens rise; negative CV shortens it. This input is separate from TRIG.</p></div></article>
+<article class="control-card" id="proc-control-11"><span class="num">11</span><div><h3>BOTH — combined timing CV</h3><p class="range">Center jack between HALT and SINK</p><p>Changes rise and fall together. Positive CV speeds up; negative CV slows down. Its saturating response is not calibrated 1V/oct.</p></div></article>
+<article class="control-card" id="proc-control-12"><span class="num">12</span><div><h3>Fall CV input</h3><p class="range">Falling-slope glyph, below-left of SINK</p><p>Positive CV lengthens fall; negative CV shortens it.</p></div></article>
+<article class="control-card" id="proc-control-13"><span class="num">13</span><div><h3>EoR — gate output</h3><p class="range">Upper-left jack in the output block</p><p>Nominal 0/10V gate: high during fall, low during rise and idle. In slew operation, indicates downward motion. HALT preserves its state.</p></div></article>
+<article class="control-card" id="proc-control-14"><span class="num">14</span><div><h3>EoC — gate output</h3><p class="range">Upper-right jack in the output block</p><p>Nominal 0/10V gate: high during rise, low during fall and idle. In slew operation, indicates upward motion. HALT preserves its state.</p></div></article>
+<article class="control-card" id="proc-control-15"><span class="num">15</span><div><h3>OUT+ — main output</h3><p class="range">Bottom-left jack</p><p>Function output scaled by AMP, or the slewed input at unity gain while idle. Slewed bipolar input can make OUT+ negative; the plus sign identifies the non-inverted output.</p></div></article>
+<article class="control-card" id="proc-control-16"><span class="num">16</span><div><h3>OUT- — inverted output</h3><p class="range">Bottom-right jack</p><p>The exact negative of OUT+. In idle slew operation it inverts the slewed input; it can be positive when OUT+ is negative.</p></div></article>
+</div>
+  </div>
+</section>
+
+<!-- CV and patching -->
+<section id="cv">
+  <div class="section-head">
+    <p class="eyebrow">CV and patching</p>
+    <h2>Voltage behavior &amp; port reference.</h2>
+    <p class="muted">Use the panel labels below to identify jacks. Gate levels are nominal; optional bandlimiting can introduce transient deviations.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Port</th>
+          <th>Type</th>
+          <th>Range / Voltage</th>
+          <th>Operational Behavior</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>INPUT</strong></td>
+          <td>Signal In</td>
+          <td>+/-10 V audio / CV</td>
+          <td>Slew limiter input. When Cycle is off and idle, output tracks this input limited by Surge and Sink rates.</td>
+        </tr>
+        <tr>
+          <td><strong>TRIG</strong></td>
+          <td>Trigger In</td>
+          <td>Rising edge at 1 V; re-arm at 0 V</td>
+          <td>Starts Rise; triggers during Rise are ignored. During Fall, an accepted trigger resets the core to 0V and rises. From idle slew, Rise starts at the current core voltage. Accepted triggers have a 0.5 ms re-arm interval.</td>
+        </tr>
+        <tr>
+          <td><strong>HALT</strong></td>
+          <td>Gate In</td>
+          <td>High threshold 2.5 V</td>
+          <td><strong>Freeze gate:</strong> At 2.5V or above, suspends core integration and preserves gate states. AMP can still change the scaled function output, and existing bandlimiting tails can settle.</td>
+        </tr>
+        <tr>
+          <td><strong>RISE CV</strong></td>
+          <td>Modulation</td>
+          <td>+/-10 V exponential</td>
+          <td>Modulates Surge. <strong>+V increases time (slower)</strong>; <strong>-V decreases time (faster)</strong>.</td>
+        </tr>
+        <tr>
+          <td><strong>FALL CV</strong></td>
+          <td>Modulation</td>
+          <td>+/-10 V exponential</td>
+          <td>Modulates Sink. <strong>+V increases time (slower)</strong>; <strong>-V decreases time (faster)</strong>.</td>
+        </tr>
+        <tr>
+          <td><strong>BOTH CV</strong></td>
+          <td>Modulation</td>
+          <td>Bipolar, saturating speed control</td>
+          <td>Scales Surge and Sink together with a saturating response: positive CV speeds up, negative CV slows down. It does not provide calibrated 1V/oct tracking.</td>
+        </tr>
+        <tr>
+          <td><strong>OUT+</strong></td>
+          <td>Signal Out</td>
+          <td>Nominal 0 to +AMP V; slew follows input</td>
+          <td>Function output scaled by AMP; while idle with INPUT patched, follows the input through the slew limiter. In slew mode, OUT+ can be bipolar.</td>
+        </tr>
+        <tr>
+          <td><strong>OUT-</strong></td>
+          <td>Signal Out</td>
+          <td>Nominal 0 to -AMP V; inverted slew</td>
+          <td>Inverted function generator output (<code>-OUT+</code>). Perfect for complementary VCA ducking or reverse sweeps.</td>
+        </tr>
+        <tr>
+          <td><strong>EOR</strong></td>
+          <td>Gate Out</td>
+          <td>0 V / +10 V</td>
+          <td>End of Rise: High (+10V) during Fall; low during Rise and idle. In Slew mode, high when slewing downward. HALT preserves the gate state.</td>
+        </tr>
+        <tr>
+          <td><strong>EOC</strong></td>
+          <td>Gate Out</td>
+          <td>0 V / +10 V</td>
+          <td>End of Cycle: High (+10V) during Rise; low during Fall and idle. In Slew mode, high when slewing upward. HALT preserves the gate state.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Unique features deep dive -->
+<section id="unique">
+  <div class="section-head">
+    <p class="eyebrow">Distinguishing characteristics</p>
+    <h2>What makes Proc unique compared to Integral Flux.</h2>
+    <p>While sharing the core variable-curvature integration engine of Integral Flux, Proc introduces specialized features for standalone utility and control.</p>
+  </div>
+  <div class="display-grid">
+    <div class="info-card">
+      <h3>1. HALT Integration Freeze</h3>
+      <p>The <strong>HALT</strong> input pauses the core in any operating mode:</p>
+      <ul>
+        <li>Applying a gate at or above 2.5V pauses integration and preserves the gate states.</li>
+        <li>The core voltage is held during rise, fall, or slew. In function mode, AMP remains active; hold it fixed for constant output voltage. Existing bandlimiting tails can settle after HALT engages.</li>
+        <li>Triggers are discarded while halted and automatic cycling pauses. On release, integration resumes from the held core state. A trigger held high through release needs a new low-to-high edge.</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>2. Dedicated AMP Attenuation Dial</h3>
+      <p>Instead of requiring an external attenuator or central mixer channel:</p>
+      <ul>
+        <li>The <strong>AMP</strong> knob sets a function amplitude target from 0 to 10V; actual peak depends on shape, rate, and signal injection.</li>
+        <li>Real-time numeric voltage readout right on the faceplate allows instant matching to standard 5V, 8V, or 10V Eurorack targets.</li>
+        <li>In idle slew operation, AMP is bypassed. An active triggered function takes priority over slew.</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>3. Simultaneous Complementary Outputs (+ / -)</h3>
+      <p>Proc eliminates the need for an external inverter:</p>
+      <ul>
+        <li><strong>OUT+</strong> yields positive modulation (0 to +AMP V).</li>
+        <li><strong>OUT-</strong> generates exact negative mirror modulation (0 to -AMP V).</li>
+        <li>OUT+ can open a filter while OUT- reduces a positively biased VCA that accepts additive bipolar CV.</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>4. Dual Gate Directional Logic</h3>
+      <p>Unlike Integral Flux where EOR belongs to CH1 and EOC belongs to CH4:</p>
+      <ul>
+        <li>Proc features <strong>both EOR and EOC simultaneously</strong> on its single channel.</li>
+        <li>In Slew mode, EOC fires whenever the signal is slewing upward (delta &gt; 0), and EOR fires whenever the signal is slewing downward (delta &lt; 0), acting as a slope direction detector.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Function vs Slew -->
+<section id="modes">
+  <div class="section-head">
+    <p class="eyebrow">Operating modes</p>
+    <h2>Envelope generator, oscillator, or slew limiter.</h2>
+    <p>Proc adapts dynamically to your patch cable connections.</p>
+  </div>
+  <div class="display-grid">
+    <div class="info-card">
+      <h3>Envelope & Oscillator Mode</h3>
+      <p>Engaged when <strong>LOOP</strong> is on or when pulses are sent to <strong>TRIG</strong>:</p>
+      <ul>
+        <li>Synthesizes a clean unipolar function ramping toward the AMP target and falling to 0V; actual peak depends on rate, shape, and signal injection.</li>
+        <li><strong>Cycle ON:</strong> Self-retriggers at the end of fall. Each stage can reach 1500 seconds (3000 seconds for a full cycle). Self-cycling is capped at 1 kHz; rate depends on Curve and CV as well as Surge/Sink.</li>
+        <li><strong>Trigger Retrigger Rule:</strong> Triggers during Surge are ignored. Triggers during Sink reset immediately to 0V and rise.</li>
+        <li><strong>External Perturbation:</strong> Patching audio into INPUT while cycling pulls the core voltage toward the input, altering the waveform. Synchronization depends on the input and timing settings.</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>Slew Limiter Mode</h3>
+      <p>Engaged when a cable is patched into <strong>INPUT</strong>, Cycle is off, and no triggered function is active:</p>
+      <ul>
+        <li>Limits how fast incoming voltages can change (voltage lag).</li>
+        <li><strong>Surge:</strong> Limits upward voltage rate of change (glide up).</li>
+        <li><strong>Sink:</strong> Limits downward voltage rate of change (glide down).</li>
+        <li><strong>Envelope Follower:</strong> Use externally rectified audio, fast Surge, and slower Sink to follow positive peaks. Direct bipolar audio is not internally full-wave rectified.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Curvature engine -->
+<section id="curves">
+  <div class="section-head">
+    <p class="eyebrow">Curvature engine</p>
+    <h2>Logarithmic, linear, and exponential shapes.</h2>
+    <p>The <strong>CURVE</strong> knob reshapes both Surge and Sink segments with mathematical phase normalization.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Curvature Setting</th>
+          <th>Rise Response</th>
+          <th>Fall Response</th>
+          <th>Musical Applications</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>0% to 32% (Logarithmic)</strong></td>
+          <td>Rapid initial rise, rounded peak</td>
+          <td>Slow initial drop, faster finish</td>
+          <td>Rounded attacks and falls that accelerate toward zero.</td>
+        </tr>
+        <tr>
+          <td><strong>33% (True Linear)</strong></td>
+          <td>Strict constant ramp rate</td>
+          <td>Strict constant ramp rate</td>
+          <td>Uncolored pitch glissandi, symmetric triangle LFOs, linear CV ramps.</td>
+        </tr>
+        <tr>
+          <td><strong>34% to 100% (Exponential)</strong></td>
+          <td>Creeping start, steep explosive peak</td>
+          <td>Fast initial drop, gentler finish</td>
+          <td>Accelerating attacks and decays that slow toward zero.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Waveform display -->
+<section id="display">
+  <div class="section-head">
+    <p class="eyebrow">Visual inspection</p>
+    <h2>Waveform preview & frequency tracking.</h2>
+    <p>Proc features a waveform preview window displaying real-time cycle geometry and timing.</p>
+  </div>
+  <div class="display-grid">
+    <div class="info-card">
+      <h3>Vector Contour & Phase Dot</h3>
+      <p>The window renders the nominal cycle shape determined by Surge, Sink, and Curve:</p>
+      <ul>
+        <li><strong>Contour Curve:</strong> Updates interactively as knobs are turned using cached contour geometry.</li>
+        <li><strong>Animated Dot:</strong> Live phase cursor shows active function cycles at low rates; hidden above about 2.4 Hz and while the function generator is idle.</li>
+        <li><strong>Phosphor Persistence:</strong> Experimental CRT-style persistence controls are available only with Dragon King debug enabled.</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>Dynamic Frequency Readout</h3>
+      <p>Below the visualizer, the calculated frequency estimate (1 / (rise time + fall time)) adapts its units. It is not a measurement of external input frequency:</p>
+      <ul>
+        <li><strong>mHz (Milli-Hertz):</strong> For cycles longer than 1 second (down to ~0.33 mHz nominal, or 50 minutes per cycle). The readout rounds to whole mHz, so very slow rates may display 0 mHz.</li>
+        <li><strong>Hz & kHz:</strong> For audio-rate oscillation up to 1.0 kHz.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Context menu settings -->
+<section id="settings">
+  <div class="section-head">
+    <p class="eyebrow">Context menu</p>
+    <h2>Engine & visual settings.</h2>
+    <p>Right-click Proc's panel to access deep engine configurations.</p>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Option</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Bandlimited EOR/EOC</strong></td>
+          <td>Disabled</td>
+          <td>Uses minBLEP anti-aliasing on EOR and EOC output edges to reduce aliasing when using the gates as audio signals; this is not a click-removal guarantee.</td>
+        </tr>
+        <tr>
+          <td><strong>Bandlimited Signal Outputs</strong></td>
+          <td>Enabled</td>
+          <td>Anti-aliases sharp envelope reset transitions to reduce step-related aliasing; it does not bandlimit the entire waveform.</td>
+        </tr>
+        <tr>
+          <td><strong>Timing Update Rate</strong></td>
+          <td>1 (Per sample)</td>
+          <td>Allows control-rate decimation (/4, /8, /16, /32) to reduce timing-calculation cost. Interpolate Timing Updates is enabled by default and smooths changes between updates.</td>
+        </tr>
+        <tr>
+          <td><strong>Preview Tracer</strong></td>
+          <td>Enabled</td>
+          <td>Toggles the low-rate animated phase tracer. Experimental phosphor controls are debug-only.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Patch recipes -->
+<section id="recipes">
+  <div class="section-head">
+    <p class="eyebrow">Patch recipes</p>
+    <h2>Six starting patches.</h2>
+    <p>Explore the sonic versatility of Proc with these creative starting configurations.</p>
+  </div>
+  <div class="recipes">
+    <article class="recipe">
+      <span class="status">Recipe 1</span>
+      <h3>Pause &amp; Resume an LFO</h3>
+      <p><strong>Goal:</strong> Pause the internal LFO to create held sections in a pitch modulation signal.</p>
+      <p>1. Enable <strong>LOOP</strong> with Surge and Sink at ~1 Hz (slow LFO).</p>
+      <p>2. Patch a 16th-note gate sequence into <strong>HALT</strong>.</p>
+      <p>3. Patch <strong>OUT+</strong> into a synth voice pitch input.</p>
+      <div class="why"><strong>Why:</strong> With HALT low, the internal LFO moves; with HALT high, its core stops. This produces moving sections and holds, not a quantized arpeggio or instantaneous sampling of an external LFO.</div>
+    </article>
+
+    <article class="recipe">
+      <span class="status">Recipe 2</span>
+      <h3>Complementary Sidechain Ducking</h3>
+      <p><strong>Goal:</strong> Duck a VCA that supports additive bipolar level CV.</p>
+      <p>1. Turn <strong>LOOP</strong> off, leave HALT low, and patch the kick trigger into <strong>TRIG</strong>.</p>
+      <p>2. Set <strong>Surge</strong> to minimum, <strong>Sink</strong> to ~25%, and <strong>Curve</strong> clockwise from the 33% linear point for a fast initial fall and gentler finish.</p>
+      <p>3. Set <strong>AMP</strong> to 5.0 V.</p>
+      <p>4. Open the VCA with its manual level or a positive bias, then add <strong>OUT-</strong> to its bipolar level CV input. Adjust CV depth to taste.</p>
+      <div class="why"><strong>Why:</strong> The negative envelope reduces an already-open VCA level and returns toward 0V. A VCA that clamps negative CV and has no positive bias will remain closed.</div>
+    </article>
+
+    <article class="recipe">
+      <span class="status">Recipe 3</span>
+      <h3>Slope Direction Detector</h3>
+      <p><strong>Goal:</strong> Detect whether a complex modulation source is moving up or down.</p>
+      <p>1. Turn <strong>LOOP</strong> off, leave TRIG unpatched and HALT low, then patch an LFO or sequencer into <strong>INPUT</strong>.</p>
+      <p>2. Set Surge and Sink to ~10% (slight smoothing).</p>
+      <p>3. Monitor <strong>EOC</strong> (high while voltage is rising) and <strong>EOR</strong> (high while voltage is falling).</p>
+      <div class="why"><strong>Why:</strong> In Slew mode, Proc's gates reflect the real-time slope sign, driving distinct percussive events on ascending vs descending motion.</div>
+    </article>
+
+    <article class="recipe">
+      <span class="status">Recipe 4</span>
+      <h3>Gate-Controlled Audio Freeze</h3>
+      <p><strong>Goal:</strong> Pause and resume an audio-rate function with a gate.</p>
+      <p>1. Turn <strong>Surge</strong> and <strong>Sink</strong> to near-minimum (watch the frequency estimate; Curve changes the rate).</p>
+      <p>2. Enable <strong>LOOP</strong>.</p>
+      <p>3. Patch a 0/10V rhythmic gate into <strong>HALT</strong>. High pauses the function; low lets it run. For run-on-high behavior, use a gate inverter that outputs a positive gate when its input is low.</p>
+      <p>4. Listen to <strong>OUT+</strong>.</p>
+      <div class="why"><strong>Why:</strong> HALT holds the current voltage rather than muting the output. Monitor through an audio output module; gate transitions can click, and this patch is not FM or a phase-reset burst generator.</div>
+    </article>
+
+    <article class="recipe">
+      <span class="status">Recipe 5</span>
+      <h3>Sub-Harmonic Pulse Divider</h3>
+      <p><strong>Goal:</strong> Divide an incoming master clock by /2, /3, or /4.</p>
+      <p>1. Turn <strong>LOOP</strong> off and patch a master clock into <strong>TRIG</strong>.</p>
+      <p>2. Patch <strong>EOR</strong> into your divided clock destination.</p>
+      <p>3. Keep <strong>Sink</strong> short and lengthen <strong>Surge</strong> across multiple clock periods. Tune while monitoring EOR; division ratio depends on timing.</p>
+      <div class="why"><strong>Why:</strong> Triggers during Surge are ignored. EOR rises at the end of Surge; triggers during Sink are accepted and reset the function, so long Sink does not reliably divide the clock.</div>
+    </article>
+
+    <article class="recipe">
+      <span class="status">Recipe 6</span>
+      <h3>5V Target VCF Envelope</h3>
+      <p><strong>Goal:</strong> Set a 5V function amplitude target for filter modulation.</p>
+      <p>1. Turn <strong>LOOP</strong> off, leave HALT low, and patch a gate into <strong>TRIG</strong>.</p>
+      <p>2. Turn <strong>AMP</strong> until the readout shows exactly <code>5.0 V</code>.</p>
+      <p>3. Shape Surge and Sink to taste.</p>
+      <p>4. Patch <strong>OUT+</strong> into your VCF Cutoff CV.</p>
+      <div class="why"><strong>Why:</strong> AMP scales the function core; actual peaks depend on rate and shape, and bandlimiting can add transient deviations. Adjust the receiving filter's CV depth to taste.</div>
+    </article>
+  </div>
+</section>
+
+<!-- Troubleshooting -->
+<section id="troubleshooting">
+  <div class="section-head">
+    <p class="eyebrow">Troubleshooting</p>
+    <h2>Common questions & answers.</h2>
+  </div>
+  <details>
+    <summary>Why has Proc frozen and stopped responding to triggers?</summary>
+    <p>Check the <strong>HALT</strong> input jack. If a cable is connected and the voltage is at least 2.5V, Proc's core is intentionally held in pause mode. Disconnecting or pulling HALT low resumes normal integration immediately.</p>
+  </details>
+  <details>
+    <summary>Why doesn't the AMP knob affect my input signal in Slew mode?</summary>
+    <p>By design, the <strong>AMP</strong> knob sets the amplitude target of internally generated function envelopes (0 to +AMP V). When Cycle is off and no triggered function is active, the patched signal is slewed with unity gain. During an active triggered or cycling function, AMP still applies and the input perturbs the core.</p>
+  </details>
+  <details>
+    <summary>How do EOR and EOC differ from Integral Flux?</summary>
+    <p>On Integral Flux, CH1 provides EOR and CH4 provides EOC. On Proc, <strong>both EOR and EOC are available simultaneously</strong> on the single channel! Furthermore, in Slew mode, EOC signals rising voltage and EOR signals falling voltage.</p>
+  </details>
+  <details>
+    <summary>Where is true linear response on the CURVE knob?</summary>
+    <p>Proc's Curve knob has true linear response at <strong>33% knob travel</strong>. Values below 33% warp into logarithmic curves; values above 33% warp into exponential curves.</p>
+  </details>
+</section>
+
+<!-- Reference -->
+<section id="reference">
+  <div class="section-head">
+    <p class="eyebrow">Technical reference</p>
+    <h2>Specifications.</h2>
+  </div>
+  <div class="spec-grid">
+    <div class="spec">
+      <strong>Format</strong>
+      8 HP virtual panel (VCV Rack 2)
+    </div>
+    <div class="spec">
+      <strong>Platform</strong>
+      Software module for VCV Rack 2; no physical depth or power draw specification
+    </div>
+    <div class="spec">
+      <strong>Frequency Span</strong>
+      Up to 1500 s per stage (3000 s nominal full cycle); self-cycle ceiling 1 kHz
+    </div>
+    <div class="spec">
+      <strong>Voltage Levels</strong>
+      Function: nominal 0 to +/-AMP V · Slew: input and inverted input · Gates: nominal 0 / +10V
+    </div>
+    <div class="spec">
+      <strong>Linear Curve Point</strong>
+      33% knob rotation (0.33 normalized)
+    </div>
+    <div class="spec">
+      <strong>HALT Gate Threshold</strong>
+      2.5 V (High = Freeze)
+    </div>
+    <div class="spec">
+      <strong>Anti-Aliasing</strong>
+      minBLEP step bandlimiting on gates and audio reset
+    </div>
+    <div class="spec">
+      <strong>License</strong>
+      GNU General Public License v3.0 (GPL-3.0-or-later)
+    </div>
+  </div>
+</section>
+</main>
+</div>
+<footer class="shell">
+  <span>&copy; 2026 Leviathan · Open Source under GPL-3.0-or-later</span>
+  <span>Proc User Manual · Documentation for VCV Rack 2</span>
+</footer>
+</body>
+</html>
