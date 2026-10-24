@@ -1,0 +1,234 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Temporal Deck user manual for VCV Rack 2: stereo live buffering, scratching, slip, freeze, samples, LongPlay, CV, and patch recipes."><title>Temporal Deck User Manual - Leviathan</title><style>
+:root {
+  color-scheme: dark;
+  --ink:#eef6ff; --muted:#a9b7c8; --deep:#070b12; --panel:#0e1520; --panel2:#121b29;
+  --cyan:#1cccd9; --purple:#7a5cff; --gold:#ebcc80; --line:#26364a; --paper:#f7f9fc;
+  --shadow:0 22px 60px rgba(0,0,0,.38);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; background:radial-gradient(circle at 78% 10%,rgba(122,92,255,.14),transparent 30rem),radial-gradient(circle at 18% 22%,rgba(28,204,217,.11),transparent 28rem),var(--deep); color:var(--ink); line-height:1.62; }
+a { color:#7feaf1; }
+.layout { display:grid; grid-template-columns:250px minmax(0,1fr); max-width:1500px; margin:auto; }
+nav { position:sticky; top:0; height:100vh; padding:30px 24px; border-right:1px solid var(--line); background:rgba(7,11,18,.9); backdrop-filter:blur(18px); overflow:auto; }
+nav .brand-home { display:block; padding:0; border-radius:7px; }
+nav .brand-home:focus-visible { outline:2px solid var(--cyan); outline-offset:4px; }
+nav .brand-lockup { display:block; width:100%; max-width:200px; height:auto; margin:0 0 20px; border-radius:7px; box-shadow:0 10px 30px rgba(0,0,0,.28); }
+nav .brand { font-size:1.25rem; letter-spacing:.18em; font-weight:800; margin-bottom:2px; }
+nav .sub { color:var(--muted); font-size:.75rem; margin-bottom:28px; }
+nav a { display:block; color:#c7d3e1; text-decoration:none; padding:7px 0; font-size:.88rem; }
+nav a:hover { color:#fff; transform:translateX(2px); }
+nav .nav-actions { margin-top:24px; }
+button { border:1px solid rgba(28,204,217,.55); background:rgba(28,204,217,.1); color:var(--ink); padding:9px 12px; border-radius:999px; cursor:pointer; }
+main { min-width:0; }
+.hero { min-height:740px; display:grid; grid-template-columns:minmax(0,1fr) minmax(200px,320px); gap:40px; align-items:center; padding:80px clamp(32px,7vw,110px); overflow:hidden; }
+.dragon-divider { position:relative; height:48px; }
+.dragon-divider img { position:absolute; left:50%; top:50%; display:block; width:min(78%,900px); height:auto; transform:translate(-50%,-50%); opacity:.42; filter:drop-shadow(0 0 22px rgba(28,204,217,.16)); pointer-events:none; user-select:none; }
+.kicker,.eyebrow { color:var(--cyan); text-transform:uppercase; letter-spacing:.2em; font-size:.72rem; font-weight:800; }
+h1 { font-size:clamp(4rem,9vw,8.2rem); line-height:.86; letter-spacing:-.075em; margin:16px 0 28px; background:linear-gradient(100deg,#865cff 0%,#c9a8ff 27%,#f6f9ff 49%,#77eaff 72%,#1cccd9 100%); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 10px 28px rgba(50,124,210,.14)); }
+.deck { font-size:clamp(1.08rem,2vw,1.4rem); max-width:680px; color:#d4e0ed; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; }
+.chip { border:1px solid var(--line); background:rgba(255,255,255,.035); border-radius:999px; padding:7px 11px; color:#c9d6e4; font-size:.8rem; }
+.hero-modules { display:flex; align-items:center; justify-content:center; gap:24px; perspective:1200px; }
+.hero-modules img { width:min(75%,240px); height:auto; border:1px solid rgba(255,255,255,.16); border-radius:12px; box-shadow:var(--shadow); transform:rotateY(-5deg) translateY(8px); }
+section { position:relative; isolation:isolate; padding:70px clamp(32px,7vw,110px); border-bottom:1px solid var(--line); scroll-margin-top:20px; overflow:hidden; }
+section::before { position:absolute; z-index:0; bottom:0; width:min(58vw,650px); aspect-ratio:959/376; background:url("../img/PerfectWave_KCrop.png") center bottom/contain no-repeat; content:""; opacity:.065; mix-blend-mode:screen; -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); pointer-events:none; }
+section:nth-of-type(odd)::before { right:0; transform:scaleX(-1); -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); }
+section:nth-of-type(even)::before { left:-5%; }
+section > * { position:relative; z-index:1; }
+.section-head { max-width:850px; margin-bottom:38px; }
+h2 { font-size:clamp(2.1rem,4.7vw,4.2rem); line-height:1; letter-spacing:-.045em; margin:8px 0 18px; }
+h3 { line-height:1.18; margin:.2rem 0 .45rem; }
+p { margin:.45rem 0 1rem; }
+.muted { color:var(--muted); }
+.callout { border-left:3px solid var(--cyan); padding:18px 22px; background:rgba(28,204,217,.07); max-width:900px; margin:30px 0; border-radius:0 12px 12px 0; }
+.callout strong { color:var(--cyan); }
+
+/* Architecture */
+.architecture { display:grid; grid-template-columns:repeat(5,minmax(120px,1fr)); gap:12px; align-items:stretch; }
+.arch-box { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:105px; padding:18px; border-radius:14px; border:1px solid var(--line); background:var(--panel); position:relative; font-weight:750; }
+.arch-box:not(:last-child)::after { content:""; position:absolute; right:-13px; top:50%; width:13px; border-top:2px solid var(--cyan); }
+.arch-box small { display:block; color:var(--muted); font-weight:500; margin-top:5px; font-size:.8rem; }
+
+/* Panel tour */
+.panel-tour { display:grid; grid-template-columns:minmax(220px,300px) minmax(0,1fr); gap:40px; align-items:start; }
+.annotated-panel { position:relative; width:min(100%,260px); margin:0 auto; box-shadow:var(--shadow); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.1); }
+.annotated-panel img { display:block; width:100%; height:auto; }
+.control-list { display:grid; grid-template-columns:1fr; gap:12px; }
+.control-card { display:grid; grid-template-columns:34px 1fr; gap:12px; padding:18px; border-radius:14px; border:1px solid var(--line); background:rgba(14,21,32,.8); }
+.control-card .num { width:30px; height:30px; border-radius:50%; display:grid; place-items:center; background:var(--purple); font-weight:900; }
+.control-card p { color:#c2cede; font-size:.91rem; margin:.3rem 0; }
+.control-card .range { color:var(--gold); font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; }
+
+.panel-overlay { position:absolute; inset:0; width:100%; height:100%; }
+.panel-overlay line { stroke:#fff; stroke-width:26; }
+.panel-overlay circle { fill:#f7fbff; stroke:var(--purple); stroke-width:42; }
+.panel-overlay text { fill:#101725; font-size:210px; font-weight:900; text-anchor:middle; dominant-baseline:central; }
+.panel-overlay a:hover circle,.panel-overlay a:focus circle { fill:var(--gold); stroke:var(--cyan); }
+.io-heading { margin-top:48px; }
+.control-card { scroll-margin-top:24px; }
+
+/* Tables */
+.table-wrap { width:100%; overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
+table { width:100%; border-collapse:collapse; min-width:760px; background:rgba(12,18,28,.88); }
+th { text-align:left; color:var(--gold); font-size:.74rem; text-transform:uppercase; letter-spacing:.08em; background:#121b29; }
+th,td { padding:14px 16px; border-bottom:1px solid var(--line); vertical-align:top; }
+td { color:#cbd6e3; }
+tr:last-child td { border-bottom:0; }
+
+/* Info and recipes */
+.display-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.info-card { padding:26px; border:1px solid var(--line); border-radius:16px; background:var(--panel); }
+.info-card ul { padding-left:1.2rem; }
+.recipes { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.recipe { padding:24px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(155deg,rgba(122,92,255,.09),rgba(28,204,217,.04)); }
+.recipe .why { color:#9feaf0; border-top:1px solid var(--line); padding-top:14px; margin-top:14px; font-size:.9rem; }
+details { border:1px solid var(--line); border-radius:12px; margin:10px 0; background:var(--panel); }
+summary { cursor:pointer; padding:16px 18px; font-weight:750; }
+details p { padding:0 18px 18px; color:#c6d2df; }
+.spec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.spec { padding:20px; border:1px solid var(--line); border-radius:14px; background:var(--panel); }
+.spec strong { display:block; color:var(--gold); font-size:.73rem; text-transform:uppercase; letter-spacing:.08em; }
+footer { position:relative; min-height:150px; padding:42px clamp(32px,7vw,110px); color:var(--muted); display:flex; align-items:flex-end; justify-content:space-between; gap:30px; overflow:hidden; }
+footer span { position:relative; z-index:1; }
+
+@media (max-width:1100px) { .layout{display:block} nav{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)} nav a{display:inline-block;margin-right:16px} .hero{grid-template-columns:1fr;} .panel-tour{grid-template-columns:1fr} .recipes{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:680px) { section,.hero{padding:48px 20px} .hero{min-height:auto} .dragon-divider{height:36px}.dragon-divider img{width:110%;max-width:none;opacity:.38} .hero-modules{gap:10px} .hero-modules img{width:100%} .control-list,.display-grid,.recipes,.spec-grid{grid-template-columns:1fr} .architecture{grid-template-columns:1fr} .arch-box:not(:last-child)::after{right:50%;top:auto;bottom:-13px;height:13px;width:0;border-top:0;border-left:2px solid var(--cyan)} footer{display:block;min-height:140px;padding:36px 20px} footer span{display:block;margin-bottom:6px} }
+@media print {
+  :root{color-scheme:light} body{background:#fff;color:#101725;font-size:10.5pt} nav,.nav-actions,.dragon-divider{display:none} .layout{display:block;max-width:none} .hero{min-height:0;grid-template-columns:1fr 280px;padding:32px;border-bottom:1px solid #b9c3ce;page-break-after:always} h1{font-size:54pt;color:#152238;background:none} section{padding:28px 34px;border-color:#cdd5de} section::before{display:none} .control-card,.info-card,.recipe,.spec,details{background:#fff;border-color:#b9c3ce;color:#101725;break-inside:avoid} p,td,.control-card p,details p{color:#26364a} table{background:#fff} th{background:#eaf1f7;color:#25334a} th,td{border-color:#cdd5de} .panel-tour{grid-template-columns:220px 1fr;gap:24px} .recipes{grid-template-columns:repeat(2,1fr)} a{color:#174f7a} footer{min-height:0;border-top:1px solid #cdd5de;color:#536274}
+}
+.hero{grid-template-columns:minmax(0,1fr) minmax(260px,440px)} .hero-modules img{width:100%;max-width:440px;transform:none} h1{font-size:clamp(3.6rem,7vw,6.6rem)} .annotated-panel{width:100%;max-width:420px} .panel-tour{grid-template-columns:minmax(280px,420px) minmax(0,1fr)} .panel-overlay circle{stroke-width:2;fill:#f7fbff} .panel-overlay text{font-size:14px} @media(max-width:1100px){.hero,.panel-tour{grid-template-columns:1fr}} @media print{.hero{grid-template-columns:1fr 240px}.panel-tour{grid-template-columns:240px 1fr}} @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* Let the legend use the space beneath the panel as well as beside it. */
+.panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px 24px; align-items:start; }
+.panel-reference .annotated-panel { grid-column:1; grid-row:1 / span 3; align-self:start; margin:0 auto; }
+.panel-reference .control-card { min-width:0; align-content:start; }
+.panel-reference .num { background:var(--purple); }
+@media (max-width:1100px) and (min-width:761px) { .panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } }
+@media (max-width:760px) { .panel-reference { grid-template-columns:minmax(0,1fr); } .panel-reference .annotated-panel { grid-column:auto; grid-row:auto; margin-bottom:12px; } }
+@media print { .panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } .panel-reference .annotated-panel { grid-column:1; grid-row:1 / span 3; } }
+
+/* One-pixel tracks allow independently stacked cards without shared row gaps. */
+@media screen and (min-width:761px) {
+  .panel-reference.is-stacked { grid-auto-rows:1px; row-gap:0; }
+  .panel-reference > * { align-self:start; }
+}
+.panel-reference .output-card .num { background:#096c78; }
+</style></head><body><div class="layout">
+<nav aria-label="Manual navigation"><a class="brand-home" href="../index.html" aria-label="Return to manuals portal"><img class="brand-lockup" src="../img/Branding_Logo_Crop_Only.png" alt="Leviathan"></a><div class="brand">TEMPORAL DECK</div><div class="sub">LEVIATHAN USER MANUAL</div><a href="#concept">A turntable for recorded time</a><a href="#start">First patch</a><a href="#panel">Panel tour</a><a href="#cv">Inputs and outputs</a><a href="#transport">Scratch, slip, reverse, and freeze</a><a href="#samples">Samples and LongPlay</a><a href="#settings">Context menu</a><a href="#recipes">Patch recipes</a><a href="#troubleshooting">Troubleshooting</a><a href="#reference">Reference</a><div class="nav-actions"><button onclick="window.print()">Print / Save PDF</button></div></nav><main>
+<header class="hero"><div><p class="kicker">Leviathan for VCV Rack 2 · Open Source</p><h1>Temporal<br>Deck</h1><p class="deck">Grab the record. Move through time.</p><p class="muted">A stereo scratch deck for live audio and loaded samples, with platter gestures, slip return, reverse, freeze, and disk-backed LongPlay playback.</p><div class="chips"><span class="chip">20 HP</span><span class="chip">Stereo live buffer</span><span class="chip">Scratch CV I/O</span><span class="chip">WAV · FLAC · MP3</span></div></div><div class="hero-modules"><img src="img/Temporal%20Deck.png" alt="Temporal Deck front panel"></div></header><div class="dragon-divider" aria-hidden="true"><img src="../img/Leviathan_Dragon_Transparent_Refined.png" alt=""></div>
+<section id="concept"><div class="section-head"><p class="eyebrow">A turntable for recorded time</p><h2>A turntable for recorded time</h2></div><p>Temporal Deck is a 20 HP stereo scratch deck, live buffer, delay, and sample player. Incoming audio enters a circular recording buffer; a separate playback head can move through that history. Moving the platter changes playback position and speed together, producing turntable-style pitch bends and scratches. Normal platter speed is based on 33⅓ RPM.</p><div class="display-grid">
+<article class="info-card"><h3>Live audio</h3><p>The recording head keeps collecting incoming sound while you explore earlier material. BUFFER limits the available history. FREEZE stops new recording so the captured material can be worked repeatedly.</p></article>
+<article class="info-card"><h3>Loaded samples</h3><p>Loading a file switches to sample playback. The platter works through the file, BUFFER sets the active playback window, and the arc provides seeking. LongPlay uses disk-backed streaming for loaded files.</p></article></div></section>
+
+<section id="start"><div class="section-head"><p class="eyebrow">First patch</p><h2>First patch</h2></div><ol><li>Patch an audio source to IN L. Leave IN R empty for the same signal on both channels, or connect a separate right channel for stereo.</li><li>Connect OUT L and OUT R to your mixer. Start with FB fully down and WET fully up.</li><li>Leave RATE centered at 1× and let the live buffer collect some sound. Turn BUFFER up to make more history accessible.</li><li>Click and drag around the platter to scrub backward and forward. Hold the platter still to hold the playback position; release to resume motion.</li><li>Press SLIP to enable a return after scratching. Press FREEZE when you want to preserve the live recording.</li></ol><div class="callout"><strong>Start with sound in the buffer.</strong> An empty live buffer has no recorded history to scratch. WET at zero passes the dry input and hides the deck’s playback.</div></section>
+
+<section id="panel"><div class="section-head"><p class="eyebrow">Panel tour</p><h2>Panel tour</h2></div><p>Click a numbered marker to reach its description. The reference begins beside the panel and continues below it, including all four outputs.</p><div class="panel-tour panel-reference"><figure class="annotated-panel"><img src="img/Temporal%20Deck.png" alt="Temporal Deck panel with numbered control locations"><svg class="panel-overlay" viewBox="0 0 600 760" aria-label="Numbered control locations" style="--unused:0"><a href="#control-1" aria-label="1: BUFFER"><circle cx="49" cy="100" r="13"/><text x="49" y="100">1</text></a><a href="#control-2" aria-label="2: Platter &amp; arc"><circle cx="299" cy="260" r="13"/><text x="299" y="260">2</text></a><a href="#control-3" aria-label="3: SENS"><circle cx="43" cy="500" r="13"/><text x="43" y="500">3</text></a><a href="#control-4" aria-label="4: SLIP"><circle cx="105" cy="511" r="13"/><text x="105" y="511">4</text></a><a href="#control-5" aria-label="5: RATE"><circle cx="124" cy="584" r="13"/><text x="124" y="584">5</text></a><a href="#control-6" aria-label="6: REV"><circle cx="270" cy="598" r="13"/><text x="270" y="598">6</text></a><a href="#control-7" aria-label="7: FREEZE"><circle cx="340" cy="598" r="13"/><text x="340" y="598">7</text></a><a href="#control-8" aria-label="8: WET &amp; FB"><circle cx="420" cy="626" r="13"/><text x="420" y="626">8</text></a><a href="#control-9" aria-label="9: Cartridge"><circle cx="545" cy="391" r="13"/><text x="545" y="391">9</text></a><a href="#control-10" aria-label="10: TD.Scope button"><circle cx="579" cy="33" r="13"/><text x="579" y="33">10</text></a><a href="#control-11" aria-label="11: GATE — scratch gate input"><circle cx="198" cy="669" r="13"/><text x="198" y="669">11</text></a><a href="#control-12" aria-label="12: POS — scratch position input"><circle cx="270" cy="669" r="13"/><text x="270" y="669">12</text></a><a href="#control-13" aria-label="13: OUT L output"><circle cx="556" cy="585" r="13"/><text x="556" y="585">13</text></a><a href="#control-14" aria-label="14: OUT R output"><circle cx="556" cy="669" r="13"/><text x="556" y="669">14</text></a><a href="#control-15" aria-label="15: S.GATE output"><circle cx="490" cy="585" r="13"/><text x="490" y="585">15</text></a><a href="#control-16" aria-label="16: S.POS output"><circle cx="490" cy="669" r="13"/><text x="490" y="669">16</text></a></svg></figure>
+<article class="control-card" id="control-1"><span class="num">1</span><div><h3>BUFFER</h3><p class="range">Top left</p><p>Limits accessible live history within the selected buffer range. In sample mode it sets the active window end as a fraction of the file; it does not select a different recording allocation.</p></div></article>
+<article class="control-card" id="control-2"><span class="num">2</span><div><h3>Platter &amp; arc</h3><p class="range">Center and upper rim</p><p>Left-drag the record to scratch; scroll over it for wheel scratching. Middle-click requests a quick slip return. Click or drag the upper arc to seek through live history or the loaded sample, clamped to the active BUFFER window.</p></div></article>
+<article class="control-card" id="control-3"><span class="num">3</span><div><h3>SENS</h3><p class="range">Lower left, above IN L</p><p>Adjusts scratch sensitivity. Tune this to your mouse or trackpad before performing fine movements.</p></div></article>
+<article class="control-card" id="control-4"><span class="num">4</span><div><h3>SLIP</h3><p class="range">Beside SENS</p><p>Cycles through Slow → Normal → Instant → Off. The three small indicators show the enabled return setting. Slip brings playback back toward its running reference after a scratch.</p></div></article>
+<article class="control-card" id="control-5"><span class="num">5</span><div><h3>RATE</h3><p class="range">Above the RATE input</p><p>Sets base playback speed from 0.5× to 2×, with 1× at the center. A cable in RATE replaces this knob setting.</p></div></article>
+<article class="control-card" id="control-6"><span class="num">6</span><div><h3>REV</h3><p class="range">Gold button beside REV input</p><p>Toggles reverse playback when external gated control is not taking ownership. Enabling reverse clears a button-latched freeze; in sample mode it also starts playback.</p></div></article>
+<article class="control-card" id="control-7"><span class="num">7</span><div><h3>FREEZE</h3><p class="range">Gold button above FREEZE input</p><p>Latches freeze. Enabling it clears reverse and slip. Live recording stops; in sample mode normal transport pauses. You can still manipulate the captured material with the platter.</p></div></article>
+<article class="control-card" id="control-8"><span class="num">8</span><div><h3>WET &amp; FB</h3><p class="range">Two knobs at lower right</p><p>WET blends dry input and deck playback, from dry to fully wet. FB feeds playback back into the live recording, from none to full feedback. Begin with FB down and raise it gradually.</p></div></article>
+<article class="control-card" id="control-9"><span class="num">9</span><div><h3>Cartridge</h3><p class="range">Tonearm / cartridge area</p><p>The cartridge selector cycles Clean, M44-7, C.MKII S, 680 HP, Q.Bert, and Lo-Fi. These provide alternative playback coloration.</p></div></article>
+<article class="control-card" id="control-10"><span class="num">10</span><div><h3>TD.Scope button</h3><p class="range">Small button at the upper right edge</p><p>Spawns the companion TD.Scope expander. It provides a larger waveform and position view; the deck can be used without it.</p></div></article>
+<article class="control-card" id="control-11"><span class="num">11</span><div><h3>GATE — scratch gate input</h3><p class="range">Bottom row, below REV</p><p>A gate of at least 1 V engages external scratching. Pair it with POS to control the platter from CV, or connect another deck’s S.GATE here. Choose Glide / inertia or Module sync in the Gate+Pos context menu.</p></div></article>
+<article class="control-card" id="control-12"><span class="num">12</span><div><h3>POS — scratch position input</h3><p class="range">Bottom row, between GATE and FREEZE</p><p>Sets relative scratch displacement while GATE is active, at 1 V per second over −10 to +10 V. Positive voltage moves forward toward NOW; negative voltage moves backward into history. Travel is limited by the available window. Connect another deck’s S.POS here to receive its gesture.</p></div></article>
+<article class="control-card output-card" id="control-13"><span class="num">13</span><div><h3>OUT L — output</h3><p class="range">Top right cyan jack</p><p>Left audio output. Carries the blend of dry input and deck playback set by WET. Connect OUT L and OUT R to a stereo mixer or output module.</p></div></article>
+<article class="control-card output-card" id="control-14"><span class="num">14</span><div><h3>OUT R — output</h3><p class="range">Bottom right cyan jack</p><p>Right audio output, with the same WET blend as OUT L. When IN R is unpatched, the left input supplies both recording channels.</p></div></article>
+<article class="control-card output-card" id="control-15"><span class="num">15</span><div><h3>S.GATE — output</h3><p class="range">Top left cyan jack</p><p>Scratch activity output: 10 V while scratching and 0 V otherwise. Connect to another deck’s GATE input and pair with S.POS to transmit the gesture.</p></div></article>
+<article class="control-card output-card" id="control-16"><span class="num">16</span><div><h3>S.POS — output</h3><p class="range">Bottom left cyan jack</p><p>Relative scratch displacement output, scaled at 1 V per second and limited to −10 to +10 V. Positive voltage means forward motion toward NOW. Returns to 0 V when S.GATE is low. Connect to another deck’s POS input.</p></div></article></div></section>
+
+<section id="cv"><div class="section-head"><p class="eyebrow">Inputs and outputs</p><h2>Inputs and outputs</h2></div><div class="table-wrap"><table><thead>
+<tr><th>Jack</th><th>Signal / range</th><th>Behavior</th></tr></thead><tbody>
+<tr><td>IN L / IN R</td><td>Stereo audio, one channel per jack</td><td>IN L is copied to the right channel when IN R is unpatched.</td></tr>
+<tr><td>RATE</td><td>−10 to +10 V</td><td>Replaces the rate knob: −10 V = 0.5×, 0 V = 1×, +10 V = 2×. Values outside that range are clamped. Reverse is controlled separately; this is not a 1 V/oct input.</td></tr>
+<tr><td>GATE + POS</td><td>Scratch gate ≥1 V; position −10 to +10 V</td><td>Use together for external scratching. POS represents relative displacement at 1 V per second: positive moves forward/toward NOW; negative moves backward/deeper into history. Movement is limited by the available window. Select Gate+Pos behavior in the context menu.</td></tr>
+<tr><td>REV</td><td>Gate or pulse</td><td>Gated Control follows the incoming high/low state and takes ownership while patched. Pulsed Control toggles reverse on incoming trigger events.</td></tr>
+<tr><td>FREEZE</td><td>Gate ≥1 V; negative reset at −1 V</td><td>Gated Control freezes while high; Pulsed Control toggles freeze. Crossing down to −1 V requests a position reset and holds the negative-reset state until voltage recovers to at least −0.5 V. A falling freeze gate also releases a freeze latched by the panel button.</td></tr>
+<tr><td>OUT L / OUT R</td><td>Stereo audio</td><td>Dry/wet mix of the input and processed playback.</td></tr>
+<tr><td>S.GATE</td><td>0 or 10 V</td><td>High during scratch activity. Pair with S.POS to transmit a scratch gesture to another deck.</td></tr>
+<tr><td>S.POS</td><td>−10 to +10 V; 1 V per second</td><td>Relative scratch displacement from the gesture anchor, with positive forward polarity. Returns to 0 V whenever S.GATE is low.</td></tr></tbody></table></div></section>
+
+<section id="transport"><div class="section-head"><p class="eyebrow">Scratch, slip, reverse, and freeze</p><h2>Scratch, slip, reverse, and freeze</h2></div><div class="display-grid">
+<article class="info-card"><h3>Perform on the record</h3><p>Use circular hand movements for vinyl-style motion. A held touch can stop playback even though live audio continues to be recorded. Wheel scratching offers another gesture path. Sensitivity and scratch smoothing affect the feel.</p></article>
+<article class="info-card"><h3>Choose the return</h3><p>Slip’s Slow, Normal, and Instant settings determine how playback rejoins its reference. Select None in the menu to disable it. Middle-clicking the platter requests a quick return without cycling the SLIP button.</p></article>
+<article class="info-card"><h3>Freeze the material</h3><p>FREEZE preserves live history by stopping writes, including feedback writes. It is distinct from simply touching the platter. In sample mode it pauses free-running transport while keeping the material available for scratching.</p></article>
+<article class="info-card"><h3>Transport interactions</h3><p>The panel buttons interact: enabling FREEZE clears reverse and slip; enabling REV clears button-latched freeze; enabling a slip return clears button-latched freeze. A patched gated control can still impose its own state.</p></article></div></section>
+
+<section id="samples"><div class="section-head"><p class="eyebrow">Samples and LongPlay</p><h2>Samples and LongPlay</h2></div><ol><li>Right-click and choose <strong>Load sample…</strong> to open a WAV, FLAC, or MP3 file. Supported audio files can also be dropped onto the module.</li><li>Click the sample loop icon to toggle looping. Enabling looping starts playback; without looping, playback stops at the active window boundary. REV also starts sample playback, in reverse. FREEZE pauses normal transport.</li><li>Set BUFFER to choose the active window end. Seek using the arc, or scratch the platter. Arc seeking addresses the full file and clamps to that window.</li><li>Choose <strong>Clear sample</strong> to return to live buffering.</li></ol><div class="display-grid">
+<article class="info-card"><h3>Capture the live buffer</h3><p>Convert live → sample turns the currently accessible live window into sample material. Save sample… exports a live-converted sample as WAV. This export option is shown for live conversions.</p></article>
+<article class="info-card"><h3>LongPlay files</h3><p>Loaded files automatically use disk-backed LongPlay rather than a selectable live RAM recording range. Sample info shows the loaded name and duration, and reports truncation when applicable. Keep source files available when reopening a patch.</p></article></div></section>
+
+<section id="settings"><div class="section-head"><p class="eyebrow">Context menu</p><h2>Context menu</h2></div><div class="table-wrap"><table><thead>
+<tr><th>Setting</th><th>Use</th></tr></thead><tbody>
+<tr><td>Scratch smoothing</td><td>Smooths scratch transitions; enabled by default.</td></tr>
+<tr><td>Scratch interpolation</td><td>Choose Cubic, 6-point Lagrange, or Sinc (CPU heavy).</td></tr>
+<tr><td>HQ rate interpolation</td><td>An additional quality option for rate playback.</td></tr>
+<tr><td>Gate+Pos mode</td><td>Glide / inertia gives external gestures a physical response. Module sync is intended for coordinated control between decks.</td></tr>
+<tr><td>Reverse CV / Freeze CV</td><td>Choose Gated Control or Pulsed Control independently. Both default to gated control.</td></tr>
+<tr><td>Buffer range</td><td>In live mode: 10 s, 20 s, 1 min stereo, 2 min stereo, 10 min stereo, or 10 min mono. Longer ranges allocate more RAM; the menu estimates use at the current sample rate. BUFFER then selects the accessible portion.</td></tr>
+<tr><td>Slip return speed</td><td>None, Slow, Normal, or Instant. Choosing a speed also enables slip.</td></tr>
+<tr><td>Vinyl</td><td>Choose platter artwork and brightness, load or clear custom art, or sync the vinyl library. Available artwork depends on the installed library.</td></tr>
+<tr><td>Sample</td><td>Load, clear, inspect, or convert live material; save a live conversion as WAV.</td></tr></tbody></table></div></section>
+
+<section id="recipes"><div class="section-head"><p class="eyebrow">Patch recipes</p><h2>Patch recipes</h2></div><div class="display-grid">
+<article class="info-card"><h3>Live scratch insert</h3><p>Patch a drum loop into IN L, set RATE to 1×, WET to full, and FB to zero. Let the buffer fill, enable Normal slip, then drag the platter in short backward and forward gestures.</p></article>
+<article class="info-card"><h3>Frozen texture</h3><p>Feed a sustained sound into the deck, then press FREEZE. Move the platter slowly through the capture. Keep WET high; use SENS to make small movements comfortable.</p></article>
+<article class="info-card"><h3>Two decks, one gesture</h3><p>Patch the first deck’s S.GATE to the second deck’s GATE and S.POS to POS. Select Module sync on the receiving deck. Use matching source material and window settings when comparing their motion.</p></article>
+<article class="info-card"><h3>Feedback history</h3><p>Start with a short live window and low FB. Move playback behind NOW, then blend it with the input using WET. Raise FB for recirculating textures; FREEZE stops further recording into the loop.</p></article></div></section>
+
+<section id="troubleshooting"><div class="section-head"><p class="eyebrow">Troubleshooting</p><h2>Troubleshooting</h2></div><details><summary>Why is scratching silent?</summary><p>Confirm that the live buffer has received audio or a sample is loaded. Check WET, output routing, sample transport, and the active BUFFER window. A stationary platter or frozen sample transport can produce silence until you move it.</p></details><details><summary>Why does RATE ignore the knob?</summary><p>A connected RATE cable replaces the knob. At 0 V the external rate is 1×. Unplug RATE to restore knob control.</p></details><details><summary>Why does the deck stay frozen or reversed?</summary><p>Check the FREEZE and REV inputs and their gated/pulsed menu settings. Gated control can impose a state independently of the button. Check for a held negative voltage on FREEZE as well.</p></details><details><summary>Why can I not reach an earlier sound?</summary><p>BUFFER limits access, and live history is overwritten as recording continues. Increase the live range before recording a longer passage, or freeze/convert the material you want to keep.</p></details><details><summary>Why does sample playback stop early?</summary><p>BUFFER may shorten the active window. Increase it and check the loop state. Inspect Sample info if the source was reported as truncated.</p></details><details><summary>Why is CPU or memory use higher?</summary><p>Long live ranges increase RAM use, especially at higher sample rates. Sinc scratch interpolation is explicitly CPU heavy; try Cubic when reducing load.</p></details></section>
+
+<section id="reference"><div class="section-head"><p class="eyebrow">Reference</p><h2>Reference</h2></div><div class="spec-grid"><div class="spec"><strong>Format</strong>VCV Rack 2 · 20 HP</div><div class="spec"><strong>Audio path</strong>Stereo live buffer / file playback</div><div class="spec"><strong>Base rate</strong>0.5×–2× · 1× center</div><div class="spec"><strong>Nominal platter</strong>33⅓ RPM</div><div class="spec"><strong>Companion</strong>TD.Scope expander</div><div class="spec"><strong>License</strong>GPL-3.0-or-later</div></div><p class="muted">Behavior checked against the local Temporal Deck implementation: module configuration, transport control, frame input, playback engine, and UI/context menu. Panel artwork may show controls differently as versions evolve.</p></section>
+<footer><span>© 2026 Leviathan · Temporal Deck</span><span><a href="../index.html">Back to manuals</a></span></footer></main></div>
+<script>
+// Stack each description in the column with the next available space.
+(() => {
+  const layouts = document.querySelectorAll('.panel-reference');
+  const compact = window.matchMedia('(max-width:760px)');
+  function arrange(layout) {
+    const items = Array.from(layout.children);
+    if (compact.matches) {
+      layout.classList.remove('is-stacked');
+      items.forEach(item => { item.style.gridColumn = ''; item.style.gridRow = ''; });
+      return;
+    }
+    layout.classList.add('is-stacked');
+    const bottoms = [0, 0];
+    items.forEach((item, index) => {
+      const column = index === 0 ? 0 : (bottoms[0] <= bottoms[1] ? 0 : 1);
+      item.style.gridColumn = String(column + 1);
+      const height = Math.ceil(item.getBoundingClientRect().height);
+      item.style.gridRow = `${bottoms[column] + 1} / span ${Math.max(1, height)}`;
+      bottoms[column] += height + 16;
+    });
+  }
+  let scheduled = false;
+  function refresh() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      layouts.forEach(arrange);
+    });
+  }
+  const observer = new ResizeObserver(refresh);
+  layouts.forEach(layout => {
+    observer.observe(layout);
+    Array.from(layout.children).forEach(item => observer.observe(item));
+    layout.querySelectorAll('img').forEach(img => img.addEventListener('load', refresh));
+  });
+  compact.addEventListener('change', refresh);
+  if (document.fonts) document.fonts.ready.then(refresh);
+  window.addEventListener('beforeprint', () => {
+    layouts.forEach(layout => Array.from(layout.children).forEach(item => {
+      item.style.gridColumn = ''; item.style.gridRow = '';
+    }));
+  });
+  window.addEventListener('afterprint', refresh);
+  refresh();
+})();
+</script>
+</body></html>

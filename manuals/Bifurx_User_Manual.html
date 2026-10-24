@@ -109,6 +109,21 @@ footer span { position:relative; z-index:1; }
 @media print {
   :root{color-scheme:light} body{background:#fff;color:#101725;font-size:10.5pt} nav,.nav-actions,.dragon-divider{display:none} .layout{display:block;max-width:none} .hero{min-height:0;grid-template-columns:1fr 340px;padding:32px;border-bottom:1px solid #b9c3ce;page-break-after:always} h1{font-size:64pt;color:#152238;background:none} section{padding:28px 34px;border-color:#cdd5de} section::before{display:none} .control-card,.info-card,.recipe,.spec,details{background:#fff;border-color:#b9c3ce;color:#101725;break-inside:avoid} p,td,.control-card p,details p{color:#26364a} table{background:#fff} th{background:#eaf1f7;color:#25334a} th,td{border-color:#cdd5de} .panel-tour{grid-template-columns:270px 1fr;gap:24px} .recipes{grid-template-columns:repeat(2,1fr)} a{color:#174f7a} footer{min-height:0;border-top:1px solid #cdd5de;color:#536274}
 }
+
+/* Continue panel descriptions beneath the image in the same two-column grid. */
+.panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px 24px; align-items:start; }
+.panel-reference .annotated-panel { grid-column:1; grid-row:1 / span 3; align-self:start; margin:0 auto; }
+.panel-reference .control-card { min-width:0; align-content:start; }
+@media (max-width:1100px) and (min-width:761px) { .panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } }
+@media (max-width:760px) { .panel-reference { grid-template-columns:minmax(0,1fr); } .panel-reference .annotated-panel { grid-column:auto; grid-row:auto; margin-bottom:12px; } }
+@media print { .panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } .panel-reference .annotated-panel { grid-column:1; grid-row:1 / span 3; } }
+
+/* One-pixel tracks allow independently stacked cards without shared row gaps. */
+@media screen and (min-width:761px) {
+  .panel-reference.is-stacked { grid-auto-rows:1px; row-gap:0; }
+  .panel-reference > * { align-self:start; }
+}
+.panel-reference .output-card .num { background:#096c78; }
 </style>
 </head>
 <body>
@@ -131,7 +146,8 @@ footer span { position:relative; z-index:1; }
 </section>
 
 <section id="panel"><div class="section-head"><p class="eyebrow">Panel tour</p><h2>The instrument at a glance.</h2><p class="muted">The numbered map groups related hardware so the operating surface can be read in seconds.</p></div>
-<div class="panel-tour"><figure class="annotated-panel"><img src="img/bifurx_light.png" alt="Annotated Bifurx light panel"><span class="panel-badge" style="left:87.886%;top:13.021%">1</span><span class="panel-badge" style="left:22.565%;top:58.854%">2</span><span class="panel-badge" style="left:19.002%;top:71.875%">3</span><span class="panel-badge" style="left:19.002%;top:82.682%">4</span><span class="panel-badge" style="left:56.057%;top:79.427%">5</span><span class="panel-badge" style="left:57.482%;top:67.188%">6</span><span class="panel-badge" style="left:81.235%;top:71.875%">7</span><span class="panel-badge" style="left:81.235%;top:82.682%">8</span><span class="panel-badge" style="left:5.701%;top:74.609%">9</span><span class="panel-badge" style="left:94.299%;top:74.609%">9</span><span class="panel-badge" style="left:55.819%;top:90.365%">10</span></figure><div class="control-list"><article class="control-card"><span class="num">1</span><div><h3>Spectrum and response display</h3><p class="range">10 Hz to 20 kHz view; 48 dB vertical window</p><p>Shows the live output spectrum, the nominal gold filter curve, the two focus frequencies, and the current dBFS ceiling.</p></div></article><article class="control-card"><span class="num">2</span><div><h3>Mode controls</h3><p class="range">11 modes</p><p>Use the left and right arrows to step through modes. Press the menu button to select a mode directly. The strip names the active mode.</p></div></article><article class="control-card"><span class="num">3</span><div><h3>LEVEL</h3><p class="range">Silence to clean unity to driven</p><p>Attenuates below noon. Noon is unity and clean. Above noon adds gain; nonlinear drive begins around the upper third and grows toward maximum.</p></div></article><article class="control-card"><span class="num">4</span><div><h3>RES</h3><p class="range">Low damping to high resonance</p><p>Raises both filter resonances. BAL redistributes emphasis between the lower and upper core. Optional self-oscillation begins near 80% when enabled.</p></div></article><article class="control-card"><span class="num">5</span><div><h3>FREQ</h3><p class="range">4 Hz to 28 kHz control range</p><p>Sets the geometric center between the two filter frequencies. The large halo and the display markers provide fast visual feedback.</p></div></article><article class="control-card"><span class="num">6</span><div><h3>SM / XM coupling</h3><p class="range">Self-modulation to neutral to cross-modulation</p><p>Left makes each core modulate its own cutoff (SM). Right makes the cores modulate one another (XM). The amber lights show side and intensity.</p></div></article><article class="control-card"><span class="num">7</span><div><h3>SPAN</h3><p class="range">0 to 96 semitones (0 to 8 octaves)</p><p>Separates the lower A and upper B frequencies symmetrically around FREQ. Near the frequency limits, Bifurx shifts the pair inward to preserve the requested separation.</p></div></article><article class="control-card"><span class="num">8</span><div><h3>BAL</h3><p class="range">Lower focus to centered to upper focus</p><p>Favors the lower or upper core and shifts resonance emphasis. In parallel modes it also weights the two mixed responses.</p></div></article><article class="control-card"><span class="num">9</span><div><h3>FM and SPAN attenuverters</h3><p class="range">-100% to +100%</p><p>Set modulation depth and polarity for their matching bottom-row jacks. Center is zero; the illuminated rail shows direction and amount.</p></div></article><article class="control-card"><span class="num">10</span><div><h3>Patch bay</h3><p class="range">FM, RES, IN, V/OCT, OUT, BAL, SPAN</p><p>One audio input, one audio output, and five modulation inputs. Bifurx processes channel 1 and produces a monophonic output.</p></div></article></div></div>
+<div class="panel-tour panel-reference"><figure class="annotated-panel"><img src="img/bifurx_light.png" alt="Annotated Bifurx light panel"><span class="panel-badge" style="left:87.886%;top:13.021%">1</span><span class="panel-badge" style="left:22.565%;top:58.854%">2</span><span class="panel-badge" style="left:19.002%;top:71.875%">3</span><span class="panel-badge" style="left:19.002%;top:82.682%">4</span><span class="panel-badge" style="left:56.057%;top:79.427%">5</span><span class="panel-badge" style="left:57.482%;top:67.188%">6</span><span class="panel-badge" style="left:81.235%;top:71.875%">7</span><span class="panel-badge" style="left:81.235%;top:82.682%">8</span><span class="panel-badge" style="left:5.701%;top:74.609%">9</span><span class="panel-badge" style="left:94.299%;top:74.609%">9</span><span class="panel-badge" style="left:55.819%;top:90.365%">10</span></figure><article class="control-card"><span class="num">1</span><div><h3>Spectrum and response display</h3><p class="range">10 Hz to 20 kHz view; 48 dB vertical window</p><p>Shows the live output spectrum, the nominal gold filter curve, the two focus frequencies, and the current dBFS ceiling.</p></div></article><article class="control-card"><span class="num">2</span><div><h3>Mode controls</h3><p class="range">11 modes</p><p>Use the left and right arrows to step through modes. Press the menu button to select a mode directly. The strip names the active mode.</p></div></article><article class="control-card"><span class="num">3</span><div><h3>LEVEL</h3><p class="range">Silence to clean unity to driven</p><p>Attenuates below noon. Noon is unity and clean. Above noon adds gain; nonlinear drive begins around the upper third and grows toward maximum.</p></div></article><article class="control-card"><span class="num">4</span><div><h3>RES</h3><p class="range">Low damping to high resonance</p><p>Raises both filter resonances. BAL redistributes emphasis between the lower and upper core. Optional self-oscillation begins near 80% when enabled.</p></div></article><article class="control-card"><span class="num">5</span><div><h3>FREQ</h3><p class="range">4 Hz to 28 kHz control range</p><p>Sets the geometric center between the two filter frequencies. The large halo and the display markers provide fast visual feedback.</p></div></article><article class="control-card"><span class="num">6</span><div><h3>SM / XM coupling</h3><p class="range">Self-modulation to neutral to cross-modulation</p><p>Left makes each core modulate its own cutoff (SM). Right makes the cores modulate one another (XM). The amber lights show side and intensity.</p></div></article><article class="control-card"><span class="num">7</span><div><h3>SPAN</h3><p class="range">0 to 96 semitones (0 to 8 octaves)</p><p>Separates the lower A and upper B frequencies symmetrically around FREQ. Near the frequency limits, Bifurx shifts the pair inward to preserve the requested separation.</p></div></article><article class="control-card"><span class="num">8</span><div><h3>BAL</h3><p class="range">Lower focus to centered to upper focus</p><p>Favors the lower or upper core and shifts resonance emphasis. In parallel modes it also weights the two mixed responses.</p></div></article><article class="control-card"><span class="num">9</span><div><h3>FM and SPAN attenuverters</h3><p class="range">-100% to +100%</p><p>Set modulation depth and polarity for their matching bottom-row jacks. Center is zero; the illuminated rail shows direction and amount.</p></div></article><article class="control-card"><span class="num">10</span><div><h3>Patch bay</h3><p class="range">FM, RES, IN, V/OCT, OUT, BAL, SPAN</p><p>One audio input, one audio output, and five modulation inputs. Bifurx processes channel 1 and produces a monophonic output.</p></div></article>
+</div>
 </section>
 
 <section id="cv"><div class="section-head"><p class="eyebrow">CV and patching</p><h2>Voltage behavior, precisely.</h2><p class="muted">Panel knobs act as offsets. Where an attenuverter is present, it scales and can invert the matching input.</p></div>
@@ -162,4 +178,53 @@ footer span { position:relative; z-index:1; }
 </section>
 <footer><span>Bifurx User Manual</span><span>Designed and developed by Levi Kendall / Leviathan</span></footer>
 </main></div>
+
+<script>
+// Stack each description in the column with the next available space.
+(() => {
+  const layouts = document.querySelectorAll('.panel-reference');
+  const compact = window.matchMedia('(max-width:760px)');
+  function arrange(layout) {
+    const items = Array.from(layout.children);
+    if (compact.matches) {
+      layout.classList.remove('is-stacked');
+      items.forEach(item => { item.style.gridColumn = ''; item.style.gridRow = ''; });
+      return;
+    }
+    layout.classList.add('is-stacked');
+    const bottoms = [0, 0];
+    items.forEach((item, index) => {
+      const column = index === 0 ? 0 : (bottoms[0] <= bottoms[1] ? 0 : 1);
+      item.style.gridColumn = String(column + 1);
+      const height = Math.ceil(item.getBoundingClientRect().height);
+      item.style.gridRow = `${bottoms[column] + 1} / span ${Math.max(1, height)}`;
+      bottoms[column] += height + 16;
+    });
+  }
+  let scheduled = false;
+  function refresh() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      layouts.forEach(arrange);
+    });
+  }
+  const observer = new ResizeObserver(refresh);
+  layouts.forEach(layout => {
+    observer.observe(layout);
+    Array.from(layout.children).forEach(item => observer.observe(item));
+    layout.querySelectorAll('img').forEach(img => img.addEventListener('load', refresh));
+  });
+  compact.addEventListener('change', refresh);
+  if (document.fonts) document.fonts.ready.then(refresh);
+  window.addEventListener('beforeprint', () => {
+    layouts.forEach(layout => Array.from(layout.children).forEach(item => {
+      item.style.gridColumn = ''; item.style.gridRow = '';
+    }));
+  });
+  window.addEventListener('afterprint', refresh);
+  refresh();
+})();
+</script>
 </body></html>

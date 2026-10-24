@@ -104,6 +104,21 @@ footer span { position:relative; z-index:1; }
 @media print {
   :root{color-scheme:light} body{background:#fff;color:#101725;font-size:10.5pt} nav,.nav-actions,.dragon-divider{display:none} .layout{display:block;max-width:none} .hero{min-height:0;grid-template-columns:1fr 280px;padding:32px;border-bottom:1px solid #b9c3ce;page-break-after:always} h1{font-size:54pt;color:#152238;background:none} section{padding:28px 34px;border-color:#cdd5de} section::before{display:none} .control-card,.info-card,.recipe,.spec,details{background:#fff;border-color:#b9c3ce;color:#101725;break-inside:avoid} p,td,.control-card p,details p{color:#26364a} table{background:#fff} th{background:#eaf1f7;color:#25334a} th,td{border-color:#cdd5de} .panel-tour{grid-template-columns:220px 1fr;gap:24px} .recipes{grid-template-columns:repeat(2,1fr)} a{color:#174f7a} footer{min-height:0;border-top:1px solid #cdd5de;color:#536274}
 }
+
+/* Continue panel descriptions beneath the image in the same two-column grid. */
+.panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px 24px; align-items:start; }
+.panel-reference .annotated-panel { grid-column:1; grid-row:1 / span 3; align-self:start; margin:0 auto; }
+.panel-reference .control-card { min-width:0; align-content:start; }
+@media (max-width:1100px) and (min-width:761px) { .panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } }
+@media (max-width:760px) { .panel-reference { grid-template-columns:minmax(0,1fr); } .panel-reference .annotated-panel { grid-column:auto; grid-row:auto; margin-bottom:12px; } }
+@media print { .panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } .panel-reference .annotated-panel { grid-column:1; grid-row:1 / span 3; } }
+
+/* One-pixel tracks allow independently stacked cards without shared row gaps. */
+@media screen and (min-width:761px) {
+  .panel-reference.is-stacked { grid-auto-rows:1px; row-gap:0; }
+  .panel-reference > * { align-self:start; }
+}
+.panel-reference .output-card .num { background:#096c78; }
 </style>
 </head>
 <body>
@@ -171,7 +186,7 @@ footer span { position:relative; z-index:1; }
     <p class="muted">The 8 HP panel has five controls, a waveform preview, six inputs, and four outputs. Separate views below identify controls and jacks. Click a numbered marker to reach its description.</p>
   </div>
   <h3>Controls &amp; display · 1–6</h3>
-  <div class="panel-tour">
+  <div class="panel-tour panel-reference">
 <figure class="annotated-panel">
 <img src="img/Proc.png" alt="Proc front panel; numbered references are described in the adjacent legend.">
 <svg class="panel-overlay" viewBox="0 0 4064 12850" aria-label="Control and display locations">
@@ -183,7 +198,6 @@ footer span { position:relative; z-index:1; }
 <a href="#proc-control-6" aria-label="6: Waveform preview"><title>6: Waveform preview</title><line x1="2032.00" y1="7815.96" x2="2032.00" y2="7815.96"/><circle cx="2032.00" cy="7815.96" r="175"/><text x="2032.00" y="7815.96">6</text></a>
 </svg>
 </figure>
-<div class="control-list">
 <article class="control-card" id="proc-control-1"><span class="num">1</span><div><h3>LOOP button &amp; LED</h3><p class="range">Gold button at top right</p><p>Latches continuous cycling on or off. The small light above the button shows cycle status. Proc has no separate Cycle CV input.</p></div></article>
 <article class="control-card" id="proc-control-2"><span class="num">2</span><div><h3>SURGE — rise time</h3><p class="range">Upper large knob on the right</p><p>Sets rise time. The adjacent rising-slope input (10) modulates it. Stage times depend on the knob, Curve, and CV; engine limits are 0.1 ms–1500 s per stage.</p></div></article>
 <article class="control-card" id="proc-control-3"><span class="num">3</span><div><h3>SINK — fall time</h3><p class="range">Lower large knob on the right</p><p>Sets fall time. Fall CV is the jack below and to the left (12). Equal rise/fall times at the linear Curve point produce a triangle.</p></div></article>
@@ -191,10 +205,9 @@ footer span { position:relative; z-index:1; }
 <article class="control-card" id="proc-control-5"><span class="num">5</span><div><h3>Amplitude knob &amp; readout</h3><p class="range">Small knob below INPUT</p><p>Sets the function amplitude target from 0 to 10V; default 8V. The readout shows the setting, not a measured output peak. AMP is bypassed during idle slew operation.</p></div></article>
 <article class="control-card" id="proc-control-6"><span class="num">6</span><div><h3>Waveform preview</h3><p class="range">Wide window below the controls</p><p>Shows nominal cycle geometry and a calculated frequency estimate. The low-rate dot tracks active functions and hides above about 2.4 Hz or while idle. This is not an input oscilloscope.</p></div></article>
 </div>
-  </div>
   <h3 class="io-heading">Inputs &amp; outputs · 7–16</h3>
   <p class="muted">Purple-ringed jacks are inputs; cyan-ringed jacks are outputs. Rising and falling slope glyphs identify the two stage CV inputs. HALT pauses the core; TRIG starts a function.</p>
-  <div class="panel-tour">
+  <div class="panel-tour panel-reference">
 <figure class="annotated-panel">
 <img src="img/Proc.png" alt="Proc front panel; numbered references are described in the adjacent legend.">
 <svg class="panel-overlay" viewBox="0 0 4064 12850" aria-label="Input and output locations">
@@ -210,19 +223,17 @@ footer span { position:relative; z-index:1; }
 <a href="#proc-control-16" aria-label="16: OUT- — inverted output"><title>16: OUT- — inverted output</title><line x1="2655.20" y1="11068.23" x2="2265.20" y2="11498.23"/><circle cx="2265.20" cy="11498.23" r="175"/><text x="2265.20" y="11498.23">16</text></a>
 </svg>
 </figure>
-<div class="control-list">
 <article class="control-card" id="proc-control-7"><span class="num">7</span><div><h3>INPUT — signal input</h3><p class="range">Top-left jack</p><p>Feeds the slew limiter when Cycle is off and no triggered function is active. During a function, a patched signal pulls the core voltage toward the input.</p></div></article>
 <article class="control-card" id="proc-control-8"><span class="num">8</span><div><h3>TRIG — trigger input</h3><p class="range">Top-center jack</p><p>Rising edge at 1V, re-arm at 0V. Triggers during rise or HALT are ignored. An accepted trigger during fall resets the core to 0V; from idle slew, rise starts at the current core voltage.</p></div></article>
 <article class="control-card" id="proc-control-9"><span class="num">9</span><div><h3>HALT — pause input</h3><p class="range">Left jack below the amplitude readout</p><p>At 2.5V or above, holds core voltage and gate states. AMP still scales a held function; existing bandlimiting tails can settle. Release resumes integration.</p></div></article>
 <article class="control-card" id="proc-control-10"><span class="num">10</span><div><h3>Rise CV input</h3><p class="range">Rising-slope glyph, left of SURGE</p><p>Positive CV lengthens rise; negative CV shortens it. This input is separate from TRIG.</p></div></article>
 <article class="control-card" id="proc-control-11"><span class="num">11</span><div><h3>BOTH — combined timing CV</h3><p class="range">Center jack between HALT and SINK</p><p>Changes rise and fall together. Positive CV speeds up; negative CV slows down. Its saturating response is not calibrated 1V/oct.</p></div></article>
 <article class="control-card" id="proc-control-12"><span class="num">12</span><div><h3>Fall CV input</h3><p class="range">Falling-slope glyph, below-left of SINK</p><p>Positive CV lengthens fall; negative CV shortens it.</p></div></article>
-<article class="control-card" id="proc-control-13"><span class="num">13</span><div><h3>EoR — gate output</h3><p class="range">Upper-left jack in the output block</p><p>Nominal 0/10V gate: high during fall, low during rise and idle. In slew operation, indicates downward motion. HALT preserves its state.</p></div></article>
-<article class="control-card" id="proc-control-14"><span class="num">14</span><div><h3>EoC — gate output</h3><p class="range">Upper-right jack in the output block</p><p>Nominal 0/10V gate: high during rise, low during fall and idle. In slew operation, indicates upward motion. HALT preserves its state.</p></div></article>
-<article class="control-card" id="proc-control-15"><span class="num">15</span><div><h3>OUT+ — main output</h3><p class="range">Bottom-left jack</p><p>Function output scaled by AMP, or the slewed input at unity gain while idle. Slewed bipolar input can make OUT+ negative; the plus sign identifies the non-inverted output.</p></div></article>
-<article class="control-card" id="proc-control-16"><span class="num">16</span><div><h3>OUT- — inverted output</h3><p class="range">Bottom-right jack</p><p>The exact negative of OUT+. In idle slew operation it inverts the slewed input; it can be positive when OUT+ is negative.</p></div></article>
+<article class="control-card output-card" id="proc-control-13"><span class="num">13</span><div><h3>EoR — gate output</h3><p class="range">Upper-left jack in the output block</p><p>Nominal 0/10V gate: high during fall, low during rise and idle. In slew operation, indicates downward motion. HALT preserves its state.</p></div></article>
+<article class="control-card output-card" id="proc-control-14"><span class="num">14</span><div><h3>EoC — gate output</h3><p class="range">Upper-right jack in the output block</p><p>Nominal 0/10V gate: high during rise, low during fall and idle. In slew operation, indicates upward motion. HALT preserves its state.</p></div></article>
+<article class="control-card output-card" id="proc-control-15"><span class="num">15</span><div><h3>OUT+ — main output</h3><p class="range">Bottom-left jack</p><p>Function output scaled by AMP, or the slewed input at unity gain while idle. Slewed bipolar input can make OUT+ negative; the plus sign identifies the non-inverted output.</p></div></article>
+<article class="control-card output-card" id="proc-control-16"><span class="num">16</span><div><h3>OUT- — inverted output</h3><p class="range">Bottom-right jack</p><p>The exact negative of OUT+. In idle slew operation it inverts the slewed input; it can be positive when OUT+ is negative.</p></div></article>
 </div>
-  </div>
 </section>
 
 <!-- CV and patching -->
@@ -640,5 +651,54 @@ footer span { position:relative; z-index:1; }
   <span>&copy; 2026 Leviathan · Open Source under GPL-3.0-or-later</span>
   <span>Proc User Manual · Documentation for VCV Rack 2</span>
 </footer>
+
+<script>
+// Stack each description in the column with the next available space.
+(() => {
+  const layouts = document.querySelectorAll('.panel-reference');
+  const compact = window.matchMedia('(max-width:760px)');
+  function arrange(layout) {
+    const items = Array.from(layout.children);
+    if (compact.matches) {
+      layout.classList.remove('is-stacked');
+      items.forEach(item => { item.style.gridColumn = ''; item.style.gridRow = ''; });
+      return;
+    }
+    layout.classList.add('is-stacked');
+    const bottoms = [0, 0];
+    items.forEach((item, index) => {
+      const column = index === 0 ? 0 : (bottoms[0] <= bottoms[1] ? 0 : 1);
+      item.style.gridColumn = String(column + 1);
+      const height = Math.ceil(item.getBoundingClientRect().height);
+      item.style.gridRow = `${bottoms[column] + 1} / span ${Math.max(1, height)}`;
+      bottoms[column] += height + 16;
+    });
+  }
+  let scheduled = false;
+  function refresh() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      layouts.forEach(arrange);
+    });
+  }
+  const observer = new ResizeObserver(refresh);
+  layouts.forEach(layout => {
+    observer.observe(layout);
+    Array.from(layout.children).forEach(item => observer.observe(item));
+    layout.querySelectorAll('img').forEach(img => img.addEventListener('load', refresh));
+  });
+  compact.addEventListener('change', refresh);
+  if (document.fonts) document.fonts.ready.then(refresh);
+  window.addEventListener('beforeprint', () => {
+    layouts.forEach(layout => Array.from(layout.children).forEach(item => {
+      item.style.gridColumn = ''; item.style.gridRow = '';
+    }));
+  });
+  window.addEventListener('afterprint', refresh);
+  refresh();
+})();
+</script>
 </body>
 </html>

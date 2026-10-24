@@ -106,6 +106,21 @@ footer span { position:relative; z-index:1; }
 @media print {
   :root{color-scheme:light} body{background:#fff;color:#101725;font-size:10.5pt} nav,.nav-actions,.dragon-divider{display:none} .layout{display:block;max-width:none} .hero{min-height:0;grid-template-columns:1fr 340px;padding:32px;border-bottom:1px solid #b9c3ce;page-break-after:always} h1{font-size:54pt;color:#152238;background:none} section{padding:28px 34px;border-color:#cdd5de} section::before{display:none} .control-card,.info-card,.recipe,.spec,details{background:#fff;border-color:#b9c3ce;color:#101725;break-inside:avoid} p,td,.control-card p,details p{color:#26364a} table{background:#fff} th{background:#eaf1f7;color:#25334a} th,td{border-color:#cdd5de} .panel-tour{grid-template-columns:270px 1fr;gap:24px} .recipes{grid-template-columns:repeat(2,1fr)} a{color:#174f7a} footer{min-height:0;border-top:1px solid #cdd5de;color:#536274}
 }
+
+/* Continue panel descriptions beneath the image in the same two-column grid. */
+.panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px 24px; align-items:start; }
+.panel-reference .annotated-panel { grid-column:1; grid-row:1 / span 3; align-self:start; margin:0 auto; }
+.panel-reference .control-card { min-width:0; align-content:start; }
+@media (max-width:1100px) and (min-width:761px) { .panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } }
+@media (max-width:760px) { .panel-reference { grid-template-columns:minmax(0,1fr); } .panel-reference .annotated-panel { grid-column:auto; grid-row:auto; margin-bottom:12px; } }
+@media print { .panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } .panel-reference .annotated-panel { grid-column:1; grid-row:1 / span 3; } }
+
+/* One-pixel tracks allow independently stacked cards without shared row gaps. */
+@media screen and (min-width:761px) {
+  .panel-reference.is-stacked { grid-auto-rows:1px; row-gap:0; }
+  .panel-reference > * { align-self:start; }
+}
+.panel-reference .output-card .num { background:#096c78; }
 </style>
 </head>
 <body>
@@ -178,7 +193,7 @@ footer span { position:relative; z-index:1; }
     <p class="muted">CH1 is on the left, CH4 on the right; CH2 and CH3 are the center utility channels. The two views below separate controls from jacks. Repeated numbers identify the same control or port type on different channels.</p>
   </div>
   <h3>Controls &amp; displays · 1–7</h3>
-  <div class="panel-tour">
+  <div class="panel-tour panel-reference">
 <figure class="annotated-panel">
 <img src="img/Integral%20Flux.png" alt="Integral Flux front panel; numbered references are described in the adjacent legend.">
 <svg class="panel-overlay" viewBox="0 0 10160 12850" aria-label="Control and display locations">
@@ -200,7 +215,6 @@ footer span { position:relative; z-index:1; }
 <a href="#flux-control-7" aria-label="7: Channel attenuverters"><title>7: Channel attenuverters</title><line x1="7593.14" y1="8644.58" x2="7123.14" y2="8174.58"/><circle cx="7123.14" cy="8174.58" r="220"/><text x="7123.14" y="8174.58">7</text></a>
 </svg>
 </figure>
-<div class="control-list">
 <article class="control-card" id="flux-control-1"><span class="num">1</span><div><h3>SURGE — rise time</h3><p class="range">CH1 left; CH4 right</p><p>Sets the rising-stage time. Rise CV is the adjacent input marked by a rising-slope glyph.</p></div></article>
 <article class="control-card" id="flux-control-2"><span class="num">2</span><div><h3>SINK — fall time</h3><p class="range">CH1 inner left; CH4 inner right</p><p>Sets the falling-stage time. Fall CV is the jack below and toward the outside of each SINK knob.</p></div></article>
 <article class="control-card" id="flux-control-3"><span class="num">3</span><div><h3>LOOP buttons &amp; LEDs</h3><p class="range">Gold buttons near the top</p><p>Each button latches cycling on or off. The small light above it indicates cycling; the separate jack beside it is Cycle CV (10).</p></div></article>
@@ -209,10 +223,9 @@ footer span { position:relative; z-index:1; }
 <article class="control-card" id="flux-control-6"><span class="num">6</span><div><h3>Waveform previews</h3><p class="range">Two windows below CURVE</p><p>Show nominal cycle geometry and a calculated frequency estimate. The animated phase dot is visible only for active functions at low rates.</p></div></article>
 <article class="control-card" id="flux-control-7"><span class="num">7</span><div><h3>Channel attenuverters</h3><p class="range">Four small knobs in a row, CH1 → CH4</p><p>Control the four numbered outputs and their bus contributions. Center = zero, counter-clockwise = inverted, clockwise = positive. CH2/CH3 use +10V/+5V references when their inputs are unpatched.</p></div></article>
 </div>
-  </div>
   <h3 class="io-heading">Inputs &amp; outputs · 8–18</h3>
   <p class="muted">Purple-ringed jacks are inputs; cyan-ringed jacks are outputs. Rise and fall CV use slope glyphs; Cycle CV sits beside LOOP. The unity outputs carry ∫ 1 and ∫ 4 labels. Click a numbered marker to reach its description.</p>
-  <div class="panel-tour">
+  <div class="panel-tour panel-reference">
 <figure class="annotated-panel">
 <img src="img/Integral%20Flux.png" alt="Integral Flux front panel; numbered references are described in the adjacent legend.">
 <svg class="panel-overlay" viewBox="0 0 10160 12850" aria-label="Input and output locations">
@@ -243,7 +256,6 @@ footer span { position:relative; z-index:1; }
 <a href="#flux-control-18" aria-label="18: OR / SUM / INV — mix outputs"><title>18: OR / SUM / INV — mix outputs</title><line x1="6797.50" y1="11068.23" x2="6327.50" y2="10598.23"/><circle cx="6327.50" cy="10598.23" r="220"/><text x="6327.50" y="10598.23">18</text></a>
 </svg>
 </figure>
-<div class="control-list">
 <article class="control-card" id="flux-control-8"><span class="num">8</span><div><h3>IN 1 / IN 4 — signal inputs</h3><p class="range">Outermost top jacks</p><p>Feed the CH1/CH4 slew limiters when idle. During a triggered or cycling function, the input perturbs the function core.</p></div></article>
 <article class="control-card" id="flux-control-9"><span class="num">9</span><div><h3>TRIG — trigger inputs</h3><p class="range">Top jacks beside IN 1 / IN 4</p><p>Left TRIG drives CH1; right TRIG drives CH4. Rising edge at 1V, re-arm at 0V. Triggers during rise are ignored; accepted triggers during fall reset the core to 0V.</p></div></article>
 <article class="control-card" id="flux-control-10"><span class="num">10</span><div><h3>Cycle CV inputs</h3><p class="range">Jacks beside the gold LOOP buttons</p><p>A gate at or above 2.5V enables cycling. These are separate from TRIG. Cycling stays on if the LOOP button is latched, even with low Cycle CV.</p></div></article>
@@ -251,12 +263,11 @@ footer span { position:relative; z-index:1; }
 <article class="control-card" id="flux-control-12"><span class="num">12</span><div><h3>BOTH — combined timing CV</h3><p class="range">Jacks between CURVE and SINK</p><p>Affects rise and fall together. Positive CV speeds up; negative CV slows down. The saturating response is not calibrated 1V/oct.</p></div></article>
 <article class="control-card" id="flux-control-13"><span class="num">13</span><div><h3>Fall CV inputs</h3><p class="range">Falling-slope glyphs below SINK</p><p>CH1 on the left; CH4 on the right. Positive CV lengthens fall; negative CV shortens it.</p></div></article>
 <article class="control-card" id="flux-control-14"><span class="num">14</span><div><h3>IN 2 / IN 3 — utility inputs</h3><p class="range">Center pair above the attenuverters</p><p>Feed the CH2/CH3 attenuverters. Unpatched: IN 2 supplies +10V and IN 3 supplies +5V. These channels do not slew.</p></div></article>
-<article class="control-card" id="flux-control-15"><span class="num">15</span><div><h3>1 / 2 / 3 / 4 — variable outputs</h3><p class="range">Four middle jacks in the upper output row</p><p>Each output follows its matching attenuverter and clamps to +/-10V. Patching one removes that channel from SUM, INV, and OR.</p></div></article>
-<article class="control-card" id="flux-control-16"><span class="num">16</span><div><h3>EoR / EoC — gate outputs</h3><p class="range">Outer jacks in the upper output row</p><p>Left EoR belongs to CH1: high during fall. Right EoC belongs to CH4: high during rise. Both are low at idle; in slew mode they indicate downward/upward motion respectively.</p></div></article>
-<article class="control-card" id="flux-control-17"><span class="num">17</span><div><h3>∫ 1 / ∫ 4 — unity outputs</h3><p class="range">Outer jacks in the bottom output row</p><p>Direct CH1/CH4 core outputs, bypassing attenuverters and their clamps. Patching these keeps the variable channels in the mix bus. The integral-symbol labels identify these unity outputs.</p></div></article>
-<article class="control-card" id="flux-control-18"><span class="num">18</span><div><h3>OR / SUM / INV — mix outputs</h3><p class="range">Three middle jacks in the bottom row, left to right</p><p>OR selects the highest positive bus voltage. SUM adds the unpatched variable channels and clamps to +/-10V. INV is the negative of SUM.</p></div></article>
+<article class="control-card output-card" id="flux-control-15"><span class="num">15</span><div><h3>1 / 2 / 3 / 4 — variable outputs</h3><p class="range">Four middle jacks in the upper output row</p><p>Each output follows its matching attenuverter and clamps to +/-10V. Patching one removes that channel from SUM, INV, and OR.</p></div></article>
+<article class="control-card output-card" id="flux-control-16"><span class="num">16</span><div><h3>EoR / EoC — gate outputs</h3><p class="range">Outer jacks in the upper output row</p><p>Left EoR belongs to CH1: high during fall. Right EoC belongs to CH4: high during rise. Both are low at idle; in slew mode they indicate downward/upward motion respectively.</p></div></article>
+<article class="control-card output-card" id="flux-control-17"><span class="num">17</span><div><h3>∫ 1 / ∫ 4 — unity outputs</h3><p class="range">Outer jacks in the bottom output row</p><p>Direct CH1/CH4 core outputs, bypassing attenuverters and their clamps. Patching these keeps the variable channels in the mix bus. The integral-symbol labels identify these unity outputs.</p></div></article>
+<article class="control-card output-card" id="flux-control-18"><span class="num">18</span><div><h3>OR / SUM / INV — mix outputs</h3><p class="range">Three middle jacks in the bottom row, left to right</p><p>OR selects the highest positive bus voltage. SUM adds the unpatched variable channels and clamps to +/-10V. INV is the negative of SUM.</p></div></article>
 </div>
-  </div>
 </section>
 
 <!-- CV and patching -->
@@ -662,5 +673,54 @@ footer span { position:relative; z-index:1; }
   <span>&copy; 2026 Leviathan · Open Source under GPL-3.0-or-later</span>
   <span>Integral Flux User Manual · Documentation for VCV Rack 2</span>
 </footer>
+
+<script>
+// Stack each description in the column with the next available space.
+(() => {
+  const layouts = document.querySelectorAll('.panel-reference');
+  const compact = window.matchMedia('(max-width:760px)');
+  function arrange(layout) {
+    const items = Array.from(layout.children);
+    if (compact.matches) {
+      layout.classList.remove('is-stacked');
+      items.forEach(item => { item.style.gridColumn = ''; item.style.gridRow = ''; });
+      return;
+    }
+    layout.classList.add('is-stacked');
+    const bottoms = [0, 0];
+    items.forEach((item, index) => {
+      const column = index === 0 ? 0 : (bottoms[0] <= bottoms[1] ? 0 : 1);
+      item.style.gridColumn = String(column + 1);
+      const height = Math.ceil(item.getBoundingClientRect().height);
+      item.style.gridRow = `${bottoms[column] + 1} / span ${Math.max(1, height)}`;
+      bottoms[column] += height + 16;
+    });
+  }
+  let scheduled = false;
+  function refresh() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      layouts.forEach(arrange);
+    });
+  }
+  const observer = new ResizeObserver(refresh);
+  layouts.forEach(layout => {
+    observer.observe(layout);
+    Array.from(layout.children).forEach(item => observer.observe(item));
+    layout.querySelectorAll('img').forEach(img => img.addEventListener('load', refresh));
+  });
+  compact.addEventListener('change', refresh);
+  if (document.fonts) document.fonts.ready.then(refresh);
+  window.addEventListener('beforeprint', () => {
+    layouts.forEach(layout => Array.from(layout.children).forEach(item => {
+      item.style.gridColumn = ''; item.style.gridRow = '';
+    }));
+  });
+  window.addEventListener('afterprint', refresh);
+  refresh();
+})();
+</script>
 </body>
 </html>
