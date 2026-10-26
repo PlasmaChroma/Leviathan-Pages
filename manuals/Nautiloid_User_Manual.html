@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="A 20 HP fractal explorer and left-side source companion for Iris, with hands-on navigation, motion CV, and location recall."><title>Nautiloid User Manual - Leviathan</title><style>
+:root {
+  color-scheme: dark;
+  --ink:#eef6ff; --muted:#a9b7c8; --deep:#070b12; --panel:#0e1520; --panel2:#121b29;
+  --cyan:#1cccd9; --purple:#7a5cff; --gold:#ebcc80; --line:#26364a; --paper:#f7f9fc;
+  --shadow:0 22px 60px rgba(0,0,0,.38);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; background:radial-gradient(circle at 78% 10%,rgba(122,92,255,.14),transparent 30rem),radial-gradient(circle at 18% 22%,rgba(28,204,217,.11),transparent 28rem),var(--deep); color:var(--ink); line-height:1.62; }
+a { color:#7feaf1; }
+.layout { display:grid; grid-template-columns:250px minmax(0,1fr); max-width:1500px; margin:auto; }
+nav { position:sticky; top:0; height:100vh; padding:30px 24px; border-right:1px solid var(--line); background:rgba(7,11,18,.9); backdrop-filter:blur(18px); overflow:auto; }
+nav .brand-home { display:block; padding:0; border-radius:7px; }
+nav .brand-home:focus-visible { outline:2px solid var(--cyan); outline-offset:4px; }
+nav .brand-lockup { display:block; width:100%; max-width:200px; height:auto; margin:0 0 20px; border-radius:7px; box-shadow:0 10px 30px rgba(0,0,0,.28); }
+nav .brand { font-size:1.25rem; letter-spacing:.18em; font-weight:800; margin-bottom:2px; }
+nav .sub { color:var(--muted); font-size:.75rem; margin-bottom:28px; }
+nav a { display:block; color:#c7d3e1; text-decoration:none; padding:7px 0; font-size:.88rem; }
+nav a:hover { color:#fff; transform:translateX(2px); }
+nav .nav-actions { margin-top:24px; }
+button { border:1px solid rgba(28,204,217,.55); background:rgba(28,204,217,.1); color:var(--ink); padding:9px 12px; border-radius:999px; cursor:pointer; }
+main { min-width:0; }
+.hero { min-height:740px; display:grid; grid-template-columns:minmax(0,1fr) minmax(200px,320px); gap:40px; align-items:center; padding:80px clamp(32px,7vw,110px); overflow:hidden; }
+.dragon-divider { position:relative; height:48px; }
+.dragon-divider img { position:absolute; left:50%; top:50%; display:block; width:min(78%,900px); height:auto; transform:translate(-50%,-50%); opacity:.42; filter:drop-shadow(0 0 22px rgba(28,204,217,.16)); pointer-events:none; user-select:none; }
+.kicker,.eyebrow { color:var(--cyan); text-transform:uppercase; letter-spacing:.2em; font-size:.72rem; font-weight:800; }
+h1 { font-size:clamp(4rem,9vw,8.2rem); line-height:.86; letter-spacing:-.075em; margin:16px 0 28px; background:linear-gradient(100deg,#865cff 0%,#c9a8ff 27%,#f6f9ff 49%,#77eaff 72%,#1cccd9 100%); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 10px 28px rgba(50,124,210,.14)); }
+.deck { font-size:clamp(1.08rem,2vw,1.4rem); max-width:680px; color:#d4e0ed; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; }
+.chip { border:1px solid var(--line); background:rgba(255,255,255,.035); border-radius:999px; padding:7px 11px; color:#c9d6e4; font-size:.8rem; }
+.hero-modules { display:flex; align-items:center; justify-content:center; gap:24px; perspective:1200px; }
+.hero-modules img { width:min(75%,240px); height:auto; border:1px solid rgba(255,255,255,.16); border-radius:12px; box-shadow:var(--shadow); transform:rotateY(-5deg) translateY(8px); }
+section { position:relative; isolation:isolate; padding:70px clamp(32px,7vw,110px); border-bottom:1px solid var(--line); scroll-margin-top:20px; overflow:hidden; }
+section::before { position:absolute; z-index:0; bottom:0; width:min(58vw,650px); aspect-ratio:959/376; background:url("../img/PerfectWave_KCrop.png") center bottom/contain no-repeat; content:""; opacity:.065; mix-blend-mode:screen; -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); pointer-events:none; }
+section:nth-of-type(odd)::before { right:0; transform:scaleX(-1); -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); }
+section:nth-of-type(even)::before { left:-5%; }
+section > * { position:relative; z-index:1; }
+.section-head { max-width:850px; margin-bottom:38px; }
+h2 { font-size:clamp(2.1rem,4.7vw,4.2rem); line-height:1; letter-spacing:-.045em; margin:8px 0 18px; }
+h3 { line-height:1.18; margin:.2rem 0 .45rem; }
+p { margin:.45rem 0 1rem; }
+.muted { color:var(--muted); }
+.callout { border-left:3px solid var(--cyan); padding:18px 22px; background:rgba(28,204,217,.07); max-width:900px; margin:30px 0; border-radius:0 12px 12px 0; }
+.callout strong { color:var(--cyan); }
+
+/* Architecture */
+.architecture { display:grid; grid-template-columns:repeat(5,minmax(120px,1fr)); gap:12px; align-items:stretch; }
+.arch-box { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:105px; padding:18px; border-radius:14px; border:1px solid var(--line); background:var(--panel); position:relative; font-weight:750; }
+.arch-box:not(:last-child)::after { content:""; position:absolute; right:-13px; top:50%; width:13px; border-top:2px solid var(--cyan); }
+.arch-box small { display:block; color:var(--muted); font-weight:500; margin-top:5px; font-size:.8rem; }
+
+/* Panel tour */
+.panel-tour { display:grid; grid-template-columns:minmax(220px,300px) minmax(0,1fr); gap:40px; align-items:start; }
+.annotated-panel { position:relative; width:min(100%,260px); margin:0 auto; box-shadow:var(--shadow); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.1); }
+.annotated-panel img { display:block; width:100%; height:auto; }
+.control-list { display:grid; grid-template-columns:1fr; gap:12px; }
+.control-card { display:grid; grid-template-columns:34px 1fr; gap:12px; padding:18px; border-radius:14px; border:1px solid var(--line); background:rgba(14,21,32,.8); }
+.control-card .num { width:30px; height:30px; border-radius:50%; display:grid; place-items:center; background:var(--purple); font-weight:900; }
+.control-card p { color:#c2cede; font-size:.91rem; margin:.3rem 0; }
+.control-card .range { color:var(--gold); font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; }
+
+.panel-overlay { position:absolute; inset:0; width:100%; height:100%; }
+.panel-overlay line { stroke:#fff; stroke-width:26; }
+.panel-overlay circle { fill:#f7fbff; stroke:var(--purple); stroke-width:42; }
+.panel-overlay text { fill:#101725; font-size:210px; font-weight:900; text-anchor:middle; dominant-baseline:central; }
+.panel-overlay a:hover circle,.panel-overlay a:focus circle { fill:var(--gold); stroke:var(--cyan); }
+.io-heading { margin-top:48px; }
+.control-card { scroll-margin-top:24px; }
+
+/* Tables */
+.table-wrap { width:100%; overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
+table { width:100%; border-collapse:collapse; min-width:760px; background:rgba(12,18,28,.88); }
+th { text-align:left; color:var(--gold); font-size:.74rem; text-transform:uppercase; letter-spacing:.08em; background:#121b29; }
+th,td { padding:14px 16px; border-bottom:1px solid var(--line); vertical-align:top; }
+td { color:#cbd6e3; }
+tr:last-child td { border-bottom:0; }
+
+/* Info and recipes */
+.display-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.info-card { padding:26px; border:1px solid var(--line); border-radius:16px; background:var(--panel); }
+.info-card ul { padding-left:1.2rem; }
+.recipes { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.recipe { padding:24px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(155deg,rgba(122,92,255,.09),rgba(28,204,217,.04)); }
+.recipe .why { color:#9feaf0; border-top:1px solid var(--line); padding-top:14px; margin-top:14px; font-size:.9rem; }
+details { border:1px solid var(--line); border-radius:12px; margin:10px 0; background:var(--panel); }
+summary { cursor:pointer; padding:16px 18px; font-weight:750; }
+details p { padding:0 18px 18px; color:#c6d2df; }
+.spec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.spec { padding:20px; border:1px solid var(--line); border-radius:14px; background:var(--panel); }
+.spec strong { display:block; color:var(--gold); font-size:.73rem; text-transform:uppercase; letter-spacing:.08em; }
+footer { position:relative; min-height:150px; padding:42px clamp(32px,7vw,110px); color:var(--muted); display:flex; align-items:flex-end; justify-content:space-between; gap:30px; overflow:hidden; }
+footer span { position:relative; z-index:1; }
+
+@media (max-width:1100px) { .layout{display:block} nav{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)} nav a{display:inline-block;margin-right:16px} .hero{grid-template-columns:1fr;} .panel-tour{grid-template-columns:1fr} .recipes{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:680px) { section,.hero{padding:48px 20px} .hero{min-height:auto} .dragon-divider{height:36px}.dragon-divider img{width:110%;max-width:none;opacity:.38} .hero-modules{gap:10px} .hero-modules img{width:100%} .control-list,.display-grid,.recipes,.spec-grid{grid-template-columns:1fr} .architecture{grid-template-columns:1fr} .arch-box:not(:last-child)::after{right:50%;top:auto;bottom:-13px;height:13px;width:0;border-top:0;border-left:2px solid var(--cyan)} footer{display:block;min-height:140px;padding:36px 20px} footer span{display:block;margin-bottom:6px} }
+@media print {
+  :root{color-scheme:light} body{background:#fff;color:#101725;font-size:10.5pt} nav,.nav-actions,.dragon-divider{display:none} .layout{display:block;max-width:none} .hero{min-height:0;grid-template-columns:1fr 280px;padding:32px;border-bottom:1px solid #b9c3ce;page-break-after:always} h1{font-size:54pt;color:#152238;background:none} section{padding:28px 34px;border-color:#cdd5de} section::before{display:none} .control-card,.info-card,.recipe,.spec,details{background:#fff;border-color:#b9c3ce;color:#101725;break-inside:avoid} p,td,.control-card p,details p{color:#26364a} table{background:#fff} th{background:#eaf1f7;color:#25334a} th,td{border-color:#cdd5de} .panel-tour{grid-template-columns:220px 1fr;gap:24px} .recipes{grid-template-columns:repeat(2,1fr)} a{color:#174f7a} footer{min-height:0;border-top:1px solid #cdd5de;color:#536274}
+}
+
+h1{font-size:clamp(3rem,7vw,6.5rem);overflow-wrap:anywhere}nav .brand{letter-spacing:.08em}.hero-modules img{width:min(100%,240px)} @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.hero{grid-template-columns:minmax(0,1fr) minmax(180px,280px);gap:32px}.hero-modules img{width:min(100%,240px);transform:none;border-radius:4px}.pair-diagram{display:flex;align-items:stretch;justify-content:center;gap:12px;margin:28px 0}.pair-diagram div{padding:20px 28px;border:1px solid var(--cyan);border-radius:12px;background:var(--panel);text-align:center}.pair-diagram small{display:block;color:var(--muted)}code{overflow-wrap:anywhere}.section-head{margin-bottom:26px}h3{margin-top:28px}.info-card h3,.recipe h3{margin-top:0}.table-wrap+ p{margin-top:24px}caption{text-align:left;padding:12px 16px;color:var(--muted)}
+@media(max-width:1100px){.hero{grid-template-columns:minmax(0,1fr) 220px}}
+@media(max-width:680px){.hero{grid-template-columns:1fr}.hero-modules img{max-width:210px}.pair-diagram{gap:8px}.pair-diagram div{padding:16px 12px}.pair-diagram small{font-size:.8rem}}
+@media print{.hero{grid-template-columns:1fr 160px}.hero-modules img{width:150px}.muted,.deck,.chip{color:#26364a}.callout{background:#edf7f8}.callout strong{color:#174f7a}.pair-diagram div{background:#fff;color:#101725;border-color:#6c8892}.pair-diagram small{color:#26364a}.table-wrap{overflow:visible}table{min-width:0}h1{filter:none}}
+
+/* Numbered panel references, following the Integral Flux manual. */
+.panel-reference{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px 24px;align-items:start;margin-top:24px}
+.panel-reference .annotated-panel{grid-column:1;grid-row:1 / span 3;align-self:start;width:min(100%,420px);margin:0 auto;border-radius:4px}
+.panel-reference.iris-reference .annotated-panel{max-width:300px}
+.panel-reference .control-card{min-width:0;align-content:start}
+.panel-reference .control-card h3{margin:0 0 8px;font-size:1.1rem;line-height:1.25}
+.panel-reference .output-card .num{background:#096c78}
+.panel-reference .panel-overlay line{stroke:#fff;stroke-width:1.6;filter:drop-shadow(0 1px 1px #000)}
+.panel-reference .panel-overlay circle{fill:#f7fbff;stroke:var(--purple);stroke-width:2}
+.panel-reference .panel-overlay text{fill:#101725;font-size:12px;font-weight:900;text-anchor:middle;dominant-baseline:central}
+.panel-reference.nautiloid-reference .panel-overlay text{font-size:16px}
+.panel-reference .panel-overlay a:hover circle,.panel-reference .panel-overlay a:focus circle{fill:var(--gold);stroke:var(--cyan)}
+.panel-reference .panel-overlay a:focus{outline:none}
+.panel-reference .panel-overlay a:focus circle{stroke-width:3}
+@media screen and (min-width:761px){.panel-reference.is-stacked{grid-auto-rows:1px;row-gap:0}.panel-reference > *{align-self:start}}
+@media(max-width:760px){.dragon-divider{overflow-x:clip}.panel-reference{grid-template-columns:minmax(0,1fr)}.panel-reference .annotated-panel{grid-column:auto;grid-row:auto;margin-bottom:12px}}
+@media print{.panel-reference{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.panel-reference .annotated-panel{grid-column:1;grid-row:1 / span 3}.panel-reference .panel-overlay circle{stroke:#7a5cff}.panel-reference .panel-overlay text{fill:#101725}}
+</style></head>
+<body><div class="layout"><nav aria-label="Manual navigation"><a class="brand-home" href="../index.html" aria-label="Return to manuals portal"><img class="brand-lockup" src="../img/Branding_Logo_Crop_Only.png" alt="Leviathan"></a><div class="brand">NAUTILOID</div><div class="sub">LEVIATHAN USER MANUAL</div><a href="#concept">A source you can explore</a>
+<a href="#start">First connected patch</a>
+<a href="#panel">Panel breakdown</a>
+<a href="#navigation">Pan, zoom, and reset</a>
+<a href="#fractals">Fractals and colors</a>
+<a href="#cv">Motion CV</a>
+<a href="#locations">Save and share locations</a>
+<a href="#rendering">Rendering and the Iris link</a>
+<a href="#recipes">Exploration patches</a>
+<a href="#troubleshooting">Troubleshooting</a>
+<a href="#reference">Reference</a>
+<div class="nav-actions"><button onclick="window.print()">Print / Save PDF</button></div></nav>
+<main><header class="hero"><div><p class="kicker">Leviathan for VCV Rack 2 · Open Source</p><h1>Nautiloid</h1><p class="deck">A 20 HP fractal explorer and left-side source companion for Iris, with hands-on navigation, motion CV, and location recall.</p><div class="chips"><span class="chip">20 HP</span><span class="chip">Iris source companion</span><span class="chip">14 fractals</span><span class="chip">Motion CV + location codes</span></div></div><div class="hero-modules"><img src="img/Nautiloid.png" alt="Nautiloid front panel"></div></header><div class="dragon-divider" aria-hidden="true"><img src="../img/Leviathan_Dragon_Transparent_Refined.png" alt=""></div>
+<section id="concept"><div class="section-head"><p class="eyebrow">A source you can explore</p><h2>A source you can explore</h2></div>
+<p>Nautiloid generates a fractal field that you can pan, zoom, recolor, and revisit. Place it immediately to the left of <a href="Iris_User_Manual.html">Iris</a> to turn the view into a wavetable source. Nautiloid provides the field; Iris converts its horizontal rows into cycles and supplies the audio or LFO outputs.</p>
+<p>Nautiloid has three motion-CV inputs and no outputs. It can display a fractal without Iris, but an attached oscillator is what makes the Iris workflow audible.</p>
+<div class="callout"><strong>Add it from Iris’s source menu.</strong> Nautiloid is hidden from the module browser in the current source manifest. On Iris, click the source button below the displays and choose Nautiloid. This creates or selects the left-side companion.</div><div class="pair-diagram" role="img" aria-label="Nautiloid immediately to the left of Iris, touching in the same rack row"><div><strong>Nautiloid</strong><small>Fractal source · left</small></div><div><strong>Iris</strong><small>Wavetable oscillator · right</small></div></div></section>
+<section id="start"><div class="section-head"><p class="eyebrow">First connected patch</p><h2>First connected patch</h2></div>
+<ol><li>Add Iris and connect OUT to a VCA or mixer, then to your audio output. Start with a low listening level.</li><li>Click Iris’s source button below the displays and select <strong>Nautiloid</strong>. If needed, this creates Nautiloid directly to Iris’s left and makes room for it.</li><li>Keep the modules touching in the same row, with Nautiloid on the left. No source cable is required.</li><li>On Nautiloid, choose a fractal with the menu button below its display. Drag the display to pan and use the mouse wheel to zoom.</li><li>On Iris, turn SCAN to hear different rows of that source. Add pitch CV to V/OCT and a slow modulation source to SCAN, then raise its attenuverter from zero.</li></ol><p>The top-edge link indicators show an amber connection while the Iris source is pending or not selected, and green when the source has been accepted. The explorer display can update before the corresponding Iris table has finished rebuilding.</p><p><a href="Iris_User_Manual.html#io">Iris inputs, outputs, and polyphony →</a></p></section>
+<section id="panel"><div class="section-head"><p class="eyebrow">Panel breakdown</p><h2>Controls, connections, and recall</h2><p class="muted">Click a numbered marker to jump to its description. The two views separate navigation from motion inputs, location recall, and the Iris link.</p></div><h3>Navigation and displays · 1–7</h3><div class="panel-tour panel-reference nautiloid-reference">
+<figure class="annotated-panel"><img src="img/Nautiloid.png" width="600" height="760" alt="Nautiloid front panel; numbered references are described in the matching legend.">
+<svg class="panel-overlay" viewBox="0 0 600 760" role="group" aria-label="Nautiloid: Navigation and displays"><a href="#nautiloid-control-1" aria-label="1: Fractal display"><title>1: Fractal display</title><line x1="300" y1="250" x2="555" y2="90"/><circle cx="555" cy="90" r="14"/><text x="555" y="90">1</text></a><a href="#nautiloid-control-2" aria-label="2: Fractal menu"><title>2: Fractal menu</title><line x1="26" y1="466" x2="54" y2="448"/><circle cx="54" cy="448" r="14"/><text x="54" y="448">2</text></a><a href="#nautiloid-control-3" aria-label="3: Reset view"><title>3: Reset view</title><line x1="573" y1="466" x2="548" y2="447"/><circle cx="548" cy="447" r="14"/><text x="548" y="447">3</text></a><a href="#nautiloid-control-4" aria-label="4: Zoom-rate slider"><title>4: Zoom-rate slider</title><line x1="300" y1="508" x2="347" y2="490"/><circle cx="347" cy="490" r="14"/><text x="347" y="490">4</text></a><a href="#nautiloid-control-5" aria-label="5: Zoom readout and amount bar"><title>5: Zoom readout and amount bar</title><line x1="300" y1="465" x2="395" y2="450"/><circle cx="395" cy="450" r="14"/><text x="395" y="450">5</text></a><a href="#nautiloid-control-5" aria-label="5: Zoom readout and amount bar"><title>5: Zoom readout and amount bar</title><line x1="380" y1="532" x2="421" y2="547"/><circle cx="421" cy="547" r="14"/><text x="421" y="547">5</text></a><a href="#nautiloid-control-6" aria-label="6: Palette button"><title>6: Palette button</title><line x1="286" y1="581" x2="286" y2="550"/><circle cx="286" cy="550" r="14"/><text x="286" y="550">6</text></a><a href="#nautiloid-control-7" aria-label="7: X / Y position readout"><title>7: X / Y position readout</title><line x1="427" y1="583" x2="530" y2="553"/><circle cx="530" cy="553" r="14"/><text x="530" y="553">7</text></a></svg></figure>
+<article class="control-card" id="nautiloid-control-1"><span class="num">1</span><div><h3>Fractal display</h3><p class="range">Large upper display</p><p>Left-drag to pan. Use the mouse wheel to zoom around the cursor; holding Rack’s Ctrl/Cmd modifier passes wheel zoom through. Release the gesture to request a settled view.</p></div></article>
+<article class="control-card" id="nautiloid-control-2"><span class="num">2</span><div><h3>Fractal menu</h3><p class="range">Three-line button below the display</p><p>Select one of 14 fractal types. Changing the type resets its center and zoom.</p></div></article>
+<article class="control-card" id="nautiloid-control-3"><span class="num">3</span><div><h3>Reset view</h3><p class="range">Circular-arrow button at the right</p><p>Returns zoom and center coordinates to their initial values. Keeps the selected fractal and palette.</p></div></article>
+<article class="control-card" id="nautiloid-control-4"><span class="num">4</span><div><h3>Zoom-rate slider</h3><p class="range">Wide slider below the readout</p><p>Hold and move left to zoom out or right to zoom in. Farther from center moves faster. Releasing recenters it and stops manual zoom; CV can continue moving the view.</p></div></article>
+<article class="control-card" id="nautiloid-control-5"><span class="num">5</span><div><h3>Zoom readout and amount bar</h3><p class="range">Percentage readout and thin bar below the slider</p><p>The percentage reports position in the zoom range, rather than optical magnification. The thin bar shows zoom amount, separately from the slider’s rate.</p></div></article>
+<article class="control-card" id="nautiloid-control-6"><span class="num">6</span><div><h3>Palette button</h3><p class="range">Colored dots beside the motion inputs</p><p>Cycles Prism, Abyss, Ember, Amethyst, Emerald, and Inverted. The palette also changes the field sent to Iris, so it can change the sound.</p></div></article>
+<article class="control-card" id="nautiloid-control-7"><span class="num">7</span><div><h3>X / Y position readout</h3><p class="range">Right side of the purple control area</p><p>Displays the normalized center coordinates as percentages. These are position readouts; the X-V and Y-V inputs control velocity.</p></div></article>
+</div><h3 class="io-heading">Motion CV, location recall, and link · 8–15</h3><p class="muted">All three jacks are inputs. Nautiloid sends its source through the adjacent Iris connection and has no output jacks.</p><div class="panel-tour panel-reference nautiloid-reference">
+<figure class="annotated-panel"><img src="img/Nautiloid.png" width="600" height="760" alt="Nautiloid front panel; numbered references are described in the matching legend.">
+<svg class="panel-overlay" viewBox="0 0 600 760" role="group" aria-label="Nautiloid: Motion CV, location recall, and Iris link"><a href="#nautiloid-control-8" aria-label="8: LOC CODE"><title>8: LOC CODE</title><line x1="227" y1="671" x2="231" y2="640"/><circle cx="231" cy="640" r="14"/><text x="231" y="640">8</text></a><a href="#nautiloid-control-9" aria-label="9: Location-code validity light"><title>9: Location-code validity light</title><line x1="366" y1="671" x2="364" y2="641"/><circle cx="364" cy="641" r="14"/><text x="364" y="641">9</text></a><a href="#nautiloid-control-10" aria-label="10: Copy location code"><title>10: Copy location code</title><line x1="408" y1="670" x2="408" y2="641"/><circle cx="408" cy="641" r="14"/><text x="408" y="641">10</text></a><a href="#nautiloid-control-11" aria-label="11: Paste location code"><title>11: Paste location code</title><line x1="453" y1="670" x2="457" y2="641"/><circle cx="457" cy="641" r="14"/><text x="457" y="641">11</text></a><a href="#nautiloid-control-12" aria-label="12: Iris link indicator"><title>12: Iris link indicator</title><line x1="580" y1="34" x2="552" y2="36"/><circle cx="552" cy="36" r="14"/><text x="552" y="36">12</text></a><a href="#nautiloid-control-13" aria-label="13: ZOOM-V"><title>13: ZOOM-V</title><line x1="53" y1="581" x2="52" y2="546"/><circle cx="52" cy="546" r="14"/><text x="52" y="546">13</text></a><a href="#nautiloid-control-14" aria-label="14: X-V"><title>14: X-V</title><line x1="131" y1="581" x2="131" y2="546"/><circle cx="131" cy="546" r="14"/><text x="131" y="546">14</text></a><a href="#nautiloid-control-15" aria-label="15: Y-V"><title>15: Y-V</title><line x1="209" y1="581" x2="209" y2="546"/><circle cx="209" cy="546" r="14"/><text x="209" y="546">15</text></a></svg></figure>
+<article class="control-card" id="nautiloid-control-8"><span class="num">8</span><div><h3>LOC CODE</h3><p class="range">Code display near the bottom</p><p>Represents fractal type, zoom, and center coordinates. The code does not include the palette or Iris settings.</p></div></article>
+<article class="control-card" id="nautiloid-control-9"><span class="num">9</span><div><h3>Location-code validity light</h3><p class="range">Small indicator beside LOC CODE</p><p>Shows whether the last location-code input was valid. Use the paste button to load a code from the clipboard.</p></div></article>
+<article class="control-card" id="nautiloid-control-10"><span class="num">10</span><div><h3>Copy location code</h3><p class="range">First clipboard button</p><p>Copies the current 16-character location code to the clipboard. Save it in a note to revisit this region.</p></div></article>
+<article class="control-card" id="nautiloid-control-11"><span class="num">11</span><div><h3>Paste location code</h3><p class="range">Second clipboard button</p><p>Loads a code from the clipboard and updates the validity indicator. Stop motion CV before recall if you want the view to remain still.</p></div></article>
+<article class="control-card" id="nautiloid-control-12"><span class="num">12</span><div><h3>Iris link indicator</h3><p class="range">Top-right edge</p><p>Amber indicates an attached Iris whose source is pending or not selected; green indicates an accepted source. Keep Iris immediately to Nautiloid’s right.</p></div></article>
+<article class="control-card" id="nautiloid-control-13"><span class="num">13</span><div><h3>ZOOM-V</h3><p class="range">Leftmost motion input</p><p>Bipolar zoom-rate CV. Positive zooms in; negative zooms out. Adds to the manual slider rate. ±10 V corresponds to the supported full rate.</p></div></article>
+<article class="control-card" id="nautiloid-control-14"><span class="num">14</span><div><h3>X-V</h3><p class="range">Middle motion input</p><p>Horizontal center velocity. Positive increases X; negative decreases X. Zero stops this contribution, and ±10 V gives full rate.</p></div></article>
+<article class="control-card" id="nautiloid-control-15"><span class="num">15</span><div><h3>Y-V</h3><p class="range">Rightmost motion input</p><p>Vertical center velocity. Positive increases Y; negative decreases Y. Zero stops this contribution, and ±10 V gives full rate.</p></div></article>
+</div></section>
+<section id="navigation"><div class="section-head"><p class="eyebrow">Pan, zoom, and reset</p><h2>Pan, zoom, and reset</h2></div>
+<div class="table-wrap"><table><thead><tr><th>Control</th><th>Function</th></tr></thead><tbody><tr><td>Main display: left-drag</td><td>Pans the fractal field. Drag the image to bring another region into view. Releasing requests a settled render.</td></tr><tr><td>Mouse wheel over the display</td><td>Zooms around the point under the cursor, keeping that fractal coordinate in place where the view limits allow. Positive wheel movement zooms in; negative zooms out. Holding Rack’s Ctrl/Cmd modifier passes the gesture through instead of using Nautiloid’s wheel zoom.</td></tr><tr><td>Zoom slider</td><td>A momentary zoom-rate control. Hold and move right of center to zoom in or left to zoom out. Farther from center moves faster. Releasing recenters the slider and stops manual zoom.</td></tr><tr><td>Thin bar below the zoom slider</td><td>Shows zoom amount, separately from the slider’s current direction and rate.</td></tr><tr><td>Zoom readout</td><td>Shows the current normalized zoom percentage. It is a position within Nautiloid’s zoom range, rather than an optical magnification ratio.</td></tr><tr><td>X / Y readout</td><td>Shows normalized center coordinates as percentages. These report the current position; the X-V and Y-V jacks control velocity.</td></tr><tr><td>Circular-arrow reset button</td><td>Returns zoom and center coordinates to their initial values for the selected fractal. The fractal selection and palette remain selected.</td></tr></tbody></table></div><p>Find a boundary between flat and detailed regions before zooming deeply. A uniformly colored interior can remain visually sparse at several scales. If you lose your place, reset the view or paste a saved location.</p></section>
+<section id="fractals"><div class="section-head"><p class="eyebrow">Fractals and colors</p><h2>Fractals and colors</h2></div>
+<p>The menu button below the display opens <strong>Fractals</strong>. It offers Mandelbrot, Multibrot, Julia, Multijulia, Phoenix Julia, Manowar, Burning Ship, Celtic, Buffalo, Tricorn, Spider, Barnsley, Newton, and Nova. Choosing a different fractal resets its zoom and center to the initial view.</p>
+<p>Click the colored-dots button to cycle <strong>Prism, Abyss, Ember, Amethyst, Emerald, and Inverted</strong>. The palette applies to the displayed field and to the source sent to Iris.</p>
+<div class="callout"><strong>Color is part of the sound source.</strong> Iris derives sample values from the selected color channel or combined luminance. Changing Nautiloid’s palette can therefore change Iris’s waveform even when the fractal geometry and position stay the same. Try the same location with several palettes and Iris COLOR settings.</div></section>
+<section id="cv"><div class="section-head"><p class="eyebrow">Motion CV</p><h2>Motion CV</h2></div>
+<div class="table-wrap"><table><thead><tr><th>Input</th><th>Behavior</th></tr></thead><tbody><tr><td>ZOOM-V</td><td>Bipolar zoom-rate CV. Positive voltage zooms in, negative voltage zooms out. Adds to the manual slider’s rate; the combined rate is limited to the supported range.</td></tr><tr><td>X-V</td><td>Bipolar horizontal center velocity. Positive voltage increases the X center coordinate; negative voltage decreases it.</td></tr><tr><td>Y-V</td><td>Bipolar vertical center velocity. Positive voltage increases the Y center coordinate; negative voltage decreases it.</td></tr></tbody></table></div><p>Each input uses its first channel, with ±10 V corresponding to the full supported rate and voltages beyond that clamped. Rate is shaped nonlinearly for finer slow movement near zero, with a small dead zone. Zero voltage stops that contribution rather than returning the view to its origin.</p>
+<p>These are <strong>rate controls</strong>, so a steady voltage keeps moving the view until a limit is reached. X/Y motion is scaled to the current view span: at deeper zoom, the same CV moves through a smaller region of fractal coordinates.</p>
+<p>Motion and render requests are serviced through the UI. Use slow CV for exploration; these inputs are not an audio-rate synthesis path. Patch audio-rate or note modulation into Iris instead. Stop or disconnect motion CV before trying to recall a stationary location.</p></section>
+<section id="locations"><div class="section-head"><p class="eyebrow">Save and share locations</p><h2>Save and share locations</h2></div>
+<p>The LOC CODE display represents the selected fractal, zoom, and center coordinates as a compact 16-character location code. Use the copy button to put it on the clipboard and the paste button to load one from the clipboard. The adjacent indicator shows whether the last input was valid.</p>
+<ol><li>Find a region you want to keep, then stop motion CV.</li><li>Click Copy location code and save the code in a patch note or text document.</li><li>To return, copy that code to the clipboard and click Paste location code.</li><li>Allow the display and Iris source to settle after the recall.</li></ol>
+<p>A location code contains geometry settings. It does <strong>not</strong> contain the palette, Iris COLOR, conversion settings, scan position, oscillator pitch, or patch cables. For the same sound, preserve those settings as well. The code encodes coordinates at finite precision, so it is a compact recall point rather than a lossless image archive.</p>
+<p>Saving the Rack patch stores Nautiloid’s fractal type, zoom, center coordinates, palette, and rendering settings. Save Iris alongside it to preserve the connected synthesis setup.</p></section>
+<section id="rendering"><div class="section-head"><p class="eyebrow">Rendering and the Iris link</p><h2>Rendering and the Iris link</h2></div>
+<p>The large explorer display and the source prepared for Iris have different jobs. The display can respond quickly while navigation is in progress; Iris receives a separately prepared source and rebuilds its table asynchronously. The picture and sound can briefly be at different stages of the same gesture.</p>
+<p>Once the new table is ready, Iris crossfades into it. Fast navigation can replace pending work with a newer request. For deliberate sound design, move to a region, release the controls, and listen after the source has settled.</p>
+<h3>Right-click menu</h3><div class="table-wrap"><table><thead><tr><th>Control</th><th>Function</th></tr></thead><tbody><tr><td>GPU Rendering → Deep precision at extreme zoom (experimental)</td><td>Enables the experimental higher-precision GPU path for extreme zoom. Off by default. It concerns the explorer’s GPU display; the Iris source has a separate generation path. Use it if fine detail becomes unstable at very deep zoom and compare the result on your graphics hardware.</td></tr></tbody></table></div><p>Additional logging and GPU-preview controls appear only when developer debugging is enabled. They are not required for normal patching.</p>
+<h3>Use an image while the companion stays attached</h3><p>Loading an image in Iris selects that file source. To restore the fractal feed, choose <strong>Source → Nautiloid</strong> on Iris. An attached companion does not require you to discard an image you deliberately selected.</p>
+<p>The Iris workflow requires direct adjacency: Nautiloid on the left, Iris on the right, touching in the same row. Another module or a gap breaks that connection.</p></section>
+<section id="recipes"><div class="section-head"><p class="eyebrow">Exploration patches</p><h2>Exploration patches</h2></div>
+<div class="recipes"><article class="recipe"><h3>Boundary study</h3><p>Select Mandelbrot or Burning Ship. Wheel-zoom into a detailed edge, release the gesture, then slowly turn Iris SCAN. Copy the location before moving on.</p><p class="why">A single region can supply a bank of related waveforms; scan it before searching for another one.</p></article>
+<article class="recipe"><h3>Controlled drift</h3><p>Send a small, slow bipolar CV to X-V or Y-V. Keep Iris pitch steady and scan depth modest. Stop the CV to hold a promising region.</p><p class="why">The source evolves as the view moves. Because the input controls velocity, offset and waveform symmetry influence the travel path.</p></article>
+<article class="recipe"><h3>Palette variations</h3><p>Recall one location. Cycle Nautiloid palettes, then compare Iris All, Red, Green, and Blue. Save separate patch variations for useful combinations.</p><p class="why">The same geometry can produce different cycles through its color mapping.</p></article></div></section>
+<section id="troubleshooting"><div class="section-head"><p class="eyebrow">Troubleshooting</p><h2>Troubleshooting</h2></div>
+<details><summary>I cannot find Nautiloid in the browser</summary><p>Use Iris’s source button and select Nautiloid. It is hidden from the browser in the current source manifest and is spawned through this workflow.</p></details>
+<details><summary>The picture moves but there is no sound</summary><p>Nautiloid has no audio outputs. Connect Iris OUT or Q through your audio chain. Confirm direct adjacency and select Source → Nautiloid on Iris.</p></details>
+<details><summary>The view keeps moving after I release the slider</summary><p>Release stops manual zoom, but connected CV can continue to drive zoom or X/Y motion. Return those signals to zero or disconnect them. A DC offset is a continuous velocity command.</p></details>
+<details><summary>Pasting a location does not reproduce the sound</summary><p>Stop motion CV, verify the valid-code indicator, and restore the palette and Iris settings too. Location codes contain fractal geometry, not a complete patch.</p></details>
+<details><summary>Deep zoom looks unstable or the display catches up slowly</summary><p>Allow the view to settle. Try the experimental deep-precision GPU option for extreme zoom detail. Rendering depends on the fractal, zoom, and graphics hardware; the Iris source may finish at a different time from the display.</p></details>
+<details><summary>Iris stays on an image instead of following Nautiloid</summary><p>Select Source → Nautiloid on Iris. File-source mode is intentional and can be preserved when a patch is restored.</p></details>
+</section>
+<section id="reference"><div class="section-head"><p class="eyebrow">Reference</p><h2>Reference</h2></div>
+<p>VCV Rack 2 · 20 HP · fractal explorer / Iris source companion · three monophonic motion inputs · no outputs · 14 fractal modes · six palettes.</p><p><a href="Iris_User_Manual.html">Iris User Manual →</a></p><p class="muted">Checked against the local Nautiloid engine, display gestures, zoom/CV handler, location-code format, Iris source handoff, and plugin manifest. Appearance and available behavior can differ between releases.</p></section>
+
+<footer><span>Leviathan · Nautiloid User Manual</span><span><a href="../index.html#free-modules">All free-module manuals</a></span></footer></main></div><script>
+// Stack each description in the column with the next available space.
+(() => {
+  const layouts = document.querySelectorAll('.panel-reference');
+  const compact = window.matchMedia('(max-width:760px)');
+  function arrange(layout) {
+    const items = Array.from(layout.children);
+    if (compact.matches) {
+      layout.classList.remove('is-stacked');
+      items.forEach(item => { item.style.gridColumn = ''; item.style.gridRow = ''; });
+      return;
+    }
+    layout.classList.add('is-stacked');
+    const bottoms = [0, 0];
+    items.forEach((item, index) => {
+      const column = index === 0 ? 0 : (bottoms[0] <= bottoms[1] ? 0 : 1);
+      item.style.gridColumn = String(column + 1);
+      const height = Math.ceil(item.getBoundingClientRect().height);
+      item.style.gridRow = `${bottoms[column] + 1} / span ${Math.max(1, height)}`;
+      bottoms[column] += height + 16;
+    });
+  }
+  let scheduled = false;
+  function refresh() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      layouts.forEach(arrange);
+    });
+  }
+  const observer = new ResizeObserver(refresh);
+  layouts.forEach(layout => {
+    observer.observe(layout);
+    Array.from(layout.children).forEach(item => observer.observe(item));
+    layout.querySelectorAll('img').forEach(img => img.addEventListener('load', refresh));
+  });
+  compact.addEventListener('change', refresh);
+  if (document.fonts) document.fonts.ready.then(refresh);
+  window.addEventListener('beforeprint', () => {
+    layouts.forEach(layout => Array.from(layout.children).forEach(item => {
+      item.style.gridColumn = ''; item.style.gridRow = '';
+    }));
+  });
+  window.addEventListener('afterprint', refresh);
+  refresh();
+})();
+</script>
+</body></html>
