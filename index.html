@@ -72,7 +72,7 @@
     footer { display:flex; justify-content:space-between; gap:28px; padding:28px 0; border-top:1px solid var(--line); color:var(--muted); font-size:.78rem; }
     @media (max-width:760px) {
       .shell { width:min(100% - 2rem,1180px); }
-      .site-header nav a:first-child { display:none; }
+      .site-header { flex-wrap:wrap; gap:12px 24px; padding-block:18px; }
       .hero { grid-template-columns:1fr; padding:42px 0 48px; }
       .brand-art { max-width:520px; }
       .manuals { padding:62px 0 48px; }
@@ -91,11 +91,6 @@
     <nav aria-label="Primary navigation">
       <a href="#pro-modules">Leviathan Pro</a>
       <a href="#free-modules">Free Modules</a>
-      <a href="manuals/Integral_Flux_User_Manual.html">Integral Flux</a>
-      <a href="manuals/Proc_User_Manual.html">Proc</a>
-      <a href="manuals/Strand_User_Manual.html">Strand</a>
-      <a href="manuals/Temporal_Deck_User_Manual.html">Temporal Deck</a>
-      <a href="manuals/Bifurx_User_Manual.html">Bifurx</a>
     </nav>
   </header>
   <main id="top">
@@ -253,7 +248,7 @@
                 </td>
                 <td>Utility</td>
                 <td>Preloads module-browser previews for faster browsing.</td>
-                <td><span class="badge-planned">Manual planned</span></td>
+                <td><a class="badge-available" href="manuals/Deep_Cache_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
