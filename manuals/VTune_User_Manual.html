@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="An 8 HP companion for Vessel, bringing six performance and voicing controls to the panel alongside a pitch-driven body display."><title>V.Tune User Manual - Leviathan</title><style>
+:root {
+  color-scheme: dark;
+  --ink:#eef6ff; --muted:#a9b7c8; --deep:#070b12; --panel:#0e1520; --panel2:#121b29;
+  --cyan:#1cccd9; --purple:#7a5cff; --gold:#ebcc80; --line:#26364a; --paper:#f7f9fc;
+  --shadow:0 22px 60px rgba(0,0,0,.38);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; background:radial-gradient(circle at 78% 10%,rgba(122,92,255,.14),transparent 30rem),radial-gradient(circle at 18% 22%,rgba(28,204,217,.11),transparent 28rem),var(--deep); color:var(--ink); line-height:1.62; }
+a { color:#7feaf1; }
+.layout { display:grid; grid-template-columns:250px minmax(0,1fr); max-width:1500px; margin:auto; }
+nav { position:sticky; top:0; height:100vh; padding:30px 24px; border-right:1px solid var(--line); background:rgba(7,11,18,.9); backdrop-filter:blur(18px); overflow:auto; }
+nav .brand-home { display:block; padding:0; border-radius:7px; }
+nav .brand-home:focus-visible { outline:2px solid var(--cyan); outline-offset:4px; }
+nav .brand-lockup { display:block; width:100%; max-width:200px; height:auto; margin:0 0 20px; border-radius:7px; box-shadow:0 10px 30px rgba(0,0,0,.28); }
+nav .brand { font-size:1.25rem; letter-spacing:.18em; font-weight:800; margin-bottom:2px; }
+nav .sub { color:var(--muted); font-size:.75rem; margin-bottom:28px; }
+nav a { display:block; color:#c7d3e1; text-decoration:none; padding:7px 0; font-size:.88rem; }
+nav a:hover { color:#fff; transform:translateX(2px); }
+nav .nav-actions { margin-top:24px; }
+button { border:1px solid rgba(28,204,217,.55); background:rgba(28,204,217,.1); color:var(--ink); padding:9px 12px; border-radius:999px; cursor:pointer; }
+main { min-width:0; }
+.hero { min-height:740px; display:grid; grid-template-columns:minmax(0,1fr) minmax(200px,320px); gap:40px; align-items:center; padding:80px clamp(32px,7vw,110px); overflow:hidden; }
+.dragon-divider { position:relative; height:48px; }
+.dragon-divider img { position:absolute; left:50%; top:50%; display:block; width:min(78%,900px); height:auto; transform:translate(-50%,-50%); opacity:.42; filter:drop-shadow(0 0 22px rgba(28,204,217,.16)); pointer-events:none; user-select:none; }
+.kicker,.eyebrow { color:var(--cyan); text-transform:uppercase; letter-spacing:.2em; font-size:.72rem; font-weight:800; }
+h1 { font-size:clamp(4rem,9vw,8.2rem); line-height:.86; letter-spacing:-.075em; margin:16px 0 28px; background:linear-gradient(100deg,#865cff 0%,#c9a8ff 27%,#f6f9ff 49%,#77eaff 72%,#1cccd9 100%); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 10px 28px rgba(50,124,210,.14)); }
+.deck { font-size:clamp(1.08rem,2vw,1.4rem); max-width:680px; color:#d4e0ed; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; }
+.chip { border:1px solid var(--line); background:rgba(255,255,255,.035); border-radius:999px; padding:7px 11px; color:#c9d6e4; font-size:.8rem; }
+.hero-modules { display:flex; align-items:center; justify-content:center; gap:24px; perspective:1200px; }
+.hero-modules img { width:min(75%,240px); height:auto; border:1px solid rgba(255,255,255,.16); border-radius:12px; box-shadow:var(--shadow); transform:rotateY(-5deg) translateY(8px); }
+section { position:relative; isolation:isolate; padding:70px clamp(32px,7vw,110px); border-bottom:1px solid var(--line); scroll-margin-top:20px; overflow:hidden; }
+section::before { position:absolute; z-index:0; bottom:0; width:min(58vw,650px); aspect-ratio:959/376; background:url("../img/PerfectWave_KCrop.png") center bottom/contain no-repeat; content:""; opacity:.065; mix-blend-mode:screen; -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); pointer-events:none; }
+section:nth-of-type(odd)::before { right:0; transform:scaleX(-1); -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); }
+section:nth-of-type(even)::before { left:-5%; }
+section > * { position:relative; z-index:1; }
+.section-head { max-width:850px; margin-bottom:38px; }
+h2 { font-size:clamp(2.1rem,4.7vw,4.2rem); line-height:1; letter-spacing:-.045em; margin:8px 0 18px; }
+h3 { line-height:1.18; margin:.2rem 0 .45rem; }
+p { margin:.45rem 0 1rem; }
+.muted { color:var(--muted); }
+.callout { border-left:3px solid var(--cyan); padding:18px 22px; background:rgba(28,204,217,.07); max-width:900px; margin:30px 0; border-radius:0 12px 12px 0; }
+.callout strong { color:var(--cyan); }
+
+/* Architecture */
+.architecture { display:grid; grid-template-columns:repeat(5,minmax(120px,1fr)); gap:12px; align-items:stretch; }
+.arch-box { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:105px; padding:18px; border-radius:14px; border:1px solid var(--line); background:var(--panel); position:relative; font-weight:750; }
+.arch-box:not(:last-child)::after { content:""; position:absolute; right:-13px; top:50%; width:13px; border-top:2px solid var(--cyan); }
+.arch-box small { display:block; color:var(--muted); font-weight:500; margin-top:5px; font-size:.8rem; }
+
+/* Panel tour */
+.panel-tour { display:grid; grid-template-columns:minmax(220px,300px) minmax(0,1fr); gap:40px; align-items:start; }
+.annotated-panel { position:relative; width:min(100%,260px); margin:0 auto; box-shadow:var(--shadow); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.1); }
+.annotated-panel img { display:block; width:100%; height:auto; }
+.control-list { display:grid; grid-template-columns:1fr; gap:12px; }
+.control-card { display:grid; grid-template-columns:34px 1fr; gap:12px; padding:18px; border-radius:14px; border:1px solid var(--line); background:rgba(14,21,32,.8); }
+.control-card .num { width:30px; height:30px; border-radius:50%; display:grid; place-items:center; background:var(--purple); font-weight:900; }
+.control-card p { color:#c2cede; font-size:.91rem; margin:.3rem 0; }
+.control-card .range { color:var(--gold); font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; }
+
+.panel-overlay { position:absolute; inset:0; width:100%; height:100%; }
+.panel-overlay line { stroke:#fff; stroke-width:26; }
+.panel-overlay circle { fill:#f7fbff; stroke:var(--purple); stroke-width:42; }
+.panel-overlay text { fill:#101725; font-size:210px; font-weight:900; text-anchor:middle; dominant-baseline:central; }
+.panel-overlay a:hover circle,.panel-overlay a:focus circle { fill:var(--gold); stroke:var(--cyan); }
+.io-heading { margin-top:48px; }
+.control-card { scroll-margin-top:24px; }
+
+/* Tables */
+.table-wrap { width:100%; overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
+table { width:100%; border-collapse:collapse; min-width:760px; background:rgba(12,18,28,.88); }
+th { text-align:left; color:var(--gold); font-size:.74rem; text-transform:uppercase; letter-spacing:.08em; background:#121b29; }
+th,td { padding:14px 16px; border-bottom:1px solid var(--line); vertical-align:top; }
+td { color:#cbd6e3; }
+tr:last-child td { border-bottom:0; }
+
+/* Info and recipes */
+.display-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.info-card { padding:26px; border:1px solid var(--line); border-radius:16px; background:var(--panel); }
+.info-card ul { padding-left:1.2rem; }
+.recipes { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.recipe { padding:24px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(155deg,rgba(122,92,255,.09),rgba(28,204,217,.04)); }
+.recipe .why { color:#9feaf0; border-top:1px solid var(--line); padding-top:14px; margin-top:14px; font-size:.9rem; }
+details { border:1px solid var(--line); border-radius:12px; margin:10px 0; background:var(--panel); }
+summary { cursor:pointer; padding:16px 18px; font-weight:750; }
+details p { padding:0 18px 18px; color:#c6d2df; }
+.spec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.spec { padding:20px; border:1px solid var(--line); border-radius:14px; background:var(--panel); }
+.spec strong { display:block; color:var(--gold); font-size:.73rem; text-transform:uppercase; letter-spacing:.08em; }
+footer { position:relative; min-height:150px; padding:42px clamp(32px,7vw,110px); color:var(--muted); display:flex; align-items:flex-end; justify-content:space-between; gap:30px; overflow:hidden; }
+footer span { position:relative; z-index:1; }
+
+@media (max-width:1100px) { .layout{display:block} nav{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)} nav a{display:inline-block;margin-right:16px} .hero{grid-template-columns:1fr;} .panel-tour{grid-template-columns:1fr} .recipes{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:680px) { section,.hero{padding:48px 20px} .hero{min-height:auto} .dragon-divider{height:36px}.dragon-divider img{width:110%;max-width:none;opacity:.38} .hero-modules{gap:10px} .hero-modules img{width:100%} .control-list,.display-grid,.recipes,.spec-grid{grid-template-columns:1fr} .architecture{grid-template-columns:1fr} .arch-box:not(:last-child)::after{right:50%;top:auto;bottom:-13px;height:13px;width:0;border-top:0;border-left:2px solid var(--cyan)} footer{display:block;min-height:140px;padding:36px 20px} footer span{display:block;margin-bottom:6px} }
+@media print {
+  :root{color-scheme:light} body{background:#fff;color:#101725;font-size:10.5pt} nav,.nav-actions,.dragon-divider{display:none} .layout{display:block;max-width:none} .hero{min-height:0;grid-template-columns:1fr 280px;padding:32px;border-bottom:1px solid #b9c3ce;page-break-after:always} h1{font-size:54pt;color:#152238;background:none} section{padding:28px 34px;border-color:#cdd5de} section::before{display:none} .control-card,.info-card,.recipe,.spec,details{background:#fff;border-color:#b9c3ce;color:#101725;break-inside:avoid} p,td,.control-card p,details p{color:#26364a} table{background:#fff} th{background:#eaf1f7;color:#25334a} th,td{border-color:#cdd5de} .panel-tour{grid-template-columns:220px 1fr;gap:24px} .recipes{grid-template-columns:repeat(2,1fr)} a{color:#174f7a} footer{min-height:0;border-top:1px solid #cdd5de;color:#536274}
+}
+
+h1{font-size:clamp(3rem,7vw,6.5rem);overflow-wrap:anywhere}nav .brand{letter-spacing:.08em}.hero-modules img{width:min(100%,240px)} @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.hero{grid-template-columns:minmax(0,1fr) minmax(180px,280px);gap:32px}.hero-modules img{width:min(100%,240px);transform:none;border-radius:4px}.pair-diagram{display:flex;align-items:stretch;justify-content:center;gap:12px;margin:28px 0}.pair-diagram div{padding:20px 28px;border:1px solid var(--cyan);border-radius:12px;background:var(--panel);text-align:center}.pair-diagram small{display:block;color:var(--muted)}code{overflow-wrap:anywhere}.section-head{margin-bottom:26px}h3{margin-top:28px}.info-card h3,.recipe h3{margin-top:0}.table-wrap+ p{margin-top:24px}caption{text-align:left;padding:12px 16px;color:var(--muted)}
+@media(max-width:1100px){.hero{grid-template-columns:minmax(0,1fr) 220px}}
+@media(min-width:681px) and (max-width:800px){.architecture{grid-template-columns:repeat(5,minmax(0,1fr))}.arch-box{padding:12px 6px;font-size:.85rem}.arch-box small{font-size:.72rem}}
+@media(max-width:680px){.hero{grid-template-columns:1fr}.hero-modules img{max-width:210px}.pair-diagram{gap:8px}.pair-diagram div{padding:16px 12px}.pair-diagram small{font-size:.8rem}}
+@media print{.hero{grid-template-columns:1fr 160px}.hero-modules img{width:150px}.muted,.deck,.chip{color:#26364a}.callout{background:#edf7f8}.callout strong{color:#174f7a}.pair-diagram div{background:#fff;color:#101725;border-color:#6c8892}.pair-diagram small{color:#26364a}.table-wrap{overflow:visible}table{min-width:0}h1{filter:none}}
+
+/* Numbered panel references, following the Integral Flux manual. */
+.panel-reference{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px 24px;align-items:start;margin-top:24px}
+.panel-reference .annotated-panel{grid-column:1;grid-row:1 / span 3;align-self:start;width:min(100%,420px);margin:0 auto;border-radius:4px}
+.panel-reference.iris-reference .annotated-panel{max-width:300px}
+.panel-reference .control-card{min-width:0;align-content:start}
+.panel-reference .control-card h3{margin:0 0 8px;font-size:1.1rem;line-height:1.25}
+.panel-reference .output-card .num{background:#096c78}
+.panel-reference .panel-overlay line{stroke:#fff;stroke-width:1.6;filter:drop-shadow(0 1px 1px #000)}
+.panel-reference .panel-overlay circle{fill:#f7fbff;stroke:var(--purple);stroke-width:2}
+.panel-reference .panel-overlay text{fill:#101725;font-size:12px;font-weight:900;text-anchor:middle;dominant-baseline:central}
+.panel-reference.nautiloid-reference .panel-overlay text{font-size:16px}
+.panel-reference .panel-overlay a:hover circle,.panel-reference .panel-overlay a:focus circle{fill:var(--gold);stroke:var(--cyan)}
+.panel-reference .panel-overlay a:focus{outline:none}
+.panel-reference .panel-overlay a:focus circle{stroke-width:3}
+@media screen and (min-width:761px){.panel-reference.is-stacked{grid-auto-rows:1px;row-gap:0}.panel-reference > *{align-self:start}}
+@media(max-width:760px){.dragon-divider{overflow-x:clip}.panel-reference{grid-template-columns:minmax(0,1fr)}.panel-reference .annotated-panel{grid-column:auto;grid-row:auto;margin-bottom:12px}}
+@media print{.panel-reference{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.panel-reference .annotated-panel{grid-column:1;grid-row:1 / span 3}.panel-reference .panel-overlay circle{stroke:#7a5cff}.panel-reference .panel-overlay text{fill:#101725}}
+
+.panel-reference.vtune-reference .annotated-panel{max-width:240px}.panel-reference.vessel-reference .annotated-panel{max-width:400px}
+@media print{.arch-box{background:#fff;color:#101725}.arch-box small{color:#26364a}.range{color:#73501e!important}}
+</style></head><body><div class="layout"><nav aria-label="Manual navigation"><a class="brand-home" href="../index.html" aria-label="Return to manuals portal"><img class="brand-lockup" src="../img/Branding_Logo_Crop_Only.png" alt="Leviathan"></a><div class="brand">V.TUNE</div><div class="sub">LEVIATHAN USER MANUAL</div><a href="#concept">Shape the bowl</a>
+<a href="#start">Connect and play</a>
+<a href="#controls">Panel breakdown</a>
+<a href="#priority">Control priority</a>
+<a href="#display">Body map and color</a>
+<a href="#storage">Attachment and patch storage</a>
+<a href="#recipes">Patch ideas</a>
+<a href="#troubleshooting">Troubleshooting</a>
+<a href="#reference">Reference</a><div class="nav-actions"><button onclick="window.print()">Print / Save PDF</button></div></nav><main><header class="hero"><div><p class="kicker">Leviathan for VCV Rack 2 · Open Source</p><h1>V.Tune</h1><p class="deck">An 8 HP companion for Vessel, bringing six performance and voicing controls to the panel alongside a pitch-driven body display.</p><div class="chips"><span class="chip">8 HP</span><span class="chip">Vessel companion</span><span class="chip">Six voicing controls</span><span class="chip">No jacks</span></div></div><div class="hero-modules"><img src="img/V.Tune.png" alt="V.Tune front panel"></div></header><div class="dragon-divider" aria-hidden="true"><img src="../img/Leviathan_Dragon_Transparent_Refined.png" alt=""></div><section id="concept"><div class="section-head"><p class="eyebrow">Shape the bowl</p><h2>Shape the bowl</h2></div><p>V.Tune exposes the excitation and voicing settings held by <a href="Vessel_User_Manual.html">Vessel</a>. Use it to set the strength of triggered hits, work directly with rubbing speed and pressure, and shape decay, resonant imperfections, and stereo width.</p><p>It has no audio engine or patch jacks of its own. Vessel remains the source of sound and the home of pitch, material, mallet, ΔHz, output level, performance pads, and CV inputs.</p></section>
+<section id="start"><div class="section-head"><p class="eyebrow">Connect and play</p><h2>Connect and play</h2></div><div class="pair-diagram" role="img" aria-label="Vessel immediately left of V.Tune, touching in the same row"><div><strong>Vessel</strong><small>Sound and performance · left</small></div><div><strong>V.Tune</strong><small>Voicing controls · right</small></div></div><ol><li>Add Vessel and connect its L and R outputs to your audio chain.</li><li>Click the gear on Vessel to spawn V.Tune. You can also add it from the browser and place it immediately to Vessel’s right.</li><li>Keep the two modules touching in the same row. V.Tune adopts Vessel’s current settings on connection.</li><li>Send triggers to Vessel HIT (T), leave VEL unpatched, and turn VELOCITY to compare hit strengths.</li><li>Hold Vessel RUB (G) high, leave INTENSE unpatched, and release the manual RUB pad. Adjust SPEED and PRESSURE to explore friction.</li><li>Strike the bowl and compare SUSTAIN, FLAWS, and WIDTH. Keep Vessel ΔHz at zero while first exploring WIDTH.</li></ol><div class="callout"><strong>The performance source matters.</strong> V.Tune’s VELOCITY controls externally triggered hits without VEL. Its SPEED and PRESSURE control rubbing only when neither INTENSE nor the held RUB pad overrides them.</div></section>
+<section id="controls"><div class="section-head"><p class="eyebrow">Panel breakdown</p><h2>Panel breakdown</h2></div><p class="muted">Click a numbered marker for its description. Defaults below are initial Vessel values; connecting to an already configured Vessel adopts its current values.</p><div class="panel-tour panel-reference vtune-reference"><figure class="annotated-panel"><img src="img/V.Tune.png" width="240" height="760" alt="V.Tune panel with numbered references described in the matching legend"><svg class="panel-overlay" viewBox="0 0 240 760" role="group" aria-label="V.Tune panel controls"><a href="#vtune-1" aria-label="1: SPEED"><title>1: SPEED</title><line x1="65" y1="100" x2="25" y2="75"/><circle cx="25" cy="75" r="11"/><text x="25" y="75">1</text></a><a href="#vtune-2" aria-label="2: VELOCITY"><title>2: VELOCITY</title><line x1="175" y1="100" x2="215" y2="75"/><circle cx="215" cy="75" r="11"/><text x="215" y="75">2</text></a><a href="#vtune-3" aria-label="3: PRESSURE"><title>3: PRESSURE</title><line x1="65" y1="205" x2="25" y2="180"/><circle cx="25" cy="180" r="11"/><text x="25" y="180">3</text></a><a href="#vtune-4" aria-label="4: SUSTAIN"><title>4: SUSTAIN</title><line x1="175" y1="205" x2="215" y2="180"/><circle cx="215" cy="180" r="11"/><text x="215" y="180">4</text></a><a href="#vtune-5" aria-label="5: FLAWS"><title>5: FLAWS</title><line x1="65" y1="310" x2="25" y2="285"/><circle cx="25" cy="285" r="11"/><text x="25" y="285">5</text></a><a href="#vtune-6" aria-label="6: WIDTH"><title>6: WIDTH</title><line x1="175" y1="310" x2="215" y2="285"/><circle cx="215" cy="285" r="11"/><text x="215" y="285">6</text></a><a href="#vtune-7" aria-label="7: Vessel link indicator"><title>7: Vessel link indicator</title><line x1="18" y1="33" x2="45" y2="35"/><circle cx="45" cy="35" r="11"/><text x="45" y="35">7</text></a><a href="#vtune-8" aria-label="8: Body map and pitch-color lights"><title>8: Body map and pitch-color lights</title><line x1="120" y1="540" x2="210" y2="460"/><circle cx="210" cy="460" r="11"/><text x="210" y="460">8</text></a></svg></figure><article class="control-card" id="vtune-1"><span class="num">1</span><div><h3>SPEED</h3><p class="range">0–2 rev/s · default 0.2</p><p>Rubbing speed around the bowl. Used with PRESSURE when RUB (G) is high, INTENSE is unpatched, and the manual RUB pad is released.</p></div></article><article class="control-card" id="vtune-2"><span class="num">2</span><div><h3>VELOCITY</h3><p class="range">0–100% · default 50%</p><p>Strength of gate-triggered hits when VEL is unpatched. A manual HIT uses its pad position; a connected VEL replaces this setting.</p></div></article><article class="control-card" id="vtune-3"><span class="num">3</span><div><h3>PRESSURE</h3><p class="range">0–15 N · default 2.5</p><p>Contact pressure for the separate-control rubbing path. Speed and pressure work together: changing pressure can alter the friction response as well as the level.</p></div></article><article class="control-card" id="vtune-4"><span class="num">4</span><div><h3>SUSTAIN</h3><p class="range">0.25×–4× · default 1×</p><p>Scales the bowl’s decay times. Lower values shorten ringing and higher values lengthen it. This shapes resonance decay rather than holding an envelope at a fixed level.</p></div></article><article class="control-card" id="vtune-5"><span class="num">5</span><div><h3>FLAWS</h3><p class="range">0–2 · default 1</p><p>Scales imperfection between paired resonant modes. Zero removes this mode-pair splitting; higher values increase it. This is a different control from Vessel’s left/right ΔHz.</p></div></article><article class="control-card" id="vtune-6"><span class="num">6</span><div><h3>WIDTH</h3><p class="range">0–100% · default 70%</p><p>Changes the separation of the stereo observation positions. Compare at ΔHz = 0 to isolate the spatial effect. It does not change the bowl frequency difference.</p></div></article><article class="control-card" id="vtune-7"><span class="num">7</span><div><h3>Vessel link indicator</h3><p class="range">Top-left edge</p><p>Shows the adjacent Vessel connection. Place V.Tune immediately to Vessel’s right. Vessel’s matching indicator turns green when it accepts the control messages.</p></div></article><article class="control-card" id="vtune-8"><span class="num">8</span><div><h3>Body map and pitch-color lights</h3><p class="range">Lower display</p><p>Body shading follows the connected Vessel’s center pitch. The seven pitch-color lights track the bowl-color mapping independently. These are visual indicators, not controls or audio outputs.</p></div></article></div></section>
+<section id="priority"><div class="section-head"><p class="eyebrow">Control priority</p><h2>Control priority</h2></div><div class="table-wrap"><table><thead><tr><th scope="col">V.Tune control</th><th scope="col">Active when</th><th scope="col">Override</th></tr></thead><tbody><tr><td>VELOCITY</td><td>Vessel receives a HIT (T) edge with VEL unpatched.</td><td>VEL replaces it for triggered hits. Manual HIT uses vertical pad position.</td></tr><tr><td>SPEED + PRESSURE</td><td>RUB (G) is active, INTENSE is unpatched, and the manual RUB pad is released.</td><td>INTENSE coordinates both values; the held RUB pad takes priority over INTENSE.</td></tr><tr><td>SUSTAIN + FLAWS + WIDTH</td><td>The companion is connected and active.</td><td>These remain voicing controls during either hits or rubbing.</td></tr><tr><td>Output level</td><td>Always controlled on Vessel.</td><td>Use Vessel LEVEL; V.Tune has no output-level knob.</td></tr></tbody></table></div><p>For a predictable comparison, change one control at a time and repeat the same gesture. If you hold the RUB pad to audition SPEED, you are hearing the pad’s coordinated intensity gesture instead of the separate-control path.</p></section>
+<section id="display"><div class="section-head"><p class="eyebrow">Body map and color</p><h2>Body map and color</h2></div><p>The lower illustration is a pitch-driven display. Body shading reads Vessel’s center-frequency value, including pitch CV; it does not analyze the output audio or measure activity in a listener’s body. Its Sound+Body associations are a visual mapping. The pitch readout can remain meaningful while the bowl is silent.</p><p>Right-click V.Tune and open <strong>Body map</strong>. Choose <strong>Body shading on</strong> or <strong>Off</strong>, then <strong>Soft intensity</strong>, <strong>Normal intensity</strong>, or <strong>Strong intensity</strong>. The menu also reports the linked Vessel target center and the active region labels. These intensity choices affect display opacity, not sound.</p><div class="table-wrap"><table><thead><tr><th scope="col">Center-frequency band</th><th scope="col">Displayed association</th></tr></thead><tbody><tr><td>20–30 Hz</td><td>Chest, abdomen, eyes / ears</td></tr><tr><td>30–50 Hz</td><td>Spine, core, legs</td></tr><tr><td>50–100 Hz</td><td>Larger muscle groups</td></tr><tr><td>100–300 Hz</td><td>Throat, chest, abdomen / flanks</td></tr><tr><td>300–600 Hz</td><td>Head and upper neck</td></tr><tr><td>600–1000 Hz</td><td>Upper / central head</td></tr><tr><td>1000–2000 Hz</td><td>Ears and head</td></tr></tbody></table></div><p>The shading blends around band boundaries. The seven chakra LEDs follow Vessel’s bowl-color mapping independently; turning body shading off does not turn off those LEDs. Disconnecting or bypassing V.Tune removes its linked-frequency display data.</p></section>
+<section id="storage"><div class="section-head"><p class="eyebrow">Attachment and patch storage</p><h2>Attachment and patch storage</h2></div><p>When V.Tune first attaches to a Vessel, it copies that Vessel’s current six settings before sending control messages. Moving it to a different Vessel therefore adopts the new neighbor’s settings rather than imposing the old ones.</p><p>While connected, Vessel keeps a copy of the received values. Detaching or bypassing V.Tune leaves the latest values in Vessel. Reattach the companion to edit them again. Keep direct adjacency: a gap, another module, or placement on the left breaks the connection.</p><p>Save the Rack patch with both modules to retain the full setup. V.Tune saves its body-map mode and shading intensity along with its knob settings. Its live frequency display comes from the attached Vessel and is refreshed when the patch runs.</p></section>
+<section id="recipes"><div class="section-head"><p class="eyebrow">Patch ideas</p><h2>Patch ideas</h2></div><div class="recipes"><article class="recipe"><h3>A longer bell</h3><p>Send a regular, sparse trigger to Vessel HIT (T), with VEL unpatched. Begin at SUSTAIN 1×, then compare shorter and longer settings using the same VELOCITY.</p><p class="why">Longer decay lets successive strikes overlap; leave enough time to hear each tail when comparing.</p></article><article class="recipe"><h3>Independent friction</h3><p>Hold RUB (G) high with INTENSE unpatched. Start around SPEED 0.2 rev/s and PRESSURE 2.5 N, then vary one slowly while holding the other still.</p><p class="why">This exposes the interaction that the coordinated intensity path normally manages for you.</p></article><article class="recipe"><h3>Resonance and space</h3><p>With ΔHz at zero, strike a fixed pitch and compare FLAWS at zero and one. Then hold FLAWS steady and sweep WIDTH.</p><p class="why">FLAWS changes mode-pair splitting; WIDTH changes observation separation. They shape different aspects of the sound.</p></article></div></section>
+<section id="troubleshooting"><div class="section-head"><p class="eyebrow">Troubleshooting</p><h2>Troubleshooting</h2></div><details><summary>The knobs do not affect Vessel</summary><p>Check that V.Tune is directly to Vessel’s right, touching in the same row, and is not bypassed. Check the link indicators.</p></details><details><summary>VELOCITY has no effect when I click HIT</summary><p>Manual HIT uses vertical pad position. Test VELOCITY with HIT (T) triggers and leave VEL unpatched.</p></details><details><summary>SPEED and PRESSURE do not change the rubbing</summary><p>Release the RUB pad and unplug INTENSE, then keep RUB (G) high. The pad and intensity input override the separate controls.</p></details><details><summary>The knob values change when I connect the companion</summary><p>This is the attachment behavior: V.Tune adopts the settings of the Vessel it is connected to.</p></details><details><summary>The body map is blank</summary><p>Check the connection, bypass state, and Body map → Body shading on. No available linked frequency means no active body shading.</p></details><details><summary>WIDTH does not remove the left/right pitch difference</summary><p>WIDTH changes observation positions. Set Vessel ΔHz to zero for equal left/right tuning.</p></details></section>
+<section id="reference"><div class="section-head"><p class="eyebrow">Reference</p><h2>Reference</h2></div><p>VCV Rack 2 · 8 HP · right-side Vessel companion · six panel knobs · no inputs or outputs · body shading and independent pitch-color indicators.</p><p><a href="Vessel_User_Manual.html">Vessel User Manual →</a></p><p class="muted">Checked against the local V.Tune controls, attachment handshake, body-map implementation, Vessel control priority, and plugin manifest on October 28, 2026. Appearance and available behavior can differ between releases.</p></section><footer><span>Leviathan · V.Tune User Manual</span><span><a href="../index.html#free-modules">All free-module manuals</a></span></footer></main></div><script>
+// Stack each description in the column with the next available space.
+(() => {
+  const layouts = document.querySelectorAll('.panel-reference');
+  const compact = window.matchMedia('(max-width:760px)');
+  function arrange(layout) {
+    const items = Array.from(layout.children);
+    if (compact.matches) {
+      layout.classList.remove('is-stacked');
+      items.forEach(item => { item.style.gridColumn = ''; item.style.gridRow = ''; });
+      return;
+    }
+    layout.classList.add('is-stacked');
+    const bottoms = [0, 0];
+    items.forEach((item, index) => {
+      const column = index === 0 ? 0 : (bottoms[0] <= bottoms[1] ? 0 : 1);
+      item.style.gridColumn = String(column + 1);
+      const height = Math.ceil(item.getBoundingClientRect().height);
+      item.style.gridRow = `${bottoms[column] + 1} / span ${Math.max(1, height)}`;
+      bottoms[column] += height + 16;
+    });
+  }
+  let scheduled = false;
+  function refresh() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      layouts.forEach(arrange);
+    });
+  }
+  const observer = new ResizeObserver(refresh);
+  layouts.forEach(layout => {
+    observer.observe(layout);
+    Array.from(layout.children).forEach(item => observer.observe(item));
+    layout.querySelectorAll('img').forEach(img => img.addEventListener('load', refresh));
+  });
+  compact.addEventListener('change', refresh);
+  if (document.fonts) document.fonts.ready.then(refresh);
+  window.addEventListener('beforeprint', () => {
+    layouts.forEach(layout => Array.from(layout.children).forEach(item => {
+      item.style.gridColumn = ''; item.style.gridRow = '';
+    }));
+  });
+  window.addEventListener('afterprint', refresh);
+  refresh();
+})();
+</script></body></html>
