@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Sil user manual: hear what each adaptive mastering stage changes, understand the signal chain, and use Boost, meters and bypass for useful comparisons."><title>Sil User Manual - Leviathan</title><style>
+:root {
+  color-scheme: dark;
+  --ink:#eef6ff; --muted:#a9b7c8; --deep:#070b12; --panel:#0e1520; --panel2:#121b29;
+  --cyan:#1cccd9; --purple:#7a5cff; --gold:#ebcc80; --line:#26364a; --paper:#f7f9fc;
+  --shadow:0 22px 60px rgba(0,0,0,.38);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; background:radial-gradient(circle at 78% 10%,rgba(122,92,255,.14),transparent 30rem),radial-gradient(circle at 18% 22%,rgba(28,204,217,.11),transparent 28rem),var(--deep); color:var(--ink); line-height:1.62; }
+a { color:#7feaf1; }
+.layout { display:grid; grid-template-columns:250px minmax(0,1fr); max-width:1500px; margin:auto; }
+nav { position:sticky; top:0; height:100vh; padding:30px 24px; border-right:1px solid var(--line); background:rgba(7,11,18,.9); backdrop-filter:blur(18px); overflow:auto; }
+nav .brand-home { display:block; padding:0; border-radius:7px; }
+nav .brand-home:focus-visible { outline:2px solid var(--cyan); outline-offset:4px; }
+nav .brand-lockup { display:block; width:100%; max-width:200px; height:auto; margin:0 0 20px; border-radius:7px; box-shadow:0 10px 30px rgba(0,0,0,.28); }
+nav .brand { font-size:1.25rem; letter-spacing:.18em; font-weight:800; margin-bottom:2px; }
+nav .sub { color:var(--muted); font-size:.75rem; margin-bottom:28px; }
+nav a { display:block; color:#c7d3e1; text-decoration:none; padding:7px 0; font-size:.88rem; }
+nav a:hover { color:#fff; transform:translateX(2px); }
+nav .nav-actions { margin-top:24px; }
+button { border:1px solid rgba(28,204,217,.55); background:rgba(28,204,217,.1); color:var(--ink); padding:9px 12px; border-radius:999px; cursor:pointer; }
+main { min-width:0; }
+.hero { min-height:740px; display:grid; grid-template-columns:minmax(0,1fr) minmax(200px,320px); gap:40px; align-items:center; padding:80px clamp(32px,7vw,110px); overflow:hidden; }
+.dragon-divider { position:relative; height:48px; }
+.dragon-divider img { position:absolute; left:50%; top:50%; display:block; width:min(78%,900px); height:auto; transform:translate(-50%,-50%); opacity:.42; filter:drop-shadow(0 0 22px rgba(28,204,217,.16)); pointer-events:none; user-select:none; }
+.kicker,.eyebrow { color:var(--cyan); text-transform:uppercase; letter-spacing:.2em; font-size:.72rem; font-weight:800; }
+h1 { font-size:clamp(4rem,9vw,8.2rem); line-height:.86; letter-spacing:-.075em; margin:16px 0 28px; background:linear-gradient(100deg,#865cff 0%,#c9a8ff 27%,#f6f9ff 49%,#77eaff 72%,#1cccd9 100%); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 10px 28px rgba(50,124,210,.14)); }
+.deck { font-size:clamp(1.08rem,2vw,1.4rem); max-width:680px; color:#d4e0ed; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; }
+.chip { border:1px solid var(--line); background:rgba(255,255,255,.035); border-radius:999px; padding:7px 11px; color:#c9d6e4; font-size:.8rem; }
+.hero-modules { display:flex; align-items:center; justify-content:center; gap:24px; perspective:1200px; }
+.hero-modules img { width:min(75%,240px); height:auto; border:1px solid rgba(255,255,255,.16); border-radius:12px; box-shadow:var(--shadow); transform:rotateY(-5deg) translateY(8px); }
+section { position:relative; isolation:isolate; padding:70px clamp(32px,7vw,110px); border-bottom:1px solid var(--line); scroll-margin-top:20px; overflow:hidden; }
+section::before { position:absolute; z-index:0; bottom:0; width:min(58vw,650px); aspect-ratio:959/376; background:url("../img/PerfectWave_KCrop.png") center bottom/contain no-repeat; content:""; opacity:.065; mix-blend-mode:screen; -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); pointer-events:none; }
+section:nth-of-type(odd)::before { right:0; transform:scaleX(-1); -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); }
+section:nth-of-type(even)::before { left:-5%; }
+section > * { position:relative; z-index:1; }
+.section-head { max-width:850px; margin-bottom:38px; }
+h2 { font-size:clamp(2.1rem,4.7vw,4.2rem); line-height:1; letter-spacing:-.045em; margin:8px 0 18px; }
+h3 { line-height:1.18; margin:.2rem 0 .45rem; }
+p { margin:.45rem 0 1rem; }
+.muted { color:var(--muted); }
+.callout { border-left:3px solid var(--cyan); padding:18px 22px; background:rgba(28,204,217,.07); max-width:900px; margin:30px 0; border-radius:0 12px 12px 0; }
+.callout strong { color:var(--cyan); }
+
+/* Architecture */
+.architecture { display:grid; grid-template-columns:repeat(5,minmax(120px,1fr)); gap:12px; align-items:stretch; }
+.arch-box { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:105px; padding:18px; border-radius:14px; border:1px solid var(--line); background:var(--panel); position:relative; font-weight:750; }
+.arch-box:not(:last-child)::after { content:""; position:absolute; right:-13px; top:50%; width:13px; border-top:2px solid var(--cyan); }
+.arch-box small { display:block; color:var(--muted); font-weight:500; margin-top:5px; font-size:.8rem; }
+
+/* Panel tour */
+.panel-tour { display:grid; grid-template-columns:minmax(220px,300px) minmax(0,1fr); gap:40px; align-items:start; }
+.annotated-panel { position:relative; width:min(100%,260px); margin:0 auto; box-shadow:var(--shadow); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.1); }
+.annotated-panel img { display:block; width:100%; height:auto; }
+.control-list { display:grid; grid-template-columns:1fr; gap:12px; }
+.control-card { display:grid; grid-template-columns:34px 1fr; gap:12px; padding:18px; border-radius:14px; border:1px solid var(--line); background:rgba(14,21,32,.8); }
+.control-card .num { width:30px; height:30px; border-radius:50%; display:grid; place-items:center; background:var(--purple); font-weight:900; }
+.control-card p { color:#c2cede; font-size:.91rem; margin:.3rem 0; }
+.control-card .range { color:var(--gold); font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; }
+
+.panel-overlay { position:absolute; inset:0; width:100%; height:100%; }
+.panel-overlay line { stroke:#fff; stroke-width:26; }
+.panel-overlay circle { fill:#f7fbff; stroke:var(--purple); stroke-width:42; }
+.panel-overlay text { fill:#101725; font-size:210px; font-weight:900; text-anchor:middle; dominant-baseline:central; }
+.panel-overlay a:hover circle,.panel-overlay a:focus circle { fill:var(--gold); stroke:var(--cyan); }
+.io-heading { margin-top:48px; }
+.control-card { scroll-margin-top:24px; }
+
+/* Tables */
+.table-wrap { width:100%; overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
+table { width:100%; border-collapse:collapse; min-width:760px; background:rgba(12,18,28,.88); }
+th { text-align:left; color:var(--gold); font-size:.74rem; text-transform:uppercase; letter-spacing:.08em; background:#121b29; }
+th,td { padding:14px 16px; border-bottom:1px solid var(--line); vertical-align:top; }
+td { color:#cbd6e3; }
+tr:last-child td { border-bottom:0; }
+
+/* Info and recipes */
+.display-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.info-card { padding:26px; border:1px solid var(--line); border-radius:16px; background:var(--panel); }
+.info-card ul { padding-left:1.2rem; }
+.recipes { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.recipe { padding:24px; border:1px solid var(--line); border-radius:18px; background:linear-gradient(155deg,rgba(122,92,255,.09),rgba(28,204,217,.04)); }
+.recipe .why { color:#9feaf0; border-top:1px solid var(--line); padding-top:14px; margin-top:14px; font-size:.9rem; }
+details { border:1px solid var(--line); border-radius:12px; margin:10px 0; background:var(--panel); }
+summary { cursor:pointer; padding:16px 18px; font-weight:750; }
+details p { padding:0 18px 18px; color:#c6d2df; }
+.spec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.spec { padding:20px; border:1px solid var(--line); border-radius:14px; background:var(--panel); }
+.spec strong { display:block; color:var(--gold); font-size:.73rem; text-transform:uppercase; letter-spacing:.08em; }
+footer { position:relative; min-height:150px; padding:42px clamp(32px,7vw,110px); color:var(--muted); display:flex; align-items:flex-end; justify-content:space-between; gap:30px; overflow:hidden; }
+footer span { position:relative; z-index:1; }
+
+@media (max-width:1100px) { .layout{display:block} nav{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)} nav a{display:inline-block;margin-right:16px} .hero{grid-template-columns:1fr;} .panel-tour{grid-template-columns:1fr} .recipes{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:680px) { section,.hero{padding:48px 20px} .hero{min-height:auto} .dragon-divider{height:36px}.dragon-divider img{width:100%;max-width:none;opacity:.38} .hero-modules{gap:10px} .hero-modules img{width:100%} .control-list,.display-grid,.recipes,.spec-grid{grid-template-columns:1fr} .architecture{grid-template-columns:1fr} .arch-box:not(:last-child)::after{right:50%;top:auto;bottom:-13px;height:13px;width:0;border-top:0;border-left:2px solid var(--cyan)} footer{display:block;min-height:140px;padding:36px 20px} footer span{display:block;margin-bottom:6px} }
+@media print {
+  :root{color-scheme:light} body{background:#fff;color:#101725;font-size:10.5pt} nav,.nav-actions,.dragon-divider{display:none} .layout{display:block;max-width:none} .hero{min-height:0;grid-template-columns:1fr 280px;padding:32px;border-bottom:1px solid #b9c3ce;page-break-after:always} h1{font-size:54pt;color:#152238;background:none} section{padding:28px 34px;border-color:#cdd5de} section::before{display:none} .control-card,.info-card,.recipe,.spec,details{background:#fff;border-color:#b9c3ce;color:#101725;break-inside:avoid} p,td,.control-card p,details p{color:#26364a} table{background:#fff} th{background:#eaf1f7;color:#25334a} th,td{border-color:#cdd5de} .panel-tour{grid-template-columns:220px 1fr;gap:24px} .recipes{grid-template-columns:repeat(2,1fr)} a{color:#174f7a} footer{min-height:0;border-top:1px solid #cdd5de;color:#536274}
+}
+
+/* Continue panel descriptions beneath the image in the same two-column grid. */
+.panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px 24px; align-items:start; }
+.panel-reference .annotated-panel { grid-column:1; grid-row:1 / span 3; align-self:start; margin:0 auto; }
+.panel-reference .control-card { min-width:0; align-content:start; }
+@media (max-width:1100px) and (min-width:761px) { .panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } }
+@media (max-width:760px) { .panel-reference { grid-template-columns:minmax(0,1fr); } .panel-reference .annotated-panel { grid-column:auto; grid-row:auto; margin-bottom:12px; } }
+@media print { .panel-reference { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } .panel-reference .annotated-panel { grid-column:1; grid-row:1 / span 3; } }
+
+/* One-pixel tracks allow independently stacked cards without shared row gaps. */
+@media screen and (min-width:761px) {
+  .panel-reference.is-stacked { grid-auto-rows:1px; row-gap:0; }
+  .panel-reference > * { align-self:start; }
+}
+.panel-reference .output-card .num { background:#096c78; }
+
+
+.hero-modules img{width:100%;max-width:320px;transform:none}.flow{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;counter-reset:stage}.flow li{counter-increment:stage}.flow a{display:block;height:100%;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);text-decoration:none}.flow a::before{content:counter(stage,decimal-leading-zero) " →";display:block;color:var(--gold);font-size:.8rem}.flow small{display:block;color:var(--muted)}.stage-title{color:var(--gold);font-size:.8rem;letter-spacing:.15em;text-transform:uppercase}.hear{font-size:1.2rem;color:#a4edf1;max-width:850px}.stage-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.stage-grid h3{font-size:1rem;color:var(--gold)}.stage-grid>div{padding:22px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}.stage-grid p:last-child{margin-bottom:0}.stage-note{margin-top:20px;color:var(--muted)}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}.hero{min-height:650px}nav .stage-link{font-size:.8rem;padding:4px 0 4px 12px} @media(max-width:680px){.flow,.stage-grid{grid-template-columns:1fr}.hero-modules img{max-width:300px}}@media print{.flow{grid-template-columns:repeat(4,1fr)}.flow a,.stage-grid>div{background:white;color:#101725;border-color:#b9c3ce}.hear,.stage-title,.stage-grid h3,.stage-note,.muted,.flow small{color:#26364a}.stage-grid{grid-template-columns:1fr 1fr}.stage-grid>div{break-inside:avoid}.callout{background:#edf6f7}.callout strong{color:#174f7a}}
+
+/* Numbered panel map. */
+.sil-panel-map{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;align-items:start}
+.sil-panel-map figure{margin:0;grid-column:1;grid-row:1 / span 3;min-width:0}
+.sil-panel-map>.control-card{min-width:0;align-content:start}
+@media screen and (min-width:761px){.sil-panel-map.is-stacked{grid-auto-rows:1px;row-gap:0}}
+.sil-panel-map .annotated-panel{width:100%;max-width:420px}
+.sil-panel-map figcaption{font-size:.8rem;color:var(--muted);margin-top:12px}
+.sil-panel-map .panel-overlay circle{fill:#f7fbff;stroke:#7a5cff;stroke-width:3}
+.sil-panel-map .panel-overlay text{fill:#101725;font-size:18px;font-weight:900}
+.sil-panel-map .panel-overlay line{stroke:#f7fbff;stroke-width:2}
+.sil-panel-map .panel-overlay a{cursor:pointer}
+.sil-panel-map .panel-overlay a:focus circle{fill:var(--gold);stroke:var(--cyan)}
+.sil-panel-map .output-card .num{background:#096c78}
+@media(max-width:760px){.sil-panel-map{grid-template-columns:minmax(0,1fr)}.sil-panel-map figure{grid-column:auto;grid-row:auto;max-width:420px;margin:auto}}
+@media print{.sil-panel-map{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px}.sil-panel-map figure{position:static}.sil-panel-map figcaption{color:#26364a}}
+</style></head><body><div class="layout"><nav aria-label="Manual navigation"><a class="brand-home" href="../index.html"><img class="brand-lockup" src="../img/Branding_Logo_Crop_Only.png" alt="Leviathan manuals home"></a><div class="brand">SIL</div><div class="sub">LEVIATHAN USER MANUAL</div>
+<a href="#start">First patch</a>
+<a href="#panel-map">Panel breakdown</a>
+<a href="#flow">How the chain fits together</a>
+<a href="#low" class="stage-link">Low Freq Mono</a>
+<a href="#air" class="stage-link">Impact Air</a>
+<a href="#mud" class="stage-link">Remove Mud</a>
+<a href="#mid" class="stage-link">Mid Lift</a>
+<a href="#glue" class="stage-link">Glue Compressor</a>
+<a href="#stereo" class="stage-link">Stereo Enhance</a>
+<a href="#saturation" class="stage-link">Saturator</a>
+<a href="#limiter" class="stage-link">Limit −1.0 dBTP</a>
+<a href="#panel">Panel & meters</a>
+<a href="#listen">Listening comparisons</a>
+<a href="#reference">Reference</a>
+<div class="nav-actions"><button onclick="window.print()">Print / Save PDF</button></div></nav><main><header class="hero"><div><p class="kicker">Leviathan for VCV Rack 2 · Open Source</p><h1>Sil</h1><p class="deck">A firmer foundation.<br>Clearer detail. A more cohesive mix.</p><p class="muted">An adaptive stereo mastering chain that listens to the signal and makes small, coordinated changes to tone, dynamics and space. This guide follows the sound through all eight stages.</p><div class="chips"><span class="chip">20 HP</span><span class="chip">Eight adaptive stages</span><span class="chip">Stereo in / out</span></div></div><div class="hero-modules"><img src="img/Sil.png" alt="Sil front panel with waveform history, Mid and Side spectra, eight stage activity rows, loudness and peak meters, Mastering button and Boost knob"></div></header><div class="dragon-divider" aria-hidden="true"><img src="../img/Leviathan_Dragon_Transparent_Refined.png" alt=""></div>
+<section id="start"><p class="eyebrow">First patch</p><h2>Start with the mix you know.</h2><ol><li>Connect your mixer’s left and right outputs to Sil’s purple L and R inputs. Connect Sil’s cyan outputs to your monitoring or recording path.</li><li>For mono, connect either input alone. Sil copies it to the other channel. Use a mixdown upstream for polyphonic sources: each input reads channel 1 only.</li><li>Leave <strong>Boost at 0 dB</strong> and <strong>Mastering enabled</strong> with the orange button below the spectra.</li><li>Play a representative passage for around ten seconds so the longer program histories can fill. Listen to bass stability, midrange clarity, stereo detail and transient shape.</li><li>Toggle Mastering to compare. Then raise Boost gradually if you want more level or density, listening for the point where attacks begin to lose their shape.</li></ol><div class="callout"><strong>Judge the sound, not the amount of activity.</strong> Each stage reacts to different features. A well-balanced passage may need very little correction. The changes described below are expected tendencies from the processing, not a promise that every source will change in every way.</div></section>
+<section id="panel-map"><p class="eyebrow">Panel breakdown</p><h2>Find your way around Sil.</h2><p>Follow the panel from analysis at the top to audio connections at the bottom. Select a numbered marker to jump to its description.</p><div class="sil-panel-map"><figure><div class="annotated-panel"><img src="img/Sil.png" alt="Sil panel with numbered locations for its displays, Mastering switch, activity rows, meters, Boost and audio jacks"><svg class="panel-overlay" viewBox="0 0 600 760" aria-label="Numbered Sil panel map">
+<a href="#sil-panel-1" aria-label="1: Waveform history"><circle cx="570" cy="102" r="20"/><text x="570" y="102">1</text></a>
+<a href="#sil-panel-2" aria-label="2: Mid / Side spectra"><circle cx="570" cy="192" r="20"/><text x="570" y="192">2</text></a>
+<a href="#sil-panel-3" aria-label="3: Mastering on / off"><circle cx="344" cy="260" r="20"/><text x="344" y="260">3</text></a>
+<a href="#sil-panel-4" aria-label="4: Stage activity"><circle cx="570" cy="385" r="20"/><text x="570" y="385">4</text></a>
+<a href="#sil-panel-5" aria-label="5: Loudness &amp; peak meters"><circle cx="570" cy="548" r="20"/><text x="570" y="548">5</text></a>
+<a href="#sil-panel-6" aria-label="6: Boost"><circle cx="365" cy="652" r="20"/><text x="365" y="652">6</text></a>
+<a href="#sil-panel-7" aria-label="7: L / R inputs"><circle cx="43" cy="607" r="20"/><text x="43" y="607">7</text></a>
+<a href="#sil-panel-8" aria-label="8: L / R outputs"><circle cx="548" cy="607" r="20"/><text x="548" y="607">8</text></a>
+</svg></div><figcaption>Numbers identify panel areas. The values in this image are an example, not recommended settings.</figcaption></figure>
+<article class="control-card" id="sil-panel-1"><span class="num">1</span><div><h3>Waveform history</h3><p class="range">Top display</p><p>Two traces show the left and right output over about ten seconds. Look here for the shape of attacks and sustained passages. The vertical scale adapts; use the level meters to compare actual output level.</p></div></article>
+<article class="control-card" id="sil-panel-2"><span class="num">2</span><div><h3>Mid / Side spectra</h3><p class="range">Below the waveform</p><p>The left pane shows shared content (Mid); the right shows channel differences (Side). Use them to see where the center and stereo detail sit in frequency. These are views of the audible output, not before/after EQ curves.</p></div></article>
+<article class="control-card" id="sil-panel-3"><span class="num">3</span><div><h3>Mastering on / off</h3><p class="range">Orange button below the spectra</p><p>Click to enable or disable the complete mastering chain. Disabled, you hear the delay-matched original without Boost or limiting. Use this button for the listening comparisons throughout this guide.</p></div></article>
+<article class="control-card" id="sil-panel-4"><span class="num">4</span><div><h3>Stage activity</h3><p class="range">Eight labeled rows</p><p>Each row has an activity percentage, a light and a short history strip. The labels follow the audio path from Low Freq Mono through the limiter. These are readouts, not individual stage switches. <a href="#panel">See how each percentage is calculated.</a></p></div></article>
+<article class="control-card" id="sil-panel-5"><span class="num">5</span><div><h3>Loudness &amp; peak meters</h3><p class="range">LUFS and dBFS bars</p><p>LUFS tracks momentary loudness; dBFS tracks sample peaks. Each pair of bars shows the two output channels. Watch these while comparing level and while increasing Boost. They follow the audible output with Mastering on or off.</p></div></article>
+<article class="control-card" id="sil-panel-6"><span class="num">6</span><div><h3>Boost</h3><p class="range">Center knob and dB readout</p><p>Turn from 0 to +6 dB to raise the signal entering the final limiter. Start at 0 dB. As the limiter catches more peaks, listen for greater density and softer attacks. <a href="#limiter">Read about Boost and limiting.</a></p></div></article>
+<article class="control-card" id="sil-panel-7"><span class="num">7</span><div><h3>L / R inputs</h3><p class="range">Purple jacks at bottom left</p><p>Connect the left and right outputs of your mix here. For mono, connect either jack alone; Sil copies it to the missing side. Each jack reads channel 1, so mix polyphonic sources down upstream.</p></div></article>
+<article class="control-card output-card" id="sil-panel-8"><span class="num">8</span><div><h3>L / R outputs</h3><p class="range">Cyan jacks at bottom right</p><p>Connect these to your stereo monitoring or recording path. Each output carries one channel. With Mastering enabled, this is the complete processed result; disabled, it is the delayed original.</p></div></article>
+</div></section>
+<section id="flow"><p class="eyebrow">Signal architecture</p><h2>Eight stages, one continuous path.</h2><p>Audio passes through the stages in this order. Each stage hears the result of the preceding processing, so a small change early in the chain can change what a later detector decides to do. Select a stage to read what it adds to the sound.</p><ol class="flow">
+<li><a href="#low">Low Freq Mono<small>Center unstable bass</small></a></li>
+<li><a href="#air">Impact Air<small>Lift highs on bass impact</small></a></li>
+<li><a href="#mud">Remove Mud<small>Clear broad low-mid buildup</small></a></li>
+<li><a href="#mid">Mid Lift<small>Restore recessed definition</small></a></li>
+<li><a href="#glue">Glue Compressor<small>Settle level contrasts</small></a></li>
+<li><a href="#stereo">Stereo Enhance<small>Open existing stereo detail</small></a></li>
+<li><a href="#saturation">Saturator<small>Add body and soften edges</small></a></li>
+<li><a href="#limiter">Limit −1.0 dBTP<small>Boost, then contain peaks</small></a></li>
+</ol><p>The order has a purpose: establish a reliable low end, adjust tonal balance, settle dynamics, refine the stereo image, then add density before the final peak control. The limiter also reports recent activity back to Mid Lift and Saturator so they can ease off when headroom is tight.</p><div class="callout"><strong>Automatic does not mean fixed.</strong> The stage amounts are continuously adapted and smoothed. Sil exposes a whole-chain Mastering switch and Boost control; there are no individual stage bypasses, threshold knobs or genre presets.</div></section>
+<section id="low"><p class="stage-title">Stage 01</p><h2>Low Freq Mono</h2><p class="hear">A steadier, more centered bass foundation.</p><div class="stage-grid"><div><h3>How it works</h3><p>Sil splits the signal at 120 Hz with a matched fourth-order Linkwitz–Riley crossover. It measures how closely the left and right low bands agree. As correlation falls, it reduces their difference and blends toward a centered reference derived from one input channel, with energy control to keep the recovery bounded.</p></div><div><h3>What to listen for</h3><p>Wide or phase-opposed bass can become more solid and survive mono playback better. The lowest part of the image moves toward the center while upper frequencies retain their stereo information. Already centered, correlated bass should need little recovery.</p></div></div><p class="stage-note">This is more than averaging L and R: a simple average could cancel opposing bass. Sil deliberately changes the low-band mono sum to recover that foundation. It does not synthesize a missing sub-octave.</p></section>
+<section id="air"><p class="stage-title">Stage 02</p><h2>Impact Air</h2><p class="hear">A small flash of brightness with low-end impact.</p><div class="stage-grid"><div><h3>How it works</h3><p>A fast envelope and a slower envelope follow the recovered low-band Mid signal. A sudden rise above the slower envelope opens a high shelf at 1 kHz, with up to 0.75 dB of lift. The lift rises and falls smoothly around the event.</p></div><div><h3>What to listen for</h3><p>On a kick-driven mix, listen for the upper edge of the mix to become slightly more articulate as the kick hits. Existing clicks, percussion and brighter textures can briefly stand out. A sustained bass drone should trigger much less of this effect.</p></div></div><p class="stage-note">The trigger is in the bass; the EQ change is in the highs. This stage lifts existing high-frequency content across the mix, so a pure low sine will not suddenly acquire a bright attack from this shelf alone.</p></section>
+<section id="mud"><p class="stage-title">Stage 03</p><h2>Remove Mud</h2><p class="hear">Less low-mid clouding; more room between sounds.</p><div class="stage-grid"><div><h3>How it works</h3><p>The detector compares energy around 180–520 Hz with bass and presence references. Additional narrow-band checks favor broad buildup over an isolated tone. When excess is detected, a broad bell centered at 315 Hz cuts by up to 2.5 dB in both channels.</p></div><div><h3>What to listen for</h3><p>Dense pads, overlapping bass parts and roomy percussion can sound less woolly or boxy. Kick and melodic detail may become easier to separate. On material that is already lean, the stage should contribute little.</p></div></div><p class="stage-note">This is selective cleanup, not a permanent low-mid scoop. If the full result feels thinner, compare the same passage with Mastering off before adding more Boost.</p></section>
+<section id="mid"><p class="stage-title">Stage 04</p><h2>Mid Lift</h2><p class="hear">A little more body and definition in the musical center.</p><div class="stage-grid"><div><h3>How it works</h3><p>After mud removal, Sil compares the core midrange with lower and higher reference bands. When the core appears recessed, a broad bell at 1.45 kHz adds up to 0.85 dB. Mud-removal activity gently encourages this response; strong upper presence and heavier limiting restrain it.</p></div><div><h3>What to listen for</h3><p>A recessed lead, vocal-like synth or chord texture may become easier to follow without a large volume change. Listen for definition and presence returning after low-mid cleanup. Already forward or bright material should receive less lift.</p></div></div><p class="stage-note">“Mid” here means midrange frequencies. This bell is applied to both left and right channels; it is different from the Mid/Side processing used by Stereo Enhance.</p></section>
+<section id="glue"><p class="stage-title">Stage 05</p><h2>Glue Compressor</h2><p class="hear">A more settled mix, with gentler level contrasts.</p><div class="stage-grid"><div><h3>How it works</h3><p>A stereo-linked RMS compressor uses a 1.5:1 ratio, a soft knee, roughly 30 ms attack and 250 ms release. Its threshold follows about ten seconds of incoming program history at this stage. A 90 Hz high-pass in the detector reduces the bass’s influence on compression. Gain reduction is capped at 3 dB, with partial automatic makeup.</p></div><div><h3>What to listen for</h3><p>Busy passages can feel more cohesive as louder moments are gently held back. The attack allows some initial transient through; the release smooths the body that follows. Both channels receive the same gain change, helping keep the image stable.</p></div></div><p class="stage-note">The 90 Hz filter is in the detector, not the audio path. Partial makeup means compression can still lower the level somewhat; this is gentle dynamic control rather than automatic loudness matching.</p></section>
+<section id="stereo"><p class="stage-title">Stage 06</p><h2>Stereo Enhance</h2><p class="hear">More space around the center, with clearer stereo detail.</p><div class="stage-grid"><div><h3>How it works</h3><p>Sil separates Mid, the shared component (L + R)/2, from Side, the difference (L − R)/2. It can cut a narrow excess around 350 Hz in Mid by up to 2 dB, and lift a broad region around 6 kHz in Side by up to 2 dB. The two decisions are independent; an already bright Side receives less lift.</p></div><div><h3>What to listen for</h3><p>A congested center may clear slightly, while panned percussion, chorus and reverb edges become more apparent. The image can feel more open without moving the recovered bass away from the center.</p></div></div><p class="stage-note">Identical left and right inputs have no Side content to brighten, so this stage does not turn a mono source into stereo. Its center cleanup can still act on a mono signal.</p></section>
+<section id="saturation"><p class="stage-title">Stage 07</p><h2>Saturator</h2><p class="hear">More density and a softly rounded edge.</p><div class="stage-grid"><div><h3>How it works</h3><p>A recent-peak history of about eight seconds guides makeup and drive. Sil blends in a biased arctangent waveshaper, which adds harmonic color and rounds peaks. It gradually reduces the nonlinear contribution near neutral settings and removes DC introduced by that contribution. Limiter feedback encourages a little more level when there is room and backs off when limiting becomes heavy.</p></div><div><h3>What to listen for</h3><p>Quieter material can feel fuller and more present; sharp edges may become smoother as harmonics fill out the sound. Expect restrained coloration rather than an abrupt distortion effect. Hot material can leave less room for additional makeup.</p></div></div><p class="stage-note">The internal makeup limit is 3.25 dB, but that is not a promise of 3.25 dB more output: shaping, blending and the final limiter all affect the result. Adaptation follows recent peaks, not an integrated LUFS target.</p></section>
+<section id="limiter"><p class="stage-title">Stage 08</p><h2>Limit −1.0 dBTP</h2><p class="hear">Controlled peaks, with increasing density as you add Boost.</p><div class="stage-grid"><div><h3>How it works</h3><p>Boost adds 0–6 dB after saturation, feeding a stereo-linked lookahead limiter. Oversampled and interpolated peak estimates anticipate overshoot; a short attack ramp and a final sample guard control the output. The nominal ceiling is −1 dB relative to Sil’s 5 V full-scale reference, about ±4.46 V.</p></div><div><h3>What to listen for</h3><p>Below the limiting threshold, more Boost mainly increases level. Once peaks reach the ceiling, additional Boost brings the body up relative to those peaks. Occasional catches may be subtle; sustained limiting can soften attacks and reduce the feeling of punch.</p></div></div><p class="stage-note">The detector includes a 0.5 dB margin. The dBTP panel label describes the intended true-peak control: the implementation uses an estimate, not a certified reconstruction guarantee. The lower dBFS meter measures sample peaks, not true peaks.</p></section>
+<section id="panel"><p class="eyebrow">Panel &amp; meters</p><h2>Read what Sil is doing.</h2><div class="display-grid"><article class="info-card"><h3>Mastering button</h3><p>The orange button beneath the spectra switches the whole chain. Disabled, it plays a delayed copy of the original input, without Boost or limiting. A roughly 10 ms crossfade softens the transition. The processing continues tracking the source while disabled, and the dry path is delayed to match the limiter’s latency.</p></article><article class="info-card"><h3>Boost</h3><p>The bottom knob adds 0–6 dB at the final limiter input; its readout shows the setting. It is not an overall “more mastering” control. The earlier adaptive stages use unboosted limiter feedback so they do not simply compensate away your Boost setting.</p></article><article class="info-card"><h3>Waveform history</h3><p>The top display shows about ten seconds of left and right output waveform history. Its scale adapts, so use the numerical meters for level comparisons rather than judging loudness from waveform height alone.</p></article><article class="info-card"><h3>Mid / Side spectra</h3><p>The two spectrum panes show shared content on the left and difference content on the right, rather than the left and right audio channels. A mono source can have a busy Mid display and an empty Side display. The displays follow the audible output, including when Mastering is disabled.</p></article><article class="info-card"><h3>LUFS and dBFS</h3><p>Paired bars show the two output channels. LUFS uses K-weighted, approximately 400 ms momentary measurements; dBFS uses sample peaks over approximately 100 ms. These are live readings, not an integrated whole-track loudness report. Sil uses 5 V as 0 dBFS and does not automatically master to a selected LUFS value.</p></article><article class="info-card"><h3>Colors</h3><p>Right-click → Visuals → Color Scheme selects Default (Purple/Cyan), Classic (Green/Red), Monochrome (Gray/White), or Fire (Red/Yellow). This changes the visualization, not the processing.</p></article></div><h3 class="io-heading">What do the stage percentages mean?</h3><p>The dots, numbers and short history strips report smoothed stage activity. They are indicators, not controls. Their scales differ: 50% on one row does not mean the same gain change as 50% on another, and none is a whole-chain wet/dry percentage.</p><div class="table-wrap"><table><thead><tr><th scope="col">Panel row</th><th scope="col">What its activity represents</th></tr></thead><tbody><tr><td>Low Freq Mono</td><td>Low-band Side power removed relative to full-band input power, with smoothing. It is not simply the amount of mono folding.</td></tr><tr><td>Impact Air</td><td>Applied shelf lift relative to its 0.75 dB maximum.</td></tr><tr><td>Remove Mud</td><td>Applied cut relative to its 2.5 dB maximum.</td></tr><tr><td>Mid Lift</td><td>Applied lift relative to its 0.85 dB maximum.</td></tr><tr><td>Glue Compressor</td><td>Gain reduction relative to the 3 dB cap, before partial makeup.</td></tr><tr><td>Stereo Enhance</td><td>Average of the normalized Mid cut and Side lift. One at maximum and the other inactive gives about 50%.</td></tr><tr><td>Saturator</td><td>A blend of makeup and drive activity, gated by signal presence; not harmonic distortion percentage.</td></tr><tr><td>Limit −1.0 dBTP</td><td>Fraction of amplitude removed by the limiter, smoothed for display. For example, 50% corresponds to roughly 6 dB of attenuation before smoothing, not 50% clipped samples.</td></tr></tbody></table></div><p class="muted">Disabling Mastering lets the stage indicators fade toward zero; their history strips can still show earlier activity.</p></section>
+<section id="listen"><p class="eyebrow">Listening comparisons</p><h2>Hear the change in context.</h2><p>Use the Mastering button to compare the complete chain on a repeating passage. Bring the louder version down with a downstream monitor trim when judging tone: a level increase can make a result seem clearer even when the main change is gain. Sil’s bypass matches delay, not perceived loudness.</p><div class="display-grid"><article class="info-card"><h3>A dense drum-and-bass passage</h3><p>Listen for a steadier bass center, less clouding behind the kick, and brighter edges arriving with bass impacts. Watch Low Freq Mono, Impact Air and Remove Mud for clues. As Boost rises, compare the kick’s attack against its body.</p></article><article class="info-card"><h3>A wide pad or reverb tail</h3><p>Listen for space around the center and clearer high-frequency detail at the edges. Stereo Enhance needs existing differences between left and right. A sustained texture may show little Impact Air activity because it has few new low-end attacks.</p></article><article class="info-card"><h3>A mono melodic part</h3><p>Patch a single input and listen for small changes in midrange definition, density and dynamics. The Side spectrum should remain empty. This is a useful way to separate tonal enhancement from the impression of stereo widening.</p></article><article class="info-card"><h3>A quiet-to-loud transition</h3><p>Let both sections run long enough to hear adaptation settle. Glue follows program level and Saturator follows recent peaks, so the response after a loud passage can differ from a fresh start. Listen over phrases rather than rapid button toggles.</p></article></div><details><summary>Why is there very little difference?</summary><p>The source may already fit the detectors’ preferred balance, have little stereo information, or leave the limiter inactive. Start at 0 dB Boost, allow time for adaptation and compare a full passage. Low activity is not a fault.</p></details><details><summary>Why is it louder but less punchy?</summary><p>Extra Boost can push more of the signal into limiting. Reduce Boost and compare the transient against the sustained body. If limiting remains heavy at 0 dB, reduce the source level feeding Sil.</p></details><details><summary>Why does the bass become narrower?</summary><p>Low Freq Mono intentionally reduces poorly correlated low-frequency Side content. That can stabilize bass on mono playback, but it also changes deliberate stereo bass movement. Compare the artistic result with Mastering disabled.</p></details><details><summary>Why does a parallel dry blend sound different?</summary><p>Sil adds about 1.5 ms of limiter delay at ordinary sample rates, and its crossover and EQ also change phase. Its own Mastering comparison delays the dry path, but an external parallel cable does not automatically match that timing or filter phase.</p></details></section>
+<section id="reference"><p class="eyebrow">Reference</p><h2>At a glance.</h2><div class="spec-grid"><div class="spec"><strong>Format</strong>VCV Rack 2 · 20 HP</div><div class="spec"><strong>Audio</strong>Stereo; channel 1 per input</div><div class="spec"><strong>Mono input</strong>Either input copies to the missing side</div><div class="spec"><strong>Controls</strong>Mastering on/off · Boost 0–6 dB</div><div class="spec"><strong>Default</strong>Mastering enabled · Boost 0 dB</div><div class="spec"><strong>Full-scale reference</strong>5 V peak = 0 dBFS</div></div><p class="muted">Checked against the local Leviathan-Rack2 implementation in Sil.cpp, SilLowBandRecovery.hpp and SilLevelMeter.hpp, October 2026. Sound descriptions explain expected behavior from the signal processing; the amount heard depends on the source. Stage frequencies and limits describe this implementation, rather than user-adjustable settings.</p></section><footer><span>© 2026 Leviathan · Sil</span><a href="../index.html">Back to manuals</a></footer></main></div><script>
+// Stack each description in the column with the next available space.
+(() => {
+  const layouts = document.querySelectorAll('.sil-panel-map');
+  const compact = window.matchMedia('(max-width:760px)');
+  function arrange(layout) {
+    const items = Array.from(layout.children);
+    if (compact.matches) {
+      layout.classList.remove('is-stacked');
+      items.forEach(item => { item.style.gridColumn = ''; item.style.gridRow = ''; });
+      return;
+    }
+    layout.classList.add('is-stacked');
+    const bottoms = [0, 0];
+    items.forEach((item, index) => {
+      const column = index === 0 ? 0 : (bottoms[0] <= bottoms[1] ? 0 : 1);
+      item.style.gridColumn = String(column + 1);
+      const height = Math.ceil(item.getBoundingClientRect().height);
+      item.style.gridRow = `${bottoms[column] + 1} / span ${Math.max(1, height)}`;
+      bottoms[column] += height + 16;
+    });
+  }
+  let scheduled = false;
+  function refresh() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      layouts.forEach(arrange);
+    });
+  }
+  const observer = new ResizeObserver(refresh);
+  layouts.forEach(layout => {
+    observer.observe(layout);
+    Array.from(layout.children).forEach(item => observer.observe(item));
+    layout.querySelectorAll('img').forEach(img => img.addEventListener('load', refresh));
+  });
+  compact.addEventListener('change', refresh);
+  if (document.fonts) document.fonts.ready.then(refresh);
+  window.addEventListener('beforeprint', () => {
+    layouts.forEach(layout => Array.from(layout.children).forEach(item => {
+      item.style.gridColumn = ''; item.style.gridRow = '';
+    }));
+  });
+  window.addEventListener('afterprint', refresh);
+  refresh();
+})();
+</script>
+</body></html>
