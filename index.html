@@ -63,9 +63,10 @@
     tr:last-child td { border-bottom:0; }
     tr:hover td { background:rgba(28,204,217,.03); }
     .mod-name { font-weight:800; color:#fff; font-size:1.02rem; display:flex; align-items:center; gap:8px; white-space:nowrap; }
-    .tag-hp { font-size:.68rem; font-weight:700; padding:2px 7px; border-radius:999px; background:rgba(255,255,255,.06); color:var(--cyan); border:1px solid rgba(28,204,217,.3); }
+    .module-hp { text-align:center; white-space:nowrap; width:64px; font-variant-numeric:tabular-nums; }
+    .tag-hp { display:inline-block; font-size:.68rem; font-weight:700; padding:2px 7px; border-radius:999px; background:rgba(255,255,255,.06); color:var(--cyan); border:1px solid rgba(28,204,217,.3); }
     .tag-expander { font-size:.65rem; font-weight:700; padding:2px 6px; border-radius:4px; background:rgba(122,92,255,.15); color:#c4b5fd; border:1px solid rgba(122,92,255,.3); text-transform:uppercase; }
-    .badge-available { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:999px; font-size:.7rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; background:rgba(28,204,217,.12); color:var(--cyan); border:1px solid rgba(28,204,217,.4); transition:background 160ms ease,border-color 160ms ease,transform 160ms ease; }
+    .badge-available { white-space:nowrap; display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:999px; font-size:.7rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; background:rgba(28,204,217,.12); color:var(--cyan); border:1px solid rgba(28,204,217,.4); transition:background 160ms ease,border-color 160ms ease,transform 160ms ease; }
     .badge-available:hover { background:rgba(28,204,217,.24); border-color:var(--cyan); color:#fff; transform:translateY(-1px); }
     .badge-planned { display:inline-block; padding:4px 10px; border-radius:999px; font-size:.68rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; background:rgba(255,255,255,.04); color:var(--muted); border:1px solid var(--line); }
 
@@ -165,7 +166,6 @@
               <div class="open-label">Open user manual <span aria-hidden="true">→</span></div>
             </div>
           </a>
-
           <a class="manual-card" href="manuals/Proc_User_Manual.html" aria-label="Open the Proc user manual">
             <div class="module-preview">
               <img src="manuals/img/Proc.png" alt="Proc panel artwork">
@@ -184,12 +184,6 @@
           </a>
           <a class="manual-card" href="manuals/TD_Scope_User_Manual.html" aria-label="Open the TD.Scope user manual"><div class="module-preview"><img src="manuals/img/TD.Scope.png" alt="TD.Scope panel artwork"></div><div class="manual-copy"><span class="status status-active">Manual available</span><p class="eyebrow">Temporal Deck companion</p><h3>TD.Scope</h3><p>Connect the waveform expander, read the playback head, and drag the display to scrub.</p><div class="open-label">Open user manual <span aria-hidden="true">→</span></div></div></a>
           <a class="manual-card" href="manuals/Undertow_User_Manual.html" aria-label="Open the Undertow user manual"><div class="module-preview"><img src="manuals/img/Undertow.png" alt="Undertow panel artwork"></div><div class="manual-copy"><span class="status status-active">Manual available</span><p class="eyebrow">Folded-wave oscillator</p><h3>Undertow</h3><p>Sine, morph, and gated sub-octave voices, with pitch control, linear FM, and hard sync.</p><div class="open-label">Open user manual <span aria-hidden="true">→</span></div></div></a>
-          <a class="manual-card" href="manuals/Puffy_User_Manual.html" aria-label="Open the Puffy user manual"><div class="module-preview"><img src="manuals/img/Puffy.png" alt="Puffy saturator front panel"></div><div class="manual-copy"><span class="status status-active">Manual available</span><p class="eyebrow">Stereo saturation &amp; waveform shaping</p><h3>Puffy</h3><p>Explore seven characters, independent polarity shaping, Puff CV, peak control, and an animated companion. Learn what each control changes in the sound.</p><div class="open-label">Open user manual <span aria-hidden="true">→</span></div></div></a>
-          <a class="manual-card" href="manuals/Sil_User_Manual.html" aria-label="Open the Sil user manual"><div class="module-preview"><img src="manuals/img/Sil.png" alt="Sil mastering engine front panel"></div><div class="manual-copy"><span class="status status-active">Manual available</span><p class="eyebrow">Adaptive stereo mastering</p><h3>Sil</h3><p>Follow all eight stages from bass recovery to peak control. Learn what each changes, what to listen for, and how to compare with Boost and bypass.</p><div class="open-label">Open user manual <span aria-hidden="true">→</span></div></div></a>
-          <a class="manual-card" href="manuals/Strand_User_Manual.html" aria-label="Open the Strand user manual">
-            <div class="module-preview"><img src="manuals/img/Strand.png" alt="Strand panel artwork" style="max-width:70px"></div>
-            <div class="manual-copy"><span class="status status-active">Manual available</span><p class="eyebrow">Pseudo-cycle interleaver</p><h3>Strand</h3><p>Weave captured A and B cycles into a new waveform. Includes an interactive explanation of the interleaving and output sequence rate.</p><div class="open-label">Open user manual <span aria-hidden="true">→</span></div></div>
-          </a>
           <a class="manual-card" href="manuals/Deep_Cache_User_Manual.html" aria-label="Open the Deep Cache user manual">
             <div class="module-preview"><img src="manuals/img/Deep%20Cache.png" alt="Deep Cache panel artwork"></div>
             <div class="manual-copy">
@@ -208,8 +202,15 @@
             <div class="module-preview"><img src="manuals/img/Nautiloid.png" alt="Nautiloid panel artwork"></div>
             <div class="manual-copy"><span class="status status-active">Manual available</span><p class="eyebrow">Fractal explorer &amp; Iris companion</p><h3>Nautiloid</h3><p>Pan, zoom, and recolor fractal sources for Iris. Explore motion CV, save location codes, and learn the connected workflow.</p><div class="open-label">Open user manual <span aria-hidden="true">→</span></div></div>
           </a>
+          <a class="manual-card" href="manuals/Puffy_User_Manual.html" aria-label="Open the Puffy user manual"><div class="module-preview"><img src="manuals/img/Puffy.png" alt="Puffy saturator front panel"></div><div class="manual-copy"><span class="status status-active">Manual available</span><p class="eyebrow">Stereo saturation &amp; waveform shaping</p><h3>Puffy</h3><p>Explore seven characters, independent polarity shaping, Puff CV, peak control, and an animated companion. Learn what each control changes in the sound.</p><div class="open-label">Open user manual <span aria-hidden="true">→</span></div></div></a>
+          <a class="manual-card" href="manuals/Sil_User_Manual.html" aria-label="Open the Sil user manual"><div class="module-preview"><img src="manuals/img/Sil.png" alt="Sil mastering engine front panel"></div><div class="manual-copy"><span class="status status-active">Manual available</span><p class="eyebrow">Adaptive stereo mastering</p><h3>Sil</h3><p>Follow all eight stages from bass recovery to peak control. Learn what each changes, what to listen for, and how to compare with Boost and bypass.</p><div class="open-label">Open user manual <span aria-hidden="true">→</span></div></div></a>
+          <a class="manual-card" href="manuals/Theme_User_Manual.html" aria-label="Open the Theme user manual"><div class="module-preview"><img src="manuals/img/Theme.png" alt="Theme palette editor front panel"></div><div class="manual-copy"><span class="status status-active">Manual available</span><p class="eyebrow">Shared color &amp; texture editor</p><h3>Theme</h3><p>Customize five visual roles, paste exact colors, and compare six factory palettes. Learn how texture and global theme saving work.</p><div class="open-label">Open user manual <span aria-hidden="true">→</span></div></div></a>
           <a class="manual-card" href="manuals/Vessel_User_Manual.html" aria-label="Open the Vessel user manual"><div class="module-preview"><img src="manuals/img/Vessel.png" alt="Vessel panel artwork"></div><div class="manual-copy"><span class="status status-active">Manual available</span><p class="eyebrow">Struck and friction-excited singing bowl</p><h3>Vessel</h3><p>Play the HIT and RUB pads, sequence dynamic strikes, explore stereo tuning, and connect V.Tune.</p><div class="open-label">Open user manual <span aria-hidden="true">→</span></div></div></a>
           <a class="manual-card" href="manuals/VTune_User_Manual.html" aria-label="Open the V.Tune user manual"><div class="module-preview"><img src="manuals/img/V.Tune.png" alt="V.Tune panel artwork"></div><div class="manual-copy"><span class="status status-active">Manual available</span><p class="eyebrow">Vessel performance and voicing companion</p><h3>V.Tune</h3><p>Shape velocity, friction, sustain, flaws, and stereo width. Learn control priority and the pitch-driven body display.</p><div class="open-label">Open user manual <span aria-hidden="true">→</span></div></div></a>
+          <a class="manual-card" href="manuals/Strand_User_Manual.html" aria-label="Open the Strand user manual">
+            <div class="module-preview"><img src="manuals/img/Strand.png" alt="Strand panel artwork" style="max-width:70px"></div>
+            <div class="manual-copy"><span class="status status-active">Manual available</span><p class="eyebrow">Pseudo-cycle interleaver</p><h3>Strand</h3><p>Weave captured A and B cycles into a new waveform. Includes an interactive explanation of the interleaving and output sequence rate.</p><div class="open-label">Open user manual <span aria-hidden="true">→</span></div></div>
+          </a>
         </div>
 
         <!-- Comprehensive Free Modules Table -->
@@ -217,7 +218,8 @@
           <table>
             <thead>
               <tr>
-                <th>Module</th>
+                <th scope="col">Module</th>
+                <th scope="col" class="module-hp">HP</th>
                 <th>Category</th>
                 <th>Description & Signal Path</th>
                 <th>Documentation</th>
@@ -226,112 +228,126 @@
             <tbody>
               <tr>
                 <td>
-                  <div class="mod-name">Integral Flux <span class="tag-hp">20 HP</span></div>
+                  <div class="mod-name">Integral Flux</div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">20 HP</span></td>
                 <td>Function Generator, Slew, Logic</td>
                 <td>Dual slope generator with variable log-lin-exp curvature, independent rise/fall CV, both CV, attenuverters, and OR / SUM / INV analog logic bus. Audio-rate and slow modulation operation.</td>
                 <td><a class="badge-available" href="manuals/Integral_Flux_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
-                  <div class="mod-name">Proc <span class="tag-hp">8 HP</span></div>
+                  <div class="mod-name">Proc</div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">8 HP</span></td>
                 <td>Function Generator, Slew, Envelope</td>
                 <td>Single-channel slope generator, slew limiter, loop cycle, envelope follower, and freeze controller. Features HALT gate pause, dedicated amplitude scaling, and simultaneous +/- outputs.</td>
                 <td><a class="badge-available" href="manuals/Proc_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
-                  <div class="mod-name">Temporal Deck <span class="tag-hp">20 HP</span></div>
+                  <div class="mod-name">Temporal Deck</div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">20 HP</span></td>
                 <td>Sampler, Delay, Turntable</td>
                 <td>Virtual turntable with modern hybrid control: circular stereo live buffering, platter scratch physics (33⅓ RPM baseline), slip return, reverse, freeze, and long-play sample playback.</td>
                 <td><a class="badge-available" href="manuals/Temporal_Deck_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
-                  <div class="mod-name">TD.Scope <span class="tag-hp">8 HP</span> <span class="tag-expander">Expander</span></div>
+                  <div class="mod-name">TD.Scope <span class="tag-expander">Expander</span></div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">8 HP</span></td>
                 <td>Visual, Expander</td>
                 <td>Waveform expander for Temporal Deck with mono and stereo views, playback-position display, and vertical dragging to scrub the deck.</td>
                 <td><a class="badge-available" href="manuals/TD_Scope_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
-                  <div class="mod-name">Undertow <span class="tag-hp">8 HP</span></div>
+                  <div class="mod-name">Undertow</div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">8 HP</span></td>
                 <td>Oscillator</td>
                 <td>Compact analog-style VCO with sine, a folded morph waveform with edge hardness control, linear FM, hard sync, and a gated -1 octave sub output.</td>
                 <td><a class="badge-available" href="manuals/Undertow_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
-                  <div class="mod-name">Deep Cache <span class="tag-hp">4 HP</span></div>
+                  <div class="mod-name">Deep Cache</div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">4 HP</span></td>
                 <td>Utility</td>
                 <td>Preloads module-browser previews for faster browsing.</td>
                 <td><a class="badge-available" href="manuals/Deep_Cache_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
-                  <div class="mod-name">Iris <span class="tag-hp">12 HP</span></div>
+                  <div class="mod-name">Iris</div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">12 HP</span></td>
                 <td>Oscillator, Visual</td>
                 <td>Polyphonic image-to-wavetable oscillator featuring smooth table scanning across visual source fields.</td>
                 <td><a class="badge-available" href="manuals/Iris_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
-                  <div class="mod-name">Nautiloid <span class="tag-hp">20 HP</span> <span class="tag-expander">Expander</span></div>
+                  <div class="mod-name">Nautiloid <span class="tag-expander">Expander</span></div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">20 HP</span></td>
                 <td>Visual, Expander</td>
                 <td>Fractal exploration display companion for image-source workflows. Hidden from the module browser in the current source manifest.</td>
                 <td><a class="badge-available" href="manuals/Nautiloid_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
-                  <div class="mod-name">Puffy <span class="tag-hp">12 HP</span></div>
+                  <div class="mod-name">Puffy</div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">12 HP</span></td>
                 <td>Distortion, Dynamics, Visual</td>
                 <td>Stereo waveshaper with seven characters, polarity shaping, and selectable peak control.</td>
                 <td><a class="badge-available" href="manuals/Puffy_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
-                  <div class="mod-name">Sil <span class="tag-hp">20 HP</span></div>
+                  <div class="mod-name">Sil</div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">20 HP</span></td>
                 <td>Dynamics, EQ, Mastering</td>
                 <td>Adaptive stereo mastering with tonal cleanup, dynamics, stereo enhancement, and peak control.</td>
                 <td><a class="badge-available" href="manuals/Sil_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
-                  <div class="mod-name">Theme <span class="tag-hp">12 HP</span></div>
+                  <div class="mod-name">Theme</div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">12 HP</span></td>
                 <td>Visual, Utility</td>
                 <td>Global semantic color palette and glass texture manager for all theme-aware Leviathan modules.</td>
-                <td><span class="badge-planned">Manual planned</span></td>
+                <td><a class="badge-available" href="manuals/Theme_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
-                  <div class="mod-name">Vessel <span class="tag-hp">16 HP</span></div>
+                  <div class="mod-name">Vessel</div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">16 HP</span></td>
                 <td>Physical Modeling, Synth Voice</td>
                 <td>Tunable struck and friction-excited singing bowl physical model with stereo observation.</td>
                 <td><a class="badge-available" href="manuals/Vessel_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
-                  <div class="mod-name">V.Tune <span class="tag-hp">8 HP</span> <span class="tag-expander">Expander</span></div>
+                  <div class="mod-name">V.Tune <span class="tag-expander">Expander</span></div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">8 HP</span></td>
                 <td>Expander</td>
                 <td>Performance and voicing controls for Vessel, with a pitch-driven body display. Connect immediately to Vessel’s right.</td>
                 <td><a class="badge-available" href="manuals/VTune_User_Manual.html">User Manual →</a></td>
               </tr>
               <tr>
                 <td>
-                  <div class="mod-name">Strand <span class="tag-hp">3 HP</span></div>
+                  <div class="mod-name">Strand</div>
                 </td>
+                <td class="module-hp"><span class="tag-hp">3 HP</span></td>
                 <td>Distortion, Effect</td>
                 <td>Zero-crossing pseudo-cycle interleaver creating harmonic folding and unique textural distortion.</td>
                 <td><a class="badge-available" href="manuals/Strand_User_Manual.html">User Manual →</a></td>

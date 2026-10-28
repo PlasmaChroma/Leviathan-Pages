@@ -33,7 +33,7 @@ h1 { font-size:clamp(4rem,9vw,8.2rem); line-height:.86; letter-spacing:-.075em; 
 .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; }
 .chip { border:1px solid var(--line); background:rgba(255,255,255,.035); border-radius:999px; padding:7px 11px; color:#c9d6e4; font-size:.8rem; }
 .hero-modules { display:flex; align-items:center; justify-content:center; gap:24px; perspective:1200px; }
-.hero-modules img { width:min(75%,240px); height:auto; border:1px solid rgba(255,255,255,.16); border-radius:12px; box-shadow:var(--shadow); transform:rotateY(-5deg) translateY(8px); }
+.hero-modules img { width:min(75%,240px); height:auto; border:1px solid rgba(255,255,255,.16); border-radius:12px; box-shadow:var(--shadow); }
 section { position:relative; isolation:isolate; padding:70px clamp(32px,7vw,110px); border-bottom:1px solid var(--line); scroll-margin-top:20px; overflow:hidden; }
 section::before { position:absolute; z-index:0; bottom:0; width:min(58vw,650px); aspect-ratio:959/376; background:url("../img/PerfectWave_KCrop.png") center bottom/contain no-repeat; content:""; opacity:.065; mix-blend-mode:screen; -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); pointer-events:none; }
 section:nth-of-type(odd)::before { right:0; transform:scaleX(-1); -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); }
@@ -102,11 +102,11 @@ footer span { position:relative; z-index:1; }
 }
 
 h1{font-size:clamp(3rem,7vw,6.5rem);overflow-wrap:anywhere}nav .brand{letter-spacing:.08em}.hero-modules img{width:min(100%,240px)} @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-.hero{grid-template-columns:minmax(0,1fr) 180px;gap:32px}.hero-modules img{width:120px;border-radius:3px;transform:none}.status-list{display:grid;grid-template-columns:1fr 1fr;gap:16px}.status-list .info-card{padding:22px}code{overflow-wrap:anywhere}table{min-width:600px}caption{text-align:left;padding:14px 16px;color:var(--muted)}
+.hero{grid-template-columns:minmax(0,1fr) 180px;gap:32px}.hero-modules img{width:120px;border-radius:3px;}.status-list{display:grid;grid-template-columns:1fr 1fr;gap:16px}.status-list .info-card{padding:22px}code{overflow-wrap:anywhere}table{min-width:600px}caption{text-align:left;padding:14px 16px;color:var(--muted)}
 @media(max-width:1100px){.hero{grid-template-columns:minmax(0,1fr) 140px}}
 @media(max-width:680px){.hero{grid-template-columns:1fr}.hero-modules img{width:100px}.status-list{grid-template-columns:1fr}}
 @media print{.hero{grid-template-columns:1fr 120px}.hero-modules img{width:90px}.status-list{grid-template-columns:1fr 1fr}.callout{background:#edf7f8}.callout strong{color:#174f7a}.muted,.deck,.chip{color:#26364a}.table-wrap{overflow:visible}table{min-width:0}h1{filter:none}}
-</style></head>
+</style><link rel="stylesheet" href="manual-hero.css"></head>
 <body><div class="layout"><nav aria-label="Manual navigation">
 <a class="brand-home" href="../index.html" aria-label="Return to manuals portal"><img class="brand-lockup" src="../img/Branding_Logo_Crop_Only.png" alt="Leviathan"></a>
 <div class="brand">DEEP CACHE</div><div class="sub">LEVIATHAN USER MANUAL</div>

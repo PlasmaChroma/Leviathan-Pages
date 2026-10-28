@@ -38,8 +38,8 @@ h1 { font-size:clamp(4rem,9vw,8.4rem); line-height:.84; letter-spacing:-.075em; 
 .chip { border:1px solid var(--line); background:rgba(255,255,255,.035); border-radius:999px; padding:7px 11px; color:#c9d6e4; font-size:.8rem; }
 .hero-modules { display:flex; align-items:center; justify-content:center; gap:24px; perspective:1200px; }
 .hero-modules img { width:min(44%,240px); height:auto; border:1px solid rgba(255,255,255,.16); box-shadow:var(--shadow); }
-.hero-modules img:first-child { transform:rotateY(7deg) translateY(22px); }
-.hero-modules img:last-child { transform:rotateY(-7deg) translateY(-12px); }
+
+
 section { position:relative; isolation:isolate; padding:70px clamp(32px,7vw,110px); border-bottom:1px solid var(--line); scroll-margin-top:20px; overflow:hidden; }
 section::before { position:absolute; z-index:0; bottom:0; width:min(58vw,650px); aspect-ratio:959/376; background:url("../img/PerfectWave_KCrop.png") center bottom/contain no-repeat; content:""; opacity:.065; mix-blend-mode:screen; -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); pointer-events:none; }
 section:nth-of-type(odd)::before { right:0; transform:scaleX(-1); -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); }
@@ -125,7 +125,7 @@ footer span { position:relative; z-index:1; }
 }
 .panel-reference .output-card .num { background:#096c78; }
 </style>
-</head>
+<link rel="stylesheet" href="manual-hero.css"></head>
 <body>
 <div class="layout">
 <nav aria-label="Manual navigation">
@@ -137,7 +137,7 @@ footer span { position:relative; z-index:1; }
 <main>
 <header class="hero">
   <div><p class="kicker">Leviathan Pro for VCV Rack 2</p><h1>Bifurx</h1><p class="deck">A dual-focus multimode filter that can carve, split, resonate, couple, and reveal a signal in motion.</p><p class="muted">Two state-variable filter cores. Ten processing topologies. One analysis-only mode. A control surface built to make the relationship between them visible.</p><div class="chips"><span class="chip">User Manual</span><span class="chip">Mono audio path</span><span class="chip">Light + dark panels</span></div></div>
-  <div class="hero-modules"><img src="img/bifurx_light.png" alt="Bifurx light panel"><img src="img/bifurx_dark.png" alt="Bifurx dark panel"></div>
+  <div class="hero-modules hero-panels-pair"><img src="img/bifurx_light.png" alt="Bifurx light panel"><img src="img/bifurx_dark.png" alt="Bifurx dark panel"></div>
 </header>
 <div class="dragon-divider" aria-hidden="true"><img src="../img/Leviathan_Dragon_Transparent_Refined.png" alt=""></div>
 

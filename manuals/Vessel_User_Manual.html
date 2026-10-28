@@ -31,7 +31,7 @@ h1 { font-size:clamp(4rem,9vw,8.2rem); line-height:.86; letter-spacing:-.075em; 
 .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; }
 .chip { border:1px solid var(--line); background:rgba(255,255,255,.035); border-radius:999px; padding:7px 11px; color:#c9d6e4; font-size:.8rem; }
 .hero-modules { display:flex; align-items:center; justify-content:center; gap:24px; perspective:1200px; }
-.hero-modules img { width:min(75%,240px); height:auto; border:1px solid rgba(255,255,255,.16); border-radius:12px; box-shadow:var(--shadow); transform:rotateY(-5deg) translateY(8px); }
+.hero-modules img { width:min(75%,240px); height:auto; border:1px solid rgba(255,255,255,.16); border-radius:12px; box-shadow:var(--shadow); }
 section { position:relative; isolation:isolate; padding:70px clamp(32px,7vw,110px); border-bottom:1px solid var(--line); scroll-margin-top:20px; overflow:hidden; }
 section::before { position:absolute; z-index:0; bottom:0; width:min(58vw,650px); aspect-ratio:959/376; background:url("../img/PerfectWave_KCrop.png") center bottom/contain no-repeat; content:""; opacity:.065; mix-blend-mode:screen; -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 82%,transparent 100%); pointer-events:none; }
 section:nth-of-type(odd)::before { right:0; transform:scaleX(-1); -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); mask-image:linear-gradient(90deg,transparent 0%,#000 18%,#000 100%); }
@@ -100,7 +100,7 @@ footer span { position:relative; z-index:1; }
 }
 
 h1{font-size:clamp(3rem,7vw,6.5rem);overflow-wrap:anywhere}nav .brand{letter-spacing:.08em}.hero-modules img{width:min(100%,240px)} @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-.hero{grid-template-columns:minmax(0,1fr) minmax(180px,280px);gap:32px}.hero-modules img{width:min(100%,240px);transform:none;border-radius:4px}.pair-diagram{display:flex;align-items:stretch;justify-content:center;gap:12px;margin:28px 0}.pair-diagram div{padding:20px 28px;border:1px solid var(--cyan);border-radius:12px;background:var(--panel);text-align:center}.pair-diagram small{display:block;color:var(--muted)}code{overflow-wrap:anywhere}.section-head{margin-bottom:26px}h3{margin-top:28px}.info-card h3,.recipe h3{margin-top:0}.table-wrap+ p{margin-top:24px}caption{text-align:left;padding:12px 16px;color:var(--muted)}
+.hero{grid-template-columns:minmax(0,1fr) minmax(180px,280px);gap:32px}.hero-modules img{width:min(100%,240px);border-radius:4px}.pair-diagram{display:flex;align-items:stretch;justify-content:center;gap:12px;margin:28px 0}.pair-diagram div{padding:20px 28px;border:1px solid var(--cyan);border-radius:12px;background:var(--panel);text-align:center}.pair-diagram small{display:block;color:var(--muted)}code{overflow-wrap:anywhere}.section-head{margin-bottom:26px}h3{margin-top:28px}.info-card h3,.recipe h3{margin-top:0}.table-wrap+ p{margin-top:24px}caption{text-align:left;padding:12px 16px;color:var(--muted)}
 @media(max-width:1100px){.hero{grid-template-columns:minmax(0,1fr) 220px}}
 @media(min-width:681px) and (max-width:800px){.architecture{grid-template-columns:repeat(5,minmax(0,1fr))}.arch-box{padding:12px 6px;font-size:.85rem}.arch-box small{font-size:.72rem}}
 @media(max-width:680px){.hero{grid-template-columns:1fr}.hero-modules img{max-width:210px}.pair-diagram{gap:8px}.pair-diagram div{padding:16px 12px}.pair-diagram small{font-size:.8rem}}
@@ -126,7 +126,7 @@ h1{font-size:clamp(3rem,7vw,6.5rem);overflow-wrap:anywhere}nav .brand{letter-spa
 
 .panel-reference.vtune-reference .annotated-panel{max-width:240px}.panel-reference.vessel-reference .annotated-panel{max-width:400px}
 @media print{.arch-box{background:#fff;color:#101725}.arch-box small{color:#26364a}.range{color:#73501e!important}}
-</style></head><body><div class="layout"><nav aria-label="Manual navigation"><a class="brand-home" href="../index.html" aria-label="Return to manuals portal"><img class="brand-lockup" src="../img/Branding_Logo_Crop_Only.png" alt="Leviathan"></a><div class="brand">VESSEL</div><div class="sub">LEVIATHAN USER MANUAL</div><a href="#concept">A bowl you can play</a>
+</style><link rel="stylesheet" href="manual-hero.css"></head><body><div class="layout"><nav aria-label="Manual navigation"><a class="brand-home" href="../index.html" aria-label="Return to manuals portal"><img class="brand-lockup" src="../img/Branding_Logo_Crop_Only.png" alt="Leviathan"></a><div class="brand">VESSEL</div><div class="sub">LEVIATHAN USER MANUAL</div><a href="#concept">A bowl you can play</a>
 <a href="#start">First patch</a>
 <a href="#panel">Panel breakdown</a>
 <a href="#gestures">Hits, rubbing, and CV</a>

@@ -1,0 +1,17 @@
+/* Shared angled panel treatment, limited to the opening hero. */
+header.hero .hero-modules {
+  perspective: 1200px;
+}
+
+header.hero .hero-modules img {
+  transform: rotateY(-7deg) translateY(8px);
+}
+
+/* Bifurx's paired light and dark panels retain their opposing angles. */
+header.hero .hero-panels-pair img:first-child {
+  transform: rotateY(7deg) translateY(22px);
+}
+
+header.hero .hero-panels-pair img:last-child {
+  transform: rotateY(-7deg) translateY(-12px);
+}
