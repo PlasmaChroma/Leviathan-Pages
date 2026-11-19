@@ -13,6 +13,9 @@
   --shadow:0 22px 60px rgba(0,0,0,.38);
 }
 * { box-sizing:border-box; }
+.mode-demo { max-width:800px; margin:2rem auto; }
+.mode-demo iframe { display:block; width:100%; aspect-ratio:16 / 9; border:1px solid var(--line); border-radius:12px; }
+.mode-demo figcaption { margin-top:.5rem; color:var(--muted); }
 html { scroll-behavior:smooth; }
 body { margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; background:radial-gradient(circle at 78% 10%,rgba(122,92,255,.14),transparent 30rem),radial-gradient(circle at 18% 22%,rgba(28,204,217,.11),transparent 28rem),var(--deep); color:var(--ink); line-height:1.62; }
 a { color:#7feaf1; }
@@ -140,6 +143,12 @@ footer span { position:relative; z-index:1; }
   <div class="hero-modules hero-panels-pair"><img src="img/bifurx_light.png" alt="Bifurx light panel"><img src="img/bifurx_dark.png" alt="Bifurx dark panel"></div>
 </header>
 <div class="dragon-divider" aria-hidden="true"><img src="../img/Leviathan_Dragon_Transparent_Refined.png" alt=""></div>
+<figure class="mode-demo">
+  <iframe src="https://www.youtube-nocookie.com/embed/Q8aZHi7xA-k"
+    title="Bifurx Mode 5 modulation demo" loading="lazy"
+    referrerpolicy="strict-origin-when-cross-origin" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>
+  <figcaption>Mode 5 modulation demo · <a href="https://www.youtube.com/watch?v=Q8aZHi7xA-k">Watch on YouTube</a></figcaption>
+</figure>
 
 <section id="concept"><div class="section-head"><p class="eyebrow">Core concept</p><h2>One center. Two foci.</h2><p>FREQ defines a center pitch. SPAN creates a lower focus A and an upper focus B around that center. The selected mode decides which response each core produces and whether the cores run in parallel or in cascade.</p></div>
 <div class="architecture"><div class="arch-box">IN<small>mono signal</small></div><div class="arch-box">LEVEL<small>gain + drive</small></div><div class="arch-box">Core A / Core B<small>parallel or cascade</small></div><div class="arch-box">Mode mix<small>balance + coupling</small></div><div class="arch-box">OUT<small>optional soft limit</small></div></div>
